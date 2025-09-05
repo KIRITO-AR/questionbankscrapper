@@ -1,0 +1,9 @@
+# Khan Academy Question Bank Scraper Dependencies
+
+# Core mitmproxy for HTTP interception and proxying
+mitmproxy>=10.0.0
+
+# Standard library dependencies (included for completeness)
+# json - built into Python
+# os - built into Python  
+# datetime - built into Python

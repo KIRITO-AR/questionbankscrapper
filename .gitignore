@@ -1,0 +1,40 @@
+# Captured question data (but keep sample files)
+# khan_academy_json/ - keeping sample files for reference
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.env
+
+# Logs
+*.log
+capture.log
+proxy_error.log
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Temporary files
+tmp/
+temp/
+
+# Development/validation scripts
+validate_setup.py
