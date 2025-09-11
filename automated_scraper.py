@@ -227,21 +227,31 @@ def check_dependencies():
     """Check if all required dependencies are installed."""
     print("Checking dependencies...")
     
-    # Check mitmproxy
+    # Check mitmproxy - look in virtual environment first
     try:
-        result = subprocess.run(['mitmdump', '--version'], 
-                              capture_output=True, text=True)
-        if result.returncode == 0:
-            print("✓ mitmproxy is installed")
+        venv_mitmdump = os.path.join(os.getcwd(), ".venv", "Scripts", "mitmdump.exe")
+        if os.path.exists(venv_mitmdump):
+            result = subprocess.run([venv_mitmdump, '--version'], 
+                                  capture_output=True, text=True, timeout=10)
+            if result.returncode == 0:
+                print("[OK] mitmproxy is installed")
+            else:
+                print("[ERROR] mitmproxy not working")
         else:
-            print("✗ mitmproxy not found")
-    except FileNotFoundError:
-        print("✗ mitmproxy not found - install with: pip install mitmproxy")
+            # Try system path
+            result = subprocess.run(['mitmdump', '--version'], 
+                                  capture_output=True, text=True, timeout=10)
+            if result.returncode == 0:
+                print("[OK] mitmproxy is installed")
+            else:
+                print("[ERROR] mitmproxy not found")
+    except (FileNotFoundError, subprocess.TimeoutExpired):
+        print("[ERROR] mitmproxy not found - install with: pip install mitmproxy")
     
     # Check selenium (optional)
     try:
         import selenium
-        print("✓ selenium is available")
+        print("[OK] selenium is available")
         
         # Check for Chrome
         try:
@@ -251,20 +261,20 @@ def check_dependencies():
             options.add_argument('--headless')
             driver = webdriver.Chrome(options=options)
             driver.quit()
-            print("✓ Chrome WebDriver is working")
+            print("[OK] Chrome WebDriver is working")
         except Exception:
-            print("✗ Chrome WebDriver not working - may need chromedriver")
+            print("[ERROR] Chrome WebDriver not working - may need chromedriver")
             
     except ImportError:
-        print("⚠ selenium not found - will use manual browser mode")
+        print("[WARNING] selenium not found - will use manual browser mode")
         print("  Install with: pip install selenium")
     
     # Check aiohttp for async requests
     try:
         import aiohttp
-        print("✓ aiohttp is available")
+        print("[OK] aiohttp is available")
     except ImportError:
-        print("⚠ aiohttp not found - install with: pip install aiohttp")
+        print("[WARNING] aiohttp not found - install with: pip install aiohttp")
     
     print("\nDependency check complete.")
 
