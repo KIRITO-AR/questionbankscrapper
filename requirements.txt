@@ -3,7 +3,15 @@
 # Core mitmproxy for HTTP interception and proxying
 mitmproxy>=10.0.0
 
+# Async HTTP requests for automated question fetching
+aiohttp>=3.8.0
+
+# Browser automation (optional but recommended)
+selenium>=4.0.0
+
 # Standard library dependencies (included for completeness)
 # json - built into Python
 # os - built into Python  
 # datetime - built into Python
+# asyncio - built into Python
+# threading - built into Python
