@@ -1,0 +1,24 @@
+{
+  "capture_method": "direct_extraction",
+  "timestamp": "2025-09-12T23:51:33.994941",
+  "question_id": "direct_1757695893_0000",
+  "data": {
+    "KA-is-e2e": false,
+    "KA-is-bot": false,
+    "KA-is-phone": false,
+    "KA-is-tablet": false,
+    "KA-is-unsupported-browser": false,
+    "KA-is-ios": false,
+    "KA-is-mobile-app": false,
+    "KA-fastly-country": "IN",
+    "KA-region": "IN-TR",
+    "KA-locale": "en",
+    "KA-locale-status": "",
+    "KA-curriculum": "in-in",
+    "KA-has-any-permissions": false,
+    "KA-is-phantom": false,
+    "KA-has-profile": false,
+    "KA-static-version": "250912-1456-e93fdb31189a",
+    "KA-published-content-version": "8f6778471273b7f4430ff7d1b1e202b87e510c21"
+  }
+}

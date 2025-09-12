@@ -35,9 +35,23 @@ class KhanAcademyBrowserAutomation:
         
         # Configure proxy
         chrome_options.add_argument(f'--proxy-server=http://127.0.0.1:{self.proxy_port}')
+        
+        # Comprehensive SSL/Certificate handling for mitmproxy
         chrome_options.add_argument('--ignore-certificate-errors')
         chrome_options.add_argument('--ignore-ssl-errors')
         chrome_options.add_argument('--ignore-certificate-errors-spki-list')
+        chrome_options.add_argument('--allow-running-insecure-content')
+        chrome_options.add_argument('--disable-web-security')
+        chrome_options.add_argument('--ignore-urlfetcher-cert-requests')
+        chrome_options.add_argument('--disable-cert-verification')
+        chrome_options.add_argument('--allow-insecure-localhost')
+        chrome_options.add_argument('--disable-features=VizDisplayCompositor')
+        
+        # Network and timeout improvements
+        chrome_options.add_argument('--disable-background-timer-throttling')
+        chrome_options.add_argument('--disable-renderer-backgrounding')
+        chrome_options.add_argument('--disable-backgrounding-occluded-windows')
+        chrome_options.add_argument('--disable-default-apps')
         
         # Additional options for automation
         chrome_options.add_argument('--disable-blink-features=AutomationControlled')
@@ -50,8 +64,13 @@ class KhanAcademyBrowserAutomation:
         try:
             self.driver = webdriver.Chrome(options=chrome_options)
             self.driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
-            self.wait = WebDriverWait(self.driver, 20)
-            logger.info("Browser setup complete with proxy configuration")
+            
+            # Set longer timeouts for better reliability
+            self.driver.set_page_load_timeout(60)  # 60 seconds
+            self.driver.implicitly_wait(15)  # 15 seconds
+            
+            self.wait = WebDriverWait(self.driver, 30)  # Increased to 30 seconds
+            logger.info("Browser setup complete with enhanced proxy and SSL configuration")
             return True
         except Exception as e:
             logger.error(f"Failed to setup browser: {e}")
@@ -61,12 +80,29 @@ class KhanAcademyBrowserAutomation:
         """Navigate to a Khan Academy exercise."""
         try:
             logger.info(f"Navigating to exercise: {exercise_url}")
-            self.driver.get(exercise_url)
+            
+            # Try to load the page with retries
+            max_retries = 3
+            for attempt in range(max_retries):
+                try:
+                    self.driver.get(exercise_url)
+                    break
+                except Exception as e:
+                    if attempt < max_retries - 1:
+                        logger.warning(f"Navigation attempt {attempt + 1} failed, retrying: {e}")
+                        time.sleep(5)
+                    else:
+                        raise e
+            
             self.current_exercise_url = exercise_url
             
-            # Wait for page to load
-            self.wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
-            time.sleep(3)  # Additional wait for full page load
+            # Wait for page to load with better error handling
+            try:
+                self.wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
+                time.sleep(5)  # Additional wait for full page load and JS execution
+                logger.info("Page loaded successfully")
+            except Exception as e:
+                logger.warning(f"Page load wait failed, but continuing: {e}")
             
             return True
         except Exception as e:
