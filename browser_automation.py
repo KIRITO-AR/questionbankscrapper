@@ -36,7 +36,7 @@ class KhanAcademyBrowserAutomation:
         # Configure proxy
         chrome_options.add_argument(f'--proxy-server=http://127.0.0.1:{self.proxy_port}')
         
-        # Comprehensive SSL/Certificate handling for mitmproxy
+        # Enhanced SSL/Certificate handling for mitmproxy
         chrome_options.add_argument('--ignore-certificate-errors')
         chrome_options.add_argument('--ignore-ssl-errors')
         chrome_options.add_argument('--ignore-certificate-errors-spki-list')
@@ -53,6 +53,13 @@ class KhanAcademyBrowserAutomation:
         chrome_options.add_argument('--disable-backgrounding-occluded-windows')
         chrome_options.add_argument('--disable-default-apps')
         
+        # Additional network optimizations
+        chrome_options.add_argument('--no-proxy-server')
+        chrome_options.add_argument('--disable-extensions')
+        chrome_options.add_argument('--disable-plugins')
+        chrome_options.add_argument('--disable-images')  # Speed up loading
+        chrome_options.add_argument('--disable-javascript')  # We don't need JS for our purpose
+        
         # Additional options for automation
         chrome_options.add_argument('--disable-blink-features=AutomationControlled')
         chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
@@ -65,11 +72,11 @@ class KhanAcademyBrowserAutomation:
             self.driver = webdriver.Chrome(options=chrome_options)
             self.driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
             
-            # Set longer timeouts for better reliability
-            self.driver.set_page_load_timeout(60)  # 60 seconds
-            self.driver.implicitly_wait(15)  # 15 seconds
+            # Set more aggressive timeouts for faster operation
+            self.driver.set_page_load_timeout(30)  # Reduced from 60
+            self.driver.implicitly_wait(10)  # Reduced from 15
             
-            self.wait = WebDriverWait(self.driver, 30)  # Increased to 30 seconds
+            self.wait = WebDriverWait(self.driver, 20)  # Reduced from 30
             logger.info("Browser setup complete with enhanced proxy and SSL configuration")
             return True
         except Exception as e:
@@ -169,9 +176,43 @@ class KhanAcademyBrowserAutomation:
             return False
     
     def simulate_question_interaction(self):
-        """Simulate minimal interaction to trigger question loading."""
+        """Simulate interaction to trigger question loading and progression."""
         try:
-            # Look for question elements to interact with
+            # Method 1: Try to find and click next question button
+            next_selectors = [
+                "button[data-test-id='next-question']",
+                "button:contains('Next')",
+                ".next-button",
+                "button[aria-label*='Next']",
+                "button[title*='Next']"
+            ]
+            
+            for selector in next_selectors:
+                try:
+                    if ":contains" in selector:
+                        element = self.driver.execute_script(f"""
+                            return Array.from(document.querySelectorAll('button')).find(el => 
+                                el.textContent.toLowerCase().includes('next'));
+                        """)
+                        if element:
+                            self.driver.execute_script("arguments[0].click();", element)
+                            logger.info("Clicked next question button")
+                            time.sleep(2)
+                            return True
+                    else:
+                        element = self.driver.find_element(By.CSS_SELECTOR, selector)
+                        if element.is_enabled():
+                            element.click()
+                            logger.info(f"Clicked next question: {selector}")
+                            time.sleep(2)
+                            return True
+                except Exception:
+                    continue
+            
+            # Method 2: Try to answer current question to progress
+            self.attempt_to_answer_question()
+            
+            # Method 3: Look for question elements to interact with
             interactive_selectors = [
                 "input[type='text']",
                 "input[type='number']", 
@@ -196,28 +237,138 @@ class KhanAcademyBrowserAutomation:
         except Exception as e:
             logger.error(f"Failed to simulate interaction: {e}")
             return False
+
+    def attempt_to_answer_question(self):
+        """
+        Attempt to answer the current question to trigger progression.
+        """
+        try:
+            # Try to fill in simple numeric answers
+            numeric_inputs = self.driver.find_elements(By.CSS_SELECTOR, "input[type='number']")
+            for input_elem in numeric_inputs:
+                try:
+                    # Put a simple answer to trigger progression
+                    input_elem.clear()
+                    input_elem.send_keys("1")
+                    time.sleep(0.5)
+                except Exception:
+                    continue
+            
+            # Try to select first radio button option
+            radio_buttons = self.driver.find_elements(By.CSS_SELECTOR, "input[type='radio']")
+            if radio_buttons:
+                try:
+                    self.driver.execute_script("arguments[0].click();", radio_buttons[0])
+                    time.sleep(0.5)
+                except Exception:
+                    pass
+            
+            # Try to submit the answer
+            submit_selectors = [
+                "button[data-test-id='check-answer']",
+                "button:contains('Check')",
+                "button:contains('Submit')",
+                ".btn-primary"
+            ]
+            
+            for selector in submit_selectors:
+                try:
+                    if ":contains" in selector:
+                        element = self.driver.execute_script(f"""
+                            return Array.from(document.querySelectorAll('button')).find(el => 
+                                el.textContent.toLowerCase().includes('{selector.split("'")[1].lower()}'));
+                        """)
+                        if element:
+                            self.driver.execute_script("arguments[0].click();", element)
+                            logger.info("Submitted answer to progress")
+                            time.sleep(2)
+                            return True
+                    else:
+                        element = self.driver.find_element(By.CSS_SELECTOR, selector)
+                        if element.is_enabled():
+                            element.click()
+                            logger.info(f"Submitted answer: {selector}")
+                            time.sleep(2)
+                            return True
+                except Exception:
+                    continue
+                    
+        except Exception as e:
+            logger.debug(f"Could not answer question: {e}")
+        
+        return False
     
     def wait_for_questions_to_load(self, timeout=30):
         """Wait for questions to be loaded and captured."""
         start_time = time.time()
         
         while time.time() - start_time < timeout:
-            # Check if new questions have been loaded
-            # This would be coordinated with the mitmproxy addon
-            time.sleep(2)
-            
-            # Simulate some interaction to keep questions loading
+            # Interact with the page to trigger question loading
             self.simulate_question_interaction()
+            
+            # Small wait between interactions
+            time.sleep(3)
+            
+            # Try to progress to next question periodically
+            if (time.time() - start_time) % 10 < 3:  # Every 10 seconds
+                self.attempt_to_progress_to_next_question()
         
         return True
     
-    def automate_exercise_session(self, exercise_url, refresh_interval=60):
+    def attempt_to_progress_to_next_question(self):
         """
-        Run a full automated session for an exercise.
+        Try various methods to progress to the next question.
+        """
+        try:
+            # Method 1: Look for "Next" or "Continue" buttons
+            progress_selectors = [
+                "button[data-test-id='next-question']",
+                "button[data-test-id='continue']",
+                "a[data-test-id='next-question']",
+                "button:contains('Next')",
+                "button:contains('Continue')",
+                ".next-button",
+                ".continue-button"
+            ]
+            
+            for selector in progress_selectors:
+                try:
+                    if ":contains" in selector:
+                        element = self.driver.execute_script(f"""
+                            return Array.from(document.querySelectorAll('button, a')).find(el => 
+                                el.textContent.toLowerCase().includes('{selector.split("'")[1].lower()}'));
+                        """)
+                        if element and element.is_displayed():
+                            self.driver.execute_script("arguments[0].click();", element)
+                            logger.info(f"Progressed using: {selector}")
+                            time.sleep(3)
+                            return True
+                    else:
+                        element = self.driver.find_element(By.CSS_SELECTOR, selector)
+                        if element.is_displayed() and element.is_enabled():
+                            element.click()
+                            logger.info(f"Progressed using: {selector}")
+                            time.sleep(3)
+                            return True
+                except Exception:
+                    continue
+            
+            # Method 2: If we can't find progress buttons, try refreshing to get new questions
+            logger.info("No progress buttons found, will refresh to get new questions")
+            return False
+            
+        except Exception as e:
+            logger.debug(f"Could not progress to next question: {e}")
+            return False
+    
+    def automate_exercise_session(self, exercise_url, max_questions=1000, refresh_interval=120):
+        """
+        Run a comprehensive automated session for an exercise.
         
         Args:
             exercise_url: URL of the Khan Academy exercise
-            refresh_interval: How often to refresh (seconds)
+            max_questions: Maximum number of questions to capture
+            refresh_interval: How often to refresh if no progress (seconds)
         """
         if not self.setup_browser():
             return False
@@ -231,24 +382,48 @@ class KhanAcademyBrowserAutomation:
             if not self.start_exercise():
                 logger.warning("Could not start exercise, continuing anyway...")
             
-            # Wait for initial questions to load
-            self.wait_for_questions_to_load()
+            # Main loop for question capture
+            total_cycles = 0
+            max_cycles = max_questions // 5  # Assume ~5 questions per cycle
+            last_refresh_time = time.time()
             
-            # Periodic refresh to get more questions
-            refresh_count = 0
-            while refresh_count < 5:  # Limit refreshes to avoid infinite loop
-                logger.info(f"Refresh cycle {refresh_count + 1}/5")
+            while total_cycles < max_cycles:
+                cycle_start = time.time()
+                logger.info(f"Question capture cycle {total_cycles + 1}/{max_cycles}")
                 
-                if not self.refresh_page():
-                    break
+                # Try to progress through questions
+                progress_made = False
+                for attempt in range(10):  # Try to progress through up to 10 questions per cycle
+                    # Wait and interact with current question
+                    self.wait_for_questions_to_load(timeout=15)
+                    
+                    # Try to progress to next question
+                    if self.attempt_to_progress_to_next_question():
+                        progress_made = True
+                        time.sleep(2)  # Brief pause between questions
+                    else:
+                        # If we can't progress, try answering the current question
+                        if self.attempt_to_answer_question():
+                            time.sleep(2)
+                            if self.attempt_to_progress_to_next_question():
+                                progress_made = True
+                        break
                 
-                self.wait_for_questions_to_load()
-                refresh_count += 1
+                # If no progress made or it's been too long, refresh
+                current_time = time.time()
+                if not progress_made or (current_time - last_refresh_time) > refresh_interval:
+                    logger.info("Refreshing page to get fresh questions...")
+                    if not self.refresh_page():
+                        logger.error("Failed to refresh page")
+                        break
+                    last_refresh_time = current_time
                 
-                # Wait before next refresh
-                time.sleep(refresh_interval)
+                total_cycles += 1
+                
+                # Brief pause between cycles
+                time.sleep(3)
             
-            logger.info("Automated session completed")
+            logger.info(f"Automated session completed after {total_cycles} cycles")
             return True
             
         except Exception as e:
