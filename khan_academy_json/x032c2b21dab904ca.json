@@ -1,0 +1,3639 @@
+{
+  "data": {
+    "assessmentItem": {
+      "__typename": "AssessmentItemOrError",
+      "error": null,
+      "item": {
+        "__typename": "AssessmentItem",
+        "id": "x0d5e5e7d7705b2df",
+        "itemData": "{\"answerArea\":{\"calculator\":false,\"chi2Table\":false,\"periodicTable\":false,\"tTable\":false,\"zTable\":false},\"hints\":[{\"content\":\"Divide both sides by $6$:\\n\\n $\\\\qquad  \\\\red{\\\\dfrac{\\\\color{black}{6g}}{6}} = \\\\red{\\\\dfrac{\\\\color{black}{48}}{6}} $\",\"images\":{},\"replace\":false,\"widgets\":{}},{\"content\":\"Simplify:\\n\\n $\\\\qquad \\\\dfrac{\\\\cancel{6}g}{\\\\cancel{6}} = \\\\dfrac{48}{6}$\",\"images\":{},\"replace\":false,\"widgets\":{}},{\"content\":\"$g = 8$\",\"images\":{},\"replace\":false,\"widgets\":{}}],\"itemDataVersion\":{\"major\":0,\"minor\":1},\"question\":{\"content\":\"**Solve the equation.**\\n\\n $6g = 48$\\n\\n$g =\\\\,$[[☃ numeric-input 1]]\",\"images\":{},\"widgets\":{\"numeric-input 1\":{\"alignment\":\"default\",\"graded\":true,\"options\":{\"answers\":[{\"maxError\":null,\"message\":\"\",\"simplify\":\"optional\",\"status\":\"correct\",\"strict\":false,\"value\":8}],\"coefficient\":false,\"labelText\":\"\",\"multipleNumberInput\":false,\"size\":\"small\",\"static\":false},\"static\":false,\"type\":\"numeric-input\",\"version\":{\"major\":0,\"minor\":0}}}}}",
+        "problemType": "1. ax=b",
+        "sha": "ddf0fcaa71bbc22e2658c2e1536c37191eca4174"
+      }
+    },
+    "getDummyPracticeTaskForPrePhantomUser": {
+      "__typename": "GetDummyPracticeTaskForPrePhantomUser",
+      "userTask": {
+        "__typename": "PracticeUserTask",
+        "cards": [
+          {
+            "__typename": "ProblemCard",
+            "cardType": "problem",
+            "done": false,
+            "exerciseName": "linear_equations_1",
+            "problemType": null
+          }
+        ],
+        "task": {
+          "__typename": "PracticeTask",
+          "bonusReservedItems": null,
+          "bonusReservedItemsCompleted": null,
+          "bonusTaskAttemptHistory": [],
+          "canRestart": false,
+          "completionCriteria": {
+            "__typename": "CompletionCriteria",
+            "name": "num_problems_7"
+          },
+          "contentKey": "ag5zfmtoYW4tYWNhZGVteXIPCxIIRXhlcmNpc2UY3A8M",
+          "exerciseLength": 7,
+          "id": null,
+          "isCompleted": false,
+          "key": null,
+          "pointBounty": 100,
+          "pointsEarned": 0,
+          "promotionCriteria": {
+            "__typename": "PromotionCriteria",
+            "name": "percent_correct",
+            "value": 70
+          },
+          "reservedItems": null,
+          "reservedItemsCompleted": null,
+          "slug": "linear_equations_1",
+          "taskAttemptHistory": [],
+          "taskType": "practice",
+          "timeEstimate": {
+            "__typename": "TimeEstimate",
+            "lowerBound": 7,
+            "upperBound": 11
+          }
+        },
+        "userExercises": [
+          {
+            "__typename": "UserExercise",
+            "exercise": "linear_equations_1",
+            "exerciseModel": {
+              "__typename": "Exercise",
+              "assessmentItemCount": 24,
+              "displayName": "One-step multiplication & division equations",
+              "id": "2012",
+              "isQuiz": false,
+              "isSkillCheck": false,
+              "name": "linear_equations_1",
+              "nodeSlug": "e/linear_equations_1",
+              "problemTypes": [
+                {
+                  "__typename": "ProblemType",
+                  "items": [
+                    {
+                      "__typename": "ProblemTypeAssessmentItem",
+                      "id": "xa226ae0d69f595ed",
+                      "live": true,
+                      "sha": "d01e9ae669dbd87ddca46a095f81290a2190e64a"
+                    },
+                    {
+                      "__typename": "ProblemTypeAssessmentItem",
+                      "id": "x2efcac12e81d22b0",
+                      "live": true,
+                      "sha": "25aee3b0a16ae13832459579f1a422a5a9daa800"
+                    },
+                    {
+                      "__typename": "ProblemTypeAssessmentItem",
+                      "id": "x1a9c91c929ac113d",
+                      "live": true,
+                      "sha": "5baf0f0118d57aa82ceb9884875baf9610f2adfd"
+                    },
+                    {
+                      "__typename": "ProblemTypeAssessmentItem",
+                      "id": "x7db8e20259ef9bd1",
+                      "live": true,
+                      "sha": "c480ad8c17654182a14b72f412a14dc8c4730c22"
+                    },
+                    {
+                      "__typename": "ProblemTypeAssessmentItem",
+                      "id": "x0d5e5e7d7705b2df",
+                      "live": true,
+                      "sha": "ddf0fcaa71bbc22e2658c2e1536c37191eca4174"
+                    },
+                    {
+                      "__typename": "ProblemTypeAssessmentItem",
+                      "id": "x2afc6f136a93995b",
+                      "live": true,
+                      "sha": "b0435c0e6b351800534893a7648142d28639911a"
+                    },
+                    {
+                      "__typename": "ProblemTypeAssessmentItem",
+                      "id": "xcb40b55d698a0f44",
+                      "live": true,
+                      "sha": "da38922dadc8c53993bb7adeb4210a19eef7f94c"
+                    },
+                    {
+                      "__typename": "ProblemTypeAssessmentItem",
+                      "id": "x308220a304630748",
+                      "live": true,
+                      "sha": "8653287da5cb066eeea86853305247ed27be5b2a"
+                    }
+                  ],
+                  "name": "1. ax=b",
+                  "relatedVideos": []
+                },
+                {
+                  "__typename": "ProblemType",
+                  "items": [
+                    {
+                      "__typename": "ProblemTypeAssessmentItem",
+                      "id": "x357bc6dcf09caaeb",
+                      "live": true,
+                      "sha": "ae9f9ee07f2c750d1b4b943b6b38ac43e2e8f735"
+                    },
+                    {
+                      "__typename": "ProblemTypeAssessmentItem",
+                      "id": "xc4854b8e909ba795",
+                      "live": true,
+                      "sha": "0f3f8d6d22edcef1aa3eea8d9343f21ecfface78"
+                    },
+                    {
+                      "__typename": "ProblemTypeAssessmentItem",
+                      "id": "x973933d72a63b821",
+                      "live": true,
+                      "sha": "423a31bd5f55d754c1e5cb50f3107f9d7b20a79a"
+                    },
+                    {
+                      "__typename": "ProblemTypeAssessmentItem",
+                      "id": "xe00c3e3d7dc31667",
+                      "live": true,
+                      "sha": "d4954be3acf2dac7c283bf90ee0707ad6b1a2c44"
+                    },
+                    {
+                      "__typename": "ProblemTypeAssessmentItem",
+                      "id": "x707dad3701de85a4",
+                      "live": true,
+                      "sha": "0e624487254f07d720011af9f41ba8bbe249c87b"
+                    },
+                    {
+                      "__typename": "ProblemTypeAssessmentItem",
+                      "id": "x15a8455db9630450",
+                      "live": true,
+                      "sha": "733c55ba8f796a2c63ac0e41645286e784c95f09"
+                    },
+                    {
+                      "__typename": "ProblemTypeAssessmentItem",
+                      "id": "x2a73db830987495e",
+                      "live": true,
+                      "sha": "53c7cc7a73e35dc8c3ffe9e819ce1687fe1f5961"
+                    },
+                    {
+                      "__typename": "ProblemTypeAssessmentItem",
+                      "id": "x58946435e292a8c8",
+                      "live": true,
+                      "sha": "7139902c178b9fde3c5d5de90cfbbff03d0f6785"
+                    },
+                    {
+                      "__typename": "ProblemTypeAssessmentItem",
+                      "id": "x7827f24294551b10",
+                      "live": true,
+                      "sha": "b60675c2dbf2c1b2ea4b160c80a9b5db0e7fa17d"
+                    },
+                    {
+                      "__typename": "ProblemTypeAssessmentItem",
+                      "id": "xc35d03fc19d45587",
+                      "live": true,
+                      "sha": "e57f1cba9fa841e866c321f3de5de3228e85b7b2"
+                    },
+                    {
+                      "__typename": "ProblemTypeAssessmentItem",
+                      "id": "xf37c4005436c5ce9",
+                      "live": true,
+                      "sha": "a31dbcc06ed84c977937c1f4c2c7ba99c687864b"
+                    },
+                    {
+                      "__typename": "ProblemTypeAssessmentItem",
+                      "id": "x849383c076a2eb79",
+                      "live": true,
+                      "sha": "bac8313963204ddd703a1b0d42c1cead5c33b3ec"
+                    },
+                    {
+                      "__typename": "ProblemTypeAssessmentItem",
+                      "id": "xaba50353356458fd",
+                      "live": true,
+                      "sha": "0e712dc83d45441ae402a5bcce496d7d702d91a5"
+                    },
+                    {
+                      "__typename": "ProblemTypeAssessmentItem",
+                      "id": "x5828f7381d516a26",
+                      "live": true,
+                      "sha": "61144ca3a4051736291359301aadc99da371dd57"
+                    },
+                    {
+                      "__typename": "ProblemTypeAssessmentItem",
+                      "id": "xf16eb1479e7e92a1",
+                      "live": true,
+                      "sha": "4acef539b78096da02ed8661d3c52114ebfd5e34"
+                    },
+                    {
+                      "__typename": "ProblemTypeAssessmentItem",
+                      "id": "x9e034645e47be8ed",
+                      "live": true,
+                      "sha": "a8381fb099f4424aa527c6fbf8b90874b269e073"
+                    }
+                  ],
+                  "name": "2. x/a=b",
+                  "relatedVideos": []
+                }
+              ],
+              "progressKey": "e2012",
+              "relatedContent": [
+                {
+                  "__typename": "Video",
+                  "contentKind": "Video",
+                  "duration": 666,
+                  "id": "7",
+                  "imageUrl": "https://cdn.kastatic.org/googleusercontent/H046477yRoXhje5ES_pi-tWs9EPuF4mn76jgQLzmntnDPcoT-VECHeFLuTEDJ0bVm_IlX9yQMw1ozz2O8RX-doxlOw",
+                  "kaUrl": "https://www.khanacademy.org/math/cc-sixth-grade-math/cc-6th-equations-and-inequalities/cc-6th-one-step-mult-div-equations/v/simple-equations",
+                  "kind": "Video",
+                  "nodeSlug": "v/simple-equations",
+                  "relativeUrl": "/math/cc-sixth-grade-math/cc-6th-equations-and-inequalities/cc-6th-one-step-mult-div-equations/v/simple-equations",
+                  "slug": "simple-equations",
+                  "thumbnailUrl": "https://cdn.kastatic.org/googleusercontent/H046477yRoXhje5ES_pi-tWs9EPuF4mn76jgQLzmntnDPcoT-VECHeFLuTEDJ0bVm_IlX9yQMw1ozz2O8RX-doxlOw",
+                  "topicPaths": [
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x0267d782",
+                          "kind": "Topic",
+                          "slug": "cc-sixth-grade-math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x98e0520f",
+                          "kind": "Topic",
+                          "slug": "cc-6th-equations-and-inequalities"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xda3c47ae",
+                          "kind": "Topic",
+                          "slug": "cc-6th-one-step-mult-div-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "7",
+                          "kind": "Video",
+                          "slug": "simple-equations"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xb4832e56",
+                          "kind": "Topic",
+                          "slug": "pre-algebra"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x04908aa2",
+                          "kind": "Topic",
+                          "slug": "pre-algebra-equations-expressions"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xdb126255",
+                          "kind": "Topic",
+                          "slug": "pre-algebra-one-step-mult-div-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "7",
+                          "kind": "Video",
+                          "slug": "simple-equations"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xed0a1484",
+                          "kind": "Topic",
+                          "slug": "algebra-basics"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x649777e8",
+                          "kind": "Topic",
+                          "slug": "alg-basics-linear-equations-and-inequalities"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x8c345638",
+                          "kind": "Topic",
+                          "slug": "alg-basics-one-step-add-sub-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "7",
+                          "kind": "Video",
+                          "slug": "simple-equations"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x0eb19e7d",
+                          "kind": "Topic",
+                          "slug": "algebra-home"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x70bad2b9",
+                          "kind": "Topic",
+                          "slug": "alg-basic-eq-ineq"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xe881ada3",
+                          "kind": "Topic",
+                          "slug": "alg-one-step-mult-div-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "7",
+                          "kind": "Video",
+                          "slug": "simple-equations"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xa46d6dd638f86863",
+                          "kind": "Topic",
+                          "slug": "get-ready-for-7th-grade"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x354dfb23361818cf",
+                          "kind": "Topic",
+                          "slug": "xa46d6dd638f86863:get-ready-for-expressions-equations-inequalities"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xbfb177d77e3bb1bd",
+                          "kind": "Topic",
+                          "slug": "xa46d6dd638f86863:one-step-multiplication-and-division-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "7",
+                          "kind": "Video",
+                          "slug": "simple-equations"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x465f0793a1788a3f",
+                          "kind": "Topic",
+                          "slug": "get-ready-for-8th-grade"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xcf366994f5088763",
+                          "kind": "Topic",
+                          "slug": "x465f0793a1788a3f:get-ready-for-solving-equations-and-systems-of-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7855cda4769689cc",
+                          "kind": "Topic",
+                          "slug": "x465f0793a1788a3f:one-step-multiplication-and-division-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "7",
+                          "kind": "Video",
+                          "slug": "simple-equations"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x127ac35e11aba30e",
+                          "kind": "Topic",
+                          "slug": "get-ready-for-algebra-i"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x512f5178b281ba0a",
+                          "kind": "Topic",
+                          "slug": "x127ac35e11aba30e:get-ready-for-equations-inequalities"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x72c17005599f45d3",
+                          "kind": "Topic",
+                          "slug": "x127ac35e11aba30e:one-step-multiplication-division-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "7",
+                          "kind": "Video",
+                          "slug": "simple-equations"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x261c2cc7",
+                          "kind": "Topic",
+                          "slug": "mappers"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x8fa5bb9e",
+                          "kind": "Topic",
+                          "slug": "operations-and-algebraic-thinking-220-223"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x90ef312972a64a81",
+                          "kind": "Topic",
+                          "slug": "x261c2cc7:one-step-multiplication-and-division-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "7",
+                          "kind": "Video",
+                          "slug": "simple-equations"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x4d211865",
+                          "kind": "Topic",
+                          "slug": "6th-engage-ny"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x80fafbe0",
+                          "kind": "Topic",
+                          "slug": "engage-6th-module-4"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x88dd96da",
+                          "kind": "Topic",
+                          "slug": "6th-module-4-topic-g"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "7",
+                          "kind": "Video",
+                          "slug": "simple-equations"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x3c33784549587b6d",
+                          "kind": "Topic",
+                          "slug": "kmap"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x19d401566fd27bd3",
+                          "kind": "Topic",
+                          "slug": "operations-and-algebraic-thinking-g"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xde9a4e3202c5d095",
+                          "kind": "Topic",
+                          "slug": "oat220-equations-inequalities-introduction"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x66b03987f1eba296",
+                          "kind": "Topic",
+                          "slug": "oat220-one-step-multiplication-and-division-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "7",
+                          "kind": "Video",
+                          "slug": "simple-equations"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x3c33784549587b6d",
+                          "kind": "Topic",
+                          "slug": "kmap"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x901d3bfb77d7e63c",
+                          "kind": "Topic",
+                          "slug": "equations-inequalities-a"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x3b7ee0b3f901e418",
+                          "kind": "Topic",
+                          "slug": "x901d3bfb77d7e63c:ratios-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x0b4e07800a675adc",
+                          "kind": "Topic",
+                          "slug": "x901d3bfb77d7e63c:one-step-multiplication-division-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "7",
+                          "kind": "Video",
+                          "slug": "simple-equations"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x5a806b5548786b28",
+                          "kind": "Topic",
+                          "slug": "districts-courses"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x9de80188cb8d3de5",
+                          "kind": "Topic",
+                          "slug": "grade-6-scps-pilot"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xa0eb5b11720f1639",
+                          "kind": "Topic",
+                          "slug": "x9de80188cb8d3de5:applications-of-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x835947d57d9976a1",
+                          "kind": "Topic",
+                          "slug": "x9de80188cb8d3de5:unit-7b-topic-2"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "7",
+                          "kind": "Video",
+                          "slug": "simple-equations"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x065dcf1640354e81",
+                          "kind": "Topic",
+                          "slug": "7th-grade-matatag"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xb12846f67609a1ac",
+                          "kind": "Topic",
+                          "slug": "x065dcf1640354e81:4th-quarter"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xcb3b0de1aa905d3f",
+                          "kind": "Topic",
+                          "slug": "x065dcf1640354e81:properties-of-equality-and-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "7",
+                          "kind": "Video",
+                          "slug": "simple-equations"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x3931b57772b927b3",
+                          "kind": "Topic",
+                          "slug": "grade-6-math-tx"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x594fe94dc8f62ae1",
+                          "kind": "Topic",
+                          "slug": "x3931b57772b927b3:one-variable-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x348104eb7c1422c2",
+                          "kind": "Topic",
+                          "slug": "x3931b57772b927b3:one-step-multiplication-division-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "7",
+                          "kind": "Video",
+                          "slug": "simple-equations"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x5a806b5548786b28",
+                          "kind": "Topic",
+                          "slug": "districts-courses"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x6e6af225b025de50",
+                          "kind": "Topic",
+                          "slug": "algebra-1-ops-pilot-textbook"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xcee2111b51109c24",
+                          "kind": "Topic",
+                          "slug": "x6e6af225b025de50:solving-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xc3e30c3ae859ebcd",
+                          "kind": "Topic",
+                          "slug": "x6e6af225b025de50:solving-one-step-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "7",
+                          "kind": "Video",
+                          "slug": "simple-equations"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x99d65df986ffa9b5",
+                          "kind": "Topic",
+                          "slug": "grade-6-virginia"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x6ba9be6036ee92e6",
+                          "kind": "Topic",
+                          "slug": "x99d65df986ffa9b5:equations-inequalities"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x1d2c74b073264ae2",
+                          "kind": "Topic",
+                          "slug": "x99d65df986ffa9b5:one-step-multiplication-division-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "7",
+                          "kind": "Video",
+                          "slug": "simple-equations"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x9def9752caf9d75b",
+                          "kind": "Topic",
+                          "slug": "grade-6-fl-best"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xeda938ec8c4bbae7",
+                          "kind": "Topic",
+                          "slug": "x9def9752caf9d75b:equations-and-inequalities"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xd4c6160974ba7332",
+                          "kind": "Topic",
+                          "slug": "x9def9752caf9d75b:one-step-multiplication-and-division-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "7",
+                          "kind": "Video",
+                          "slug": "simple-equations"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xa86a6c4721d5a691",
+                          "kind": "Topic",
+                          "slug": "grade-6-math-snc-aligned"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x6ba86ed6e41c1adc",
+                          "kind": "Topic",
+                          "slug": "xa86a6c4721d5a691:linear-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x0339e7c1f252ec93",
+                          "kind": "Topic",
+                          "slug": "xa86a6c4721d5a691:solve-simple-linear-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "7",
+                          "kind": "Video",
+                          "slug": "simple-equations"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x5a806b5548786b28",
+                          "kind": "Topic",
+                          "slug": "districts-courses"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xea7cecff7bfddb01",
+                          "kind": "Topic",
+                          "slug": "math-6-acc-lbusd-pilot"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x5e9fcd1628ba5727",
+                          "kind": "Topic",
+                          "slug": "xea7cecff7bfddb01:equations-and-inequalities"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x9b7a88fd64b1e813",
+                          "kind": "Topic",
+                          "slug": "xea7cecff7bfddb01:solving-equations-using-multiplication-or-division"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "7",
+                          "kind": "Video",
+                          "slug": "simple-equations"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xf8b56da266eb02cb",
+                          "kind": "Topic",
+                          "slug": "grade-6-math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xdfbbb5ce5a8d7dd7",
+                          "kind": "Topic",
+                          "slug": "xf8b56da266eb02cb:linear-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xf5b21cbd08b4a082",
+                          "kind": "Topic",
+                          "slug": "xf8b56da266eb02cb:one-step-multiplication-and-division-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "7",
+                          "kind": "Video",
+                          "slug": "simple-equations"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xcf876fe7",
+                          "kind": "Topic",
+                          "slug": "algebra-2018"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x86a3d4b8",
+                          "kind": "Topic",
+                          "slug": "one-variable-linear-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x794fd41e",
+                          "kind": "Topic",
+                          "slug": "alg1-one-step-mult-div-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "7",
+                          "kind": "Video",
+                          "slug": "simple-equations"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xdd8e247e1e1da0e3",
+                          "kind": "Topic",
+                          "slug": "pre-algebra-staging"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xa65fa4b69410096e",
+                          "kind": "Topic",
+                          "slug": "xdd8e247e1e1da0e3:equations-inequalities-introduction"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xc6fc82b57fa435ab",
+                          "kind": "Topic",
+                          "slug": "xdd8e247e1e1da0e3:one-step-multiplication-division-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "7",
+                          "kind": "Video",
+                          "slug": "simple-equations"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7d118a7bb3c3ce56",
+                          "kind": "Topic",
+                          "slug": "in-in-class-6-math-india-icse"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x8711e4815cdbd4d4",
+                          "kind": "Topic",
+                          "slug": "in-in-6-linear-equations-in-one-variable-icse"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x99f8bdc39cb2d713",
+                          "kind": "Topic",
+                          "slug": "in-in-6-one-step-multiplication-and-division-equations-icse"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "7",
+                          "kind": "Video",
+                          "slug": "simple-equations"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xaede9e6ba20535bd",
+                          "kind": "Topic",
+                          "slug": "in-in-class-7-math-india-icse"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x95bf6ccb28692a5a",
+                          "kind": "Topic",
+                          "slug": "in-in-7-simple-linear-equations-in-one-variable-icse"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xe8cc44da573fc8bc",
+                          "kind": "Topic",
+                          "slug": "in-in-7-one-step-multiplication-division-equations-icse"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "7",
+                          "kind": "Video",
+                          "slug": "simple-equations"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x2fa930cf47c5fdef",
+                          "kind": "Topic",
+                          "slug": "in-in-class-8-math-india-icse"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x6822e081f6dcf1df",
+                          "kind": "Topic",
+                          "slug": "in-in-8-linear-equations-in-one-variable-icse"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x0e05e72cb42c06dd",
+                          "kind": "Topic",
+                          "slug": "in-in-8-one-step-multiplication-division-equation-icse"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "7",
+                          "kind": "Video",
+                          "slug": "simple-equations"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xb95629935c14d200",
+                          "kind": "Topic",
+                          "slug": "class-7-kn"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x8a442a44f9e1ac5a",
+                          "kind": "Topic",
+                          "slug": "xb95629935c14d200:simple-equations-ncert-new"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xc28389f62e21c82a",
+                          "kind": "Topic",
+                          "slug": "xb95629935c14d200:what-equation-is"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "7",
+                          "kind": "Video",
+                          "slug": "simple-equations"
+                        }
+                      ]
+                    }
+                  ],
+                  "translatedTitle": "One-step division equations",
+                  "translatedYoutubeId": "9Ek61w1LxSc",
+                  "urlWithinClosestAncestor": "/math/cc-sixth-grade-math/cc-6th-equations-and-inequalities/cc-6th-one-step-mult-div-equations/v/simple-equations",
+                  "urlWithinCurationNode": "/math/cc-sixth-grade-math/cc-6th-equations-and-inequalities/cc-6th-one-step-mult-div-equations/v/simple-equations"
+                },
+                {
+                  "__typename": "Video",
+                  "contentKind": "Video",
+                  "duration": 143,
+                  "id": "13179466",
+                  "imageUrl": "https://cdn.kastatic.org/ka_thumbnails_cache/3d7fae72-bf00-4140-b90a-8a7eac0a6511_1280_720_base.png",
+                  "kaUrl": "https://www.khanacademy.org/math/cc-sixth-grade-math/cc-6th-equations-and-inequalities/cc-6th-one-step-mult-div-equations/v/solving-one-step-equations-2",
+                  "kind": "Video",
+                  "nodeSlug": "v/solving-one-step-equations-2",
+                  "relativeUrl": "/math/cc-sixth-grade-math/cc-6th-equations-and-inequalities/cc-6th-one-step-mult-div-equations/v/solving-one-step-equations-2",
+                  "slug": "solving-one-step-equations-2",
+                  "thumbnailUrl": "https://cdn.kastatic.org/ka_thumbnails_cache/3d7fae72-bf00-4140-b90a-8a7eac0a6511_1280_720_base.png",
+                  "topicPaths": [
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x0267d782",
+                          "kind": "Topic",
+                          "slug": "cc-sixth-grade-math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x98e0520f",
+                          "kind": "Topic",
+                          "slug": "cc-6th-equations-and-inequalities"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xda3c47ae",
+                          "kind": "Topic",
+                          "slug": "cc-6th-one-step-mult-div-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "13179466",
+                          "kind": "Video",
+                          "slug": "solving-one-step-equations-2"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xb4832e56",
+                          "kind": "Topic",
+                          "slug": "pre-algebra"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x04908aa2",
+                          "kind": "Topic",
+                          "slug": "pre-algebra-equations-expressions"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xdb126255",
+                          "kind": "Topic",
+                          "slug": "pre-algebra-one-step-mult-div-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "13179466",
+                          "kind": "Video",
+                          "slug": "solving-one-step-equations-2"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xed0a1484",
+                          "kind": "Topic",
+                          "slug": "algebra-basics"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x649777e8",
+                          "kind": "Topic",
+                          "slug": "alg-basics-linear-equations-and-inequalities"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x8c345638",
+                          "kind": "Topic",
+                          "slug": "alg-basics-one-step-add-sub-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "13179466",
+                          "kind": "Video",
+                          "slug": "solving-one-step-equations-2"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x0eb19e7d",
+                          "kind": "Topic",
+                          "slug": "algebra-home"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x70bad2b9",
+                          "kind": "Topic",
+                          "slug": "alg-basic-eq-ineq"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xe881ada3",
+                          "kind": "Topic",
+                          "slug": "alg-one-step-mult-div-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "13179466",
+                          "kind": "Video",
+                          "slug": "solving-one-step-equations-2"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xa46d6dd638f86863",
+                          "kind": "Topic",
+                          "slug": "get-ready-for-7th-grade"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x354dfb23361818cf",
+                          "kind": "Topic",
+                          "slug": "xa46d6dd638f86863:get-ready-for-expressions-equations-inequalities"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xbfb177d77e3bb1bd",
+                          "kind": "Topic",
+                          "slug": "xa46d6dd638f86863:one-step-multiplication-and-division-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "13179466",
+                          "kind": "Video",
+                          "slug": "solving-one-step-equations-2"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x465f0793a1788a3f",
+                          "kind": "Topic",
+                          "slug": "get-ready-for-8th-grade"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xcf366994f5088763",
+                          "kind": "Topic",
+                          "slug": "x465f0793a1788a3f:get-ready-for-solving-equations-and-systems-of-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7855cda4769689cc",
+                          "kind": "Topic",
+                          "slug": "x465f0793a1788a3f:one-step-multiplication-and-division-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "13179466",
+                          "kind": "Video",
+                          "slug": "solving-one-step-equations-2"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x127ac35e11aba30e",
+                          "kind": "Topic",
+                          "slug": "get-ready-for-algebra-i"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x512f5178b281ba0a",
+                          "kind": "Topic",
+                          "slug": "x127ac35e11aba30e:get-ready-for-equations-inequalities"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x72c17005599f45d3",
+                          "kind": "Topic",
+                          "slug": "x127ac35e11aba30e:one-step-multiplication-division-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "13179466",
+                          "kind": "Video",
+                          "slug": "solving-one-step-equations-2"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x261c2cc7",
+                          "kind": "Topic",
+                          "slug": "mappers"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x8fa5bb9e",
+                          "kind": "Topic",
+                          "slug": "operations-and-algebraic-thinking-220-223"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x90ef312972a64a81",
+                          "kind": "Topic",
+                          "slug": "x261c2cc7:one-step-multiplication-and-division-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "13179466",
+                          "kind": "Video",
+                          "slug": "solving-one-step-equations-2"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x4d211865",
+                          "kind": "Topic",
+                          "slug": "6th-engage-ny"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x80fafbe0",
+                          "kind": "Topic",
+                          "slug": "engage-6th-module-4"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x88dd96da",
+                          "kind": "Topic",
+                          "slug": "6th-module-4-topic-g"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "13179466",
+                          "kind": "Video",
+                          "slug": "solving-one-step-equations-2"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x3c33784549587b6d",
+                          "kind": "Topic",
+                          "slug": "kmap"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x19d401566fd27bd3",
+                          "kind": "Topic",
+                          "slug": "operations-and-algebraic-thinking-g"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xde9a4e3202c5d095",
+                          "kind": "Topic",
+                          "slug": "oat220-equations-inequalities-introduction"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x66b03987f1eba296",
+                          "kind": "Topic",
+                          "slug": "oat220-one-step-multiplication-and-division-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "13179466",
+                          "kind": "Video",
+                          "slug": "solving-one-step-equations-2"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x3c33784549587b6d",
+                          "kind": "Topic",
+                          "slug": "kmap"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x901d3bfb77d7e63c",
+                          "kind": "Topic",
+                          "slug": "equations-inequalities-a"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x3b7ee0b3f901e418",
+                          "kind": "Topic",
+                          "slug": "x901d3bfb77d7e63c:ratios-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x0b4e07800a675adc",
+                          "kind": "Topic",
+                          "slug": "x901d3bfb77d7e63c:one-step-multiplication-division-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "13179466",
+                          "kind": "Video",
+                          "slug": "solving-one-step-equations-2"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x5a806b5548786b28",
+                          "kind": "Topic",
+                          "slug": "districts-courses"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x9de80188cb8d3de5",
+                          "kind": "Topic",
+                          "slug": "grade-6-scps-pilot"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xa0eb5b11720f1639",
+                          "kind": "Topic",
+                          "slug": "x9de80188cb8d3de5:applications-of-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x835947d57d9976a1",
+                          "kind": "Topic",
+                          "slug": "x9de80188cb8d3de5:unit-7b-topic-2"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "13179466",
+                          "kind": "Video",
+                          "slug": "solving-one-step-equations-2"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x6d0461550282bed1",
+                          "kind": "Topic",
+                          "slug": "6th-grade-illustrative-math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xde962a58a14f51dd",
+                          "kind": "Topic",
+                          "slug": "unit-6-expressions-and-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xb1927188c03aa430",
+                          "kind": "Topic",
+                          "slug": "lesson-4-practice-solving-equations-and-representing-situations-with-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "13179466",
+                          "kind": "Video",
+                          "slug": "solving-one-step-equations-2"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x065dcf1640354e81",
+                          "kind": "Topic",
+                          "slug": "7th-grade-matatag"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xb12846f67609a1ac",
+                          "kind": "Topic",
+                          "slug": "x065dcf1640354e81:4th-quarter"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xcb3b0de1aa905d3f",
+                          "kind": "Topic",
+                          "slug": "x065dcf1640354e81:properties-of-equality-and-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "13179466",
+                          "kind": "Video",
+                          "slug": "solving-one-step-equations-2"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x3931b57772b927b3",
+                          "kind": "Topic",
+                          "slug": "grade-6-math-tx"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x594fe94dc8f62ae1",
+                          "kind": "Topic",
+                          "slug": "x3931b57772b927b3:one-variable-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x348104eb7c1422c2",
+                          "kind": "Topic",
+                          "slug": "x3931b57772b927b3:one-step-multiplication-division-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "13179466",
+                          "kind": "Video",
+                          "slug": "solving-one-step-equations-2"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x5a806b5548786b28",
+                          "kind": "Topic",
+                          "slug": "districts-courses"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x6e6af225b025de50",
+                          "kind": "Topic",
+                          "slug": "algebra-1-ops-pilot-textbook"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xcee2111b51109c24",
+                          "kind": "Topic",
+                          "slug": "x6e6af225b025de50:solving-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xc3e30c3ae859ebcd",
+                          "kind": "Topic",
+                          "slug": "x6e6af225b025de50:solving-one-step-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "13179466",
+                          "kind": "Video",
+                          "slug": "solving-one-step-equations-2"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x99d65df986ffa9b5",
+                          "kind": "Topic",
+                          "slug": "grade-6-virginia"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x6ba9be6036ee92e6",
+                          "kind": "Topic",
+                          "slug": "x99d65df986ffa9b5:equations-inequalities"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x1d2c74b073264ae2",
+                          "kind": "Topic",
+                          "slug": "x99d65df986ffa9b5:one-step-multiplication-division-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "13179466",
+                          "kind": "Video",
+                          "slug": "solving-one-step-equations-2"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x9def9752caf9d75b",
+                          "kind": "Topic",
+                          "slug": "grade-6-fl-best"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xeda938ec8c4bbae7",
+                          "kind": "Topic",
+                          "slug": "x9def9752caf9d75b:equations-and-inequalities"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xd4c6160974ba7332",
+                          "kind": "Topic",
+                          "slug": "x9def9752caf9d75b:one-step-multiplication-and-division-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "13179466",
+                          "kind": "Video",
+                          "slug": "solving-one-step-equations-2"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xa86a6c4721d5a691",
+                          "kind": "Topic",
+                          "slug": "grade-6-math-snc-aligned"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x6ba86ed6e41c1adc",
+                          "kind": "Topic",
+                          "slug": "xa86a6c4721d5a691:linear-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x0339e7c1f252ec93",
+                          "kind": "Topic",
+                          "slug": "xa86a6c4721d5a691:solve-simple-linear-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "13179466",
+                          "kind": "Video",
+                          "slug": "solving-one-step-equations-2"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x5a806b5548786b28",
+                          "kind": "Topic",
+                          "slug": "districts-courses"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xea7cecff7bfddb01",
+                          "kind": "Topic",
+                          "slug": "math-6-acc-lbusd-pilot"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x5e9fcd1628ba5727",
+                          "kind": "Topic",
+                          "slug": "xea7cecff7bfddb01:equations-and-inequalities"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x9b7a88fd64b1e813",
+                          "kind": "Topic",
+                          "slug": "xea7cecff7bfddb01:solving-equations-using-multiplication-or-division"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "13179466",
+                          "kind": "Video",
+                          "slug": "solving-one-step-equations-2"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xf8b56da266eb02cb",
+                          "kind": "Topic",
+                          "slug": "grade-6-math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xdfbbb5ce5a8d7dd7",
+                          "kind": "Topic",
+                          "slug": "xf8b56da266eb02cb:linear-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xf5b21cbd08b4a082",
+                          "kind": "Topic",
+                          "slug": "xf8b56da266eb02cb:one-step-multiplication-and-division-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "13179466",
+                          "kind": "Video",
+                          "slug": "solving-one-step-equations-2"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xcf876fe7",
+                          "kind": "Topic",
+                          "slug": "algebra-2018"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x86a3d4b8",
+                          "kind": "Topic",
+                          "slug": "one-variable-linear-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x794fd41e",
+                          "kind": "Topic",
+                          "slug": "alg1-one-step-mult-div-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "13179466",
+                          "kind": "Video",
+                          "slug": "solving-one-step-equations-2"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xdd8e247e1e1da0e3",
+                          "kind": "Topic",
+                          "slug": "pre-algebra-staging"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xa65fa4b69410096e",
+                          "kind": "Topic",
+                          "slug": "xdd8e247e1e1da0e3:equations-inequalities-introduction"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xc6fc82b57fa435ab",
+                          "kind": "Topic",
+                          "slug": "xdd8e247e1e1da0e3:one-step-multiplication-division-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "13179466",
+                          "kind": "Video",
+                          "slug": "solving-one-step-equations-2"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7d118a7bb3c3ce56",
+                          "kind": "Topic",
+                          "slug": "in-in-class-6-math-india-icse"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x8711e4815cdbd4d4",
+                          "kind": "Topic",
+                          "slug": "in-in-6-linear-equations-in-one-variable-icse"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x99f8bdc39cb2d713",
+                          "kind": "Topic",
+                          "slug": "in-in-6-one-step-multiplication-and-division-equations-icse"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "13179466",
+                          "kind": "Video",
+                          "slug": "solving-one-step-equations-2"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xaede9e6ba20535bd",
+                          "kind": "Topic",
+                          "slug": "in-in-class-7-math-india-icse"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x95bf6ccb28692a5a",
+                          "kind": "Topic",
+                          "slug": "in-in-7-simple-linear-equations-in-one-variable-icse"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xe8cc44da573fc8bc",
+                          "kind": "Topic",
+                          "slug": "in-in-7-one-step-multiplication-division-equations-icse"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "13179466",
+                          "kind": "Video",
+                          "slug": "solving-one-step-equations-2"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x2fa930cf47c5fdef",
+                          "kind": "Topic",
+                          "slug": "in-in-class-8-math-india-icse"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x6822e081f6dcf1df",
+                          "kind": "Topic",
+                          "slug": "in-in-8-linear-equations-in-one-variable-icse"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x0e05e72cb42c06dd",
+                          "kind": "Topic",
+                          "slug": "in-in-8-one-step-multiplication-division-equation-icse"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "13179466",
+                          "kind": "Video",
+                          "slug": "solving-one-step-equations-2"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xb95629935c14d200",
+                          "kind": "Topic",
+                          "slug": "class-7-kn"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x8a442a44f9e1ac5a",
+                          "kind": "Topic",
+                          "slug": "xb95629935c14d200:simple-equations-ncert-new"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xc28389f62e21c82a",
+                          "kind": "Topic",
+                          "slug": "xb95629935c14d200:what-equation-is"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "13179466",
+                          "kind": "Video",
+                          "slug": "solving-one-step-equations-2"
+                        }
+                      ]
+                    }
+                  ],
+                  "translatedTitle": "One-step multiplication equations",
+                  "translatedYoutubeId": "DqeMQHomwAU",
+                  "urlWithinClosestAncestor": "/math/cc-sixth-grade-math/cc-6th-equations-and-inequalities/cc-6th-one-step-mult-div-equations/v/solving-one-step-equations-2",
+                  "urlWithinCurationNode": "/math/cc-sixth-grade-math/cc-6th-equations-and-inequalities/cc-6th-one-step-mult-div-equations/v/solving-one-step-equations-2"
+                },
+                {
+                  "__typename": "Video",
+                  "contentKind": "Video",
+                  "duration": 279,
+                  "id": "948578231",
+                  "imageUrl": "https://cdn.kastatic.org/googleusercontent/hNkL2m5CQTMTDzu21O9aByC7pPGy8aeBQt0Pd4f6iIru01VsOFpn0Gr74JXY9i-vAimlRgF7ZQwhQTIyMVZC0QX7",
+                  "kaUrl": "https://www.khanacademy.org/math/cc-sixth-grade-math/cc-6th-equations-and-inequalities/cc-6th-solving-equations/v/one-step-equation-intuition",
+                  "kind": "Video",
+                  "nodeSlug": "v/one-step-equation-intuition",
+                  "relativeUrl": "/math/cc-sixth-grade-math/cc-6th-equations-and-inequalities/cc-6th-solving-equations/v/one-step-equation-intuition",
+                  "slug": "one-step-equation-intuition",
+                  "thumbnailUrl": "https://cdn.kastatic.org/googleusercontent/hNkL2m5CQTMTDzu21O9aByC7pPGy8aeBQt0Pd4f6iIru01VsOFpn0Gr74JXY9i-vAimlRgF7ZQwhQTIyMVZC0QX7",
+                  "topicPaths": [
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x0267d782",
+                          "kind": "Topic",
+                          "slug": "cc-sixth-grade-math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x98e0520f",
+                          "kind": "Topic",
+                          "slug": "cc-6th-equations-and-inequalities"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x6724c587",
+                          "kind": "Topic",
+                          "slug": "cc-6th-solving-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "948578231",
+                          "kind": "Video",
+                          "slug": "one-step-equation-intuition"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xb4832e56",
+                          "kind": "Topic",
+                          "slug": "pre-algebra"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x04908aa2",
+                          "kind": "Topic",
+                          "slug": "pre-algebra-equations-expressions"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xe62c62cc",
+                          "kind": "Topic",
+                          "slug": "pre-algebra-solving-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "948578231",
+                          "kind": "Video",
+                          "slug": "one-step-equation-intuition"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x0eb19e7d",
+                          "kind": "Topic",
+                          "slug": "algebra-home"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x70bad2b9",
+                          "kind": "Topic",
+                          "slug": "alg-basic-eq-ineq"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xcbb8a186",
+                          "kind": "Topic",
+                          "slug": "alg-solving-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "948578231",
+                          "kind": "Video",
+                          "slug": "one-step-equation-intuition"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x261c2cc7",
+                          "kind": "Topic",
+                          "slug": "mappers"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x8fa5bb9e",
+                          "kind": "Topic",
+                          "slug": "operations-and-algebraic-thinking-220-223"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xae9dd9fdcc04b543",
+                          "kind": "Topic",
+                          "slug": "x261c2cc7:one-step-equations-intuition"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "948578231",
+                          "kind": "Video",
+                          "slug": "one-step-equation-intuition"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x4d211865",
+                          "kind": "Topic",
+                          "slug": "6th-engage-ny"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x80fafbe0",
+                          "kind": "Topic",
+                          "slug": "engage-6th-module-4"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x88dd96da",
+                          "kind": "Topic",
+                          "slug": "6th-module-4-topic-g"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "948578231",
+                          "kind": "Video",
+                          "slug": "one-step-equation-intuition"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x3c33784549587b6d",
+                          "kind": "Topic",
+                          "slug": "kmap"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x19d401566fd27bd3",
+                          "kind": "Topic",
+                          "slug": "operations-and-algebraic-thinking-g"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xde9a4e3202c5d095",
+                          "kind": "Topic",
+                          "slug": "oat220-equations-inequalities-introduction"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xc3982601b74aabf7",
+                          "kind": "Topic",
+                          "slug": "oat220-one-step-equations-intuition"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "948578231",
+                          "kind": "Video",
+                          "slug": "one-step-equation-intuition"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x3c33784549587b6d",
+                          "kind": "Topic",
+                          "slug": "kmap"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x901d3bfb77d7e63c",
+                          "kind": "Topic",
+                          "slug": "equations-inequalities-a"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x3b7ee0b3f901e418",
+                          "kind": "Topic",
+                          "slug": "x901d3bfb77d7e63c:ratios-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xeb204f9393639fdd",
+                          "kind": "Topic",
+                          "slug": "x901d3bfb77d7e63c:one-step-equations-intuition"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "948578231",
+                          "kind": "Video",
+                          "slug": "one-step-equation-intuition"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x6d0461550282bed1",
+                          "kind": "Topic",
+                          "slug": "6th-grade-illustrative-math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xde962a58a14f51dd",
+                          "kind": "Topic",
+                          "slug": "unit-6-expressions-and-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x622fa838ad31e5cc",
+                          "kind": "Topic",
+                          "slug": "lesson-3-staying-in-balance"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "948578231",
+                          "kind": "Video",
+                          "slug": "one-step-equation-intuition"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x065dcf1640354e81",
+                          "kind": "Topic",
+                          "slug": "7th-grade-matatag"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xb12846f67609a1ac",
+                          "kind": "Topic",
+                          "slug": "x065dcf1640354e81:4th-quarter"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xcb3b0de1aa905d3f",
+                          "kind": "Topic",
+                          "slug": "x065dcf1640354e81:properties-of-equality-and-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "948578231",
+                          "kind": "Video",
+                          "slug": "one-step-equation-intuition"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x5ee0e3519fe698ad",
+                          "kind": "Topic",
+                          "slug": "in-class-8-math-foundation"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x032c2b21dab904ca",
+                          "kind": "Topic",
+                          "slug": "x5ee0e3519fe698ad:simple-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xff0a7028306add01",
+                          "kind": "Topic",
+                          "slug": "x5ee0e3519fe698ad:solving-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "948578231",
+                          "kind": "Video",
+                          "slug": "one-step-equation-intuition"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x99d65df986ffa9b5",
+                          "kind": "Topic",
+                          "slug": "grade-6-virginia"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x6ba9be6036ee92e6",
+                          "kind": "Topic",
+                          "slug": "x99d65df986ffa9b5:equations-inequalities"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xaa7c02a92c1f3973",
+                          "kind": "Topic",
+                          "slug": "x99d65df986ffa9b5:one-step-equations-intuition"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "948578231",
+                          "kind": "Video",
+                          "slug": "one-step-equation-intuition"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x9def9752caf9d75b",
+                          "kind": "Topic",
+                          "slug": "grade-6-fl-best"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xeda938ec8c4bbae7",
+                          "kind": "Topic",
+                          "slug": "x9def9752caf9d75b:equations-and-inequalities"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xfeba4902bb2f6034",
+                          "kind": "Topic",
+                          "slug": "x9def9752caf9d75b:one-step-equations-intuition"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "948578231",
+                          "kind": "Video",
+                          "slug": "one-step-equation-intuition"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xf8b56da266eb02cb",
+                          "kind": "Topic",
+                          "slug": "grade-6-math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xdfbbb5ce5a8d7dd7",
+                          "kind": "Topic",
+                          "slug": "xf8b56da266eb02cb:linear-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x57aa3bb1488293d7",
+                          "kind": "Topic",
+                          "slug": "xf8b56da266eb02cb:one-step-equations-intuition"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "948578231",
+                          "kind": "Video",
+                          "slug": "one-step-equation-intuition"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xcf876fe7",
+                          "kind": "Topic",
+                          "slug": "algebra-2018"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x86a3d4b8",
+                          "kind": "Topic",
+                          "slug": "one-variable-linear-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x6bb51b62",
+                          "kind": "Topic",
+                          "slug": "alg1-solving-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "948578231",
+                          "kind": "Video",
+                          "slug": "one-step-equation-intuition"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xaf06646de8e27a4f",
+                          "kind": "Topic",
+                          "slug": "5th-grade-math-eureka-squared-aligned"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xbc2175431f363897",
+                          "kind": "Topic",
+                          "slug": "xaf06646de8e27a4f:multiplication-and-division-with-fractions"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x89a8307e8a6bf4ad",
+                          "kind": "Topic",
+                          "slug": "xaf06646de8e27a4f:compare-and-evaluate-expressions-with-parentheses"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "948578231",
+                          "kind": "Video",
+                          "slug": "one-step-equation-intuition"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xdd8e247e1e1da0e3",
+                          "kind": "Topic",
+                          "slug": "pre-algebra-staging"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xa65fa4b69410096e",
+                          "kind": "Topic",
+                          "slug": "xdd8e247e1e1da0e3:equations-inequalities-introduction"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x017114774c98f63c",
+                          "kind": "Topic",
+                          "slug": "xdd8e247e1e1da0e3:one-step-equations-intuition"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "948578231",
+                          "kind": "Video",
+                          "slug": "one-step-equation-intuition"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7d118a7bb3c3ce56",
+                          "kind": "Topic",
+                          "slug": "in-in-class-6-math-india-icse"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x8711e4815cdbd4d4",
+                          "kind": "Topic",
+                          "slug": "in-in-6-linear-equations-in-one-variable-icse"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x554f258975728738",
+                          "kind": "Topic",
+                          "slug": "in-in-6-one-step-equations-intuition-icse"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "948578231",
+                          "kind": "Video",
+                          "slug": "one-step-equation-intuition"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x2fa930cf47c5fdef",
+                          "kind": "Topic",
+                          "slug": "in-in-class-8-math-india-icse"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x6822e081f6dcf1df",
+                          "kind": "Topic",
+                          "slug": "in-in-8-linear-equations-in-one-variable-icse"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xdb4f361a0ab9d1bc",
+                          "kind": "Topic",
+                          "slug": "in-in-8-why-we-do-the-same-thing-to-both-sides-of-an-equation-icse"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "948578231",
+                          "kind": "Video",
+                          "slug": "one-step-equation-intuition"
+                        }
+                      ]
+                    }
+                  ],
+                  "translatedTitle": "One-step equations intuition",
+                  "translatedYoutubeId": "kbqO0YTUyAY",
+                  "urlWithinClosestAncestor": "/math/cc-sixth-grade-math/cc-6th-equations-and-inequalities/cc-6th-solving-equations/v/one-step-equation-intuition",
+                  "urlWithinCurationNode": "/math/cc-sixth-grade-math/cc-6th-equations-and-inequalities/cc-6th-solving-equations/v/one-step-equation-intuition"
+                },
+                {
+                  "__typename": "Video",
+                  "contentKind": "Video",
+                  "duration": 194,
+                  "id": "948526680",
+                  "imageUrl": "https://cdn.kastatic.org/googleusercontent/PGpS9R2B2yRPTrqwhWzTucVOnJmD9_AJXcn_8R3qp7ml6Tc-q6yuQosIEXjqEBsMuNLb97fSalcHm7DalLUgOBaMhg",
+                  "kaUrl": "https://www.khanacademy.org/math/cc-sixth-grade-math/cc-6th-equations-and-inequalities/cc-6th-solving-equations/v/intuition-why-we-divide-both-sides",
+                  "kind": "Video",
+                  "nodeSlug": "v/intuition-why-we-divide-both-sides",
+                  "relativeUrl": "/math/cc-sixth-grade-math/cc-6th-equations-and-inequalities/cc-6th-solving-equations/v/intuition-why-we-divide-both-sides",
+                  "slug": "intuition-why-we-divide-both-sides",
+                  "thumbnailUrl": "https://cdn.kastatic.org/googleusercontent/PGpS9R2B2yRPTrqwhWzTucVOnJmD9_AJXcn_8R3qp7ml6Tc-q6yuQosIEXjqEBsMuNLb97fSalcHm7DalLUgOBaMhg",
+                  "topicPaths": [
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x0267d782",
+                          "kind": "Topic",
+                          "slug": "cc-sixth-grade-math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x98e0520f",
+                          "kind": "Topic",
+                          "slug": "cc-6th-equations-and-inequalities"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x6724c587",
+                          "kind": "Topic",
+                          "slug": "cc-6th-solving-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "948526680",
+                          "kind": "Video",
+                          "slug": "intuition-why-we-divide-both-sides"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xb4832e56",
+                          "kind": "Topic",
+                          "slug": "pre-algebra"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x04908aa2",
+                          "kind": "Topic",
+                          "slug": "pre-algebra-equations-expressions"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xe62c62cc",
+                          "kind": "Topic",
+                          "slug": "pre-algebra-solving-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "948526680",
+                          "kind": "Video",
+                          "slug": "intuition-why-we-divide-both-sides"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x0eb19e7d",
+                          "kind": "Topic",
+                          "slug": "algebra-home"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x70bad2b9",
+                          "kind": "Topic",
+                          "slug": "alg-basic-eq-ineq"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xcbb8a186",
+                          "kind": "Topic",
+                          "slug": "alg-solving-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "948526680",
+                          "kind": "Video",
+                          "slug": "intuition-why-we-divide-both-sides"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x261c2cc7",
+                          "kind": "Topic",
+                          "slug": "mappers"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x8fa5bb9e",
+                          "kind": "Topic",
+                          "slug": "operations-and-algebraic-thinking-220-223"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xae9dd9fdcc04b543",
+                          "kind": "Topic",
+                          "slug": "x261c2cc7:one-step-equations-intuition"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "948526680",
+                          "kind": "Video",
+                          "slug": "intuition-why-we-divide-both-sides"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x4d211865",
+                          "kind": "Topic",
+                          "slug": "6th-engage-ny"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x80fafbe0",
+                          "kind": "Topic",
+                          "slug": "engage-6th-module-4"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x88dd96da",
+                          "kind": "Topic",
+                          "slug": "6th-module-4-topic-g"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "948526680",
+                          "kind": "Video",
+                          "slug": "intuition-why-we-divide-both-sides"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x4f15f0e8d14edb51",
+                          "kind": "Topic",
+                          "slug": "engageny-alg-1"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xa76356b2f977ab5c",
+                          "kind": "Topic",
+                          "slug": "alg1-1"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x644bc44f027f8183",
+                          "kind": "Topic",
+                          "slug": "alg1-1c-solving-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "948526680",
+                          "kind": "Video",
+                          "slug": "intuition-why-we-divide-both-sides"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x3c33784549587b6d",
+                          "kind": "Topic",
+                          "slug": "kmap"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x19d401566fd27bd3",
+                          "kind": "Topic",
+                          "slug": "operations-and-algebraic-thinking-g"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xde9a4e3202c5d095",
+                          "kind": "Topic",
+                          "slug": "oat220-equations-inequalities-introduction"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xc3982601b74aabf7",
+                          "kind": "Topic",
+                          "slug": "oat220-one-step-equations-intuition"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "948526680",
+                          "kind": "Video",
+                          "slug": "intuition-why-we-divide-both-sides"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x3c33784549587b6d",
+                          "kind": "Topic",
+                          "slug": "kmap"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x901d3bfb77d7e63c",
+                          "kind": "Topic",
+                          "slug": "equations-inequalities-a"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x3b7ee0b3f901e418",
+                          "kind": "Topic",
+                          "slug": "x901d3bfb77d7e63c:ratios-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xeb204f9393639fdd",
+                          "kind": "Topic",
+                          "slug": "x901d3bfb77d7e63c:one-step-equations-intuition"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "948526680",
+                          "kind": "Video",
+                          "slug": "intuition-why-we-divide-both-sides"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x6d0461550282bed1",
+                          "kind": "Topic",
+                          "slug": "6th-grade-illustrative-math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xde962a58a14f51dd",
+                          "kind": "Topic",
+                          "slug": "unit-6-expressions-and-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x622fa838ad31e5cc",
+                          "kind": "Topic",
+                          "slug": "lesson-3-staying-in-balance"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "948526680",
+                          "kind": "Video",
+                          "slug": "intuition-why-we-divide-both-sides"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x476671d9fb9d8978",
+                          "kind": "Topic",
+                          "slug": "class-7-tg"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xbb8820902e5c2ebb",
+                          "kind": "Topic",
+                          "slug": "x476671d9fb9d8978:simple-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x66f8b19d3a02276b",
+                          "kind": "Topic",
+                          "slug": "x476671d9fb9d8978:equation-weighing-balance"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "948526680",
+                          "kind": "Video",
+                          "slug": "intuition-why-we-divide-both-sides"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x99d65df986ffa9b5",
+                          "kind": "Topic",
+                          "slug": "grade-6-virginia"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x6ba9be6036ee92e6",
+                          "kind": "Topic",
+                          "slug": "x99d65df986ffa9b5:equations-inequalities"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xaa7c02a92c1f3973",
+                          "kind": "Topic",
+                          "slug": "x99d65df986ffa9b5:one-step-equations-intuition"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "948526680",
+                          "kind": "Video",
+                          "slug": "intuition-why-we-divide-both-sides"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x9def9752caf9d75b",
+                          "kind": "Topic",
+                          "slug": "grade-6-fl-best"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xeda938ec8c4bbae7",
+                          "kind": "Topic",
+                          "slug": "x9def9752caf9d75b:equations-and-inequalities"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xfeba4902bb2f6034",
+                          "kind": "Topic",
+                          "slug": "x9def9752caf9d75b:one-step-equations-intuition"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "948526680",
+                          "kind": "Video",
+                          "slug": "intuition-why-we-divide-both-sides"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xf8b56da266eb02cb",
+                          "kind": "Topic",
+                          "slug": "grade-6-math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xdfbbb5ce5a8d7dd7",
+                          "kind": "Topic",
+                          "slug": "xf8b56da266eb02cb:linear-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x57aa3bb1488293d7",
+                          "kind": "Topic",
+                          "slug": "xf8b56da266eb02cb:one-step-equations-intuition"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "948526680",
+                          "kind": "Video",
+                          "slug": "intuition-why-we-divide-both-sides"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xcf876fe7",
+                          "kind": "Topic",
+                          "slug": "algebra-2018"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x86a3d4b8",
+                          "kind": "Topic",
+                          "slug": "one-variable-linear-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x6bb51b62",
+                          "kind": "Topic",
+                          "slug": "alg1-solving-equations"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "948526680",
+                          "kind": "Video",
+                          "slug": "intuition-why-we-divide-both-sides"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xdd8e247e1e1da0e3",
+                          "kind": "Topic",
+                          "slug": "pre-algebra-staging"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xa65fa4b69410096e",
+                          "kind": "Topic",
+                          "slug": "xdd8e247e1e1da0e3:equations-inequalities-introduction"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x017114774c98f63c",
+                          "kind": "Topic",
+                          "slug": "xdd8e247e1e1da0e3:one-step-equations-intuition"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "948526680",
+                          "kind": "Video",
+                          "slug": "intuition-why-we-divide-both-sides"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7d118a7bb3c3ce56",
+                          "kind": "Topic",
+                          "slug": "in-in-class-6-math-india-icse"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x8711e4815cdbd4d4",
+                          "kind": "Topic",
+                          "slug": "in-in-6-linear-equations-in-one-variable-icse"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x554f258975728738",
+                          "kind": "Topic",
+                          "slug": "in-in-6-one-step-equations-intuition-icse"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "948526680",
+                          "kind": "Video",
+                          "slug": "intuition-why-we-divide-both-sides"
+                        }
+                      ]
+                    },
+                    {
+                      "__typename": "TopicPath",
+                      "path": [
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x7a488390",
+                          "kind": "Topic",
+                          "slug": "math"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x2fa930cf47c5fdef",
+                          "kind": "Topic",
+                          "slug": "in-in-class-8-math-india-icse"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "x6822e081f6dcf1df",
+                          "kind": "Topic",
+                          "slug": "in-in-8-linear-equations-in-one-variable-icse"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "xdb4f361a0ab9d1bc",
+                          "kind": "Topic",
+                          "slug": "in-in-8-why-we-do-the-same-thing-to-both-sides-of-an-equation-icse"
+                        },
+                        {
+                          "__typename": "TopicPathSegment",
+                          "id": "948526680",
+                          "kind": "Video",
+                          "slug": "intuition-why-we-divide-both-sides"
+                        }
+                      ]
+                    }
+                  ],
+                  "translatedTitle": "Dividing both sides of an equation",
+                  "translatedYoutubeId": "Ye13MIPv6n0",
+                  "urlWithinClosestAncestor": "/math/cc-sixth-grade-math/cc-6th-equations-and-inequalities/cc-6th-solving-equations/v/intuition-why-we-divide-both-sides",
+                  "urlWithinCurationNode": "/math/cc-sixth-grade-math/cc-6th-equations-and-inequalities/cc-6th-solving-equations/v/intuition-why-we-divide-both-sides"
+                }
+              ],
+              "relatedVideos": [
+                {
+                  "__typename": "Video",
+                  "contentKind": "Video",
+                  "duration": 666,
+                  "id": "7",
+                  "imageUrl": "https://cdn.kastatic.org/googleusercontent/H046477yRoXhje5ES_pi-tWs9EPuF4mn76jgQLzmntnDPcoT-VECHeFLuTEDJ0bVm_IlX9yQMw1ozz2O8RX-doxlOw",
+                  "kaUrl": "https://www.khanacademy.org/math/cc-sixth-grade-math/cc-6th-equations-and-inequalities/cc-6th-one-step-mult-div-equations/v/simple-equations",
+                  "kind": "Video",
+                  "nodeSlug": "v/simple-equations",
+                  "progressKey": "v7",
+                  "relativeUrl": "/math/cc-sixth-grade-math/cc-6th-equations-and-inequalities/cc-6th-one-step-mult-div-equations/v/simple-equations",
+                  "slug": "simple-equations",
+                  "thumbnailUrl": "https://cdn.kastatic.org/googleusercontent/H046477yRoXhje5ES_pi-tWs9EPuF4mn76jgQLzmntnDPcoT-VECHeFLuTEDJ0bVm_IlX9yQMw1ozz2O8RX-doxlOw",
+                  "translatedDescription": "In this lesson, we learn how to solve simple algebraic equations systematically. We focus on understanding the meaning of equations, like 7x = 14, and using techniques like dividing both sides of the equation by the coefficient to isolate the variable. This method helps us find the value of the unknown variable, making algebra easier and more approachable.",
+                  "translatedTitle": "One-step division equations",
+                  "translatedYoutubeId": "9Ek61w1LxSc"
+                },
+                {
+                  "__typename": "Video",
+                  "contentKind": "Video",
+                  "duration": 143,
+                  "id": "13179466",
+                  "imageUrl": "https://cdn.kastatic.org/ka_thumbnails_cache/3d7fae72-bf00-4140-b90a-8a7eac0a6511_1280_720_base.png",
+                  "kaUrl": "https://www.khanacademy.org/math/cc-sixth-grade-math/cc-6th-equations-and-inequalities/cc-6th-one-step-mult-div-equations/v/solving-one-step-equations-2",
+                  "kind": "Video",
+                  "nodeSlug": "v/solving-one-step-equations-2",
+                  "progressKey": "v13179466",
+                  "relativeUrl": "/math/cc-sixth-grade-math/cc-6th-equations-and-inequalities/cc-6th-one-step-mult-div-equations/v/solving-one-step-equations-2",
+                  "slug": "solving-one-step-equations-2",
+                  "thumbnailUrl": "https://cdn.kastatic.org/ka_thumbnails_cache/3d7fae72-bf00-4140-b90a-8a7eac0a6511_1280_720_base.png",
+                  "translatedDescription": "In this math lesson, we learn to solve equations with x divided by a number, like x/3 = 14. To find x, we isolate it by multiplying both sides of the equation by the divisor (3). This gives us x = 42. Finally, we check our answer by substituting x back into the original equation to make sure it's correct.",
+                  "translatedTitle": "One-step multiplication equations",
+                  "translatedYoutubeId": "DqeMQHomwAU"
+                },
+                {
+                  "__typename": "Video",
+                  "contentKind": "Video",
+                  "duration": 279,
+                  "id": "948578231",
+                  "imageUrl": "https://cdn.kastatic.org/googleusercontent/hNkL2m5CQTMTDzu21O9aByC7pPGy8aeBQt0Pd4f6iIru01VsOFpn0Gr74JXY9i-vAimlRgF7ZQwhQTIyMVZC0QX7",
+                  "kaUrl": "https://www.khanacademy.org/math/cc-sixth-grade-math/cc-6th-equations-and-inequalities/cc-6th-solving-equations/v/one-step-equation-intuition",
+                  "kind": "Video",
+                  "nodeSlug": "v/one-step-equation-intuition",
+                  "progressKey": "v948578231",
+                  "relativeUrl": "/math/cc-sixth-grade-math/cc-6th-equations-and-inequalities/cc-6th-solving-equations/v/one-step-equation-intuition",
+                  "slug": "one-step-equation-intuition",
+                  "thumbnailUrl": "https://cdn.kastatic.org/googleusercontent/hNkL2m5CQTMTDzu21O9aByC7pPGy8aeBQt0Pd4f6iIru01VsOFpn0Gr74JXY9i-vAimlRgF7ZQwhQTIyMVZC0QX7",
+                  "translatedDescription": "In this math lesson, we learn how to solve a balance scale problem with unknown mass. We represent the problem using an algebraic equation, 3x = 9, where x is the unknown mass. By dividing both sides by 3, we find that x = 3, meaning each object has a mass of 3 kilograms.",
+                  "translatedTitle": "One-step equations intuition",
+                  "translatedYoutubeId": "kbqO0YTUyAY"
+                },
+                {
+                  "__typename": "Video",
+                  "contentKind": "Video",
+                  "duration": 194,
+                  "id": "948526680",
+                  "imageUrl": "https://cdn.kastatic.org/googleusercontent/PGpS9R2B2yRPTrqwhWzTucVOnJmD9_AJXcn_8R3qp7ml6Tc-q6yuQosIEXjqEBsMuNLb97fSalcHm7DalLUgOBaMhg",
+                  "kaUrl": "https://www.khanacademy.org/math/cc-sixth-grade-math/cc-6th-equations-and-inequalities/cc-6th-solving-equations/v/intuition-why-we-divide-both-sides",
+                  "kind": "Video",
+                  "nodeSlug": "v/intuition-why-we-divide-both-sides",
+                  "progressKey": "v948526680",
+                  "relativeUrl": "/math/cc-sixth-grade-math/cc-6th-equations-and-inequalities/cc-6th-solving-equations/v/intuition-why-we-divide-both-sides",
+                  "slug": "intuition-why-we-divide-both-sides",
+                  "thumbnailUrl": "https://cdn.kastatic.org/googleusercontent/PGpS9R2B2yRPTrqwhWzTucVOnJmD9_AJXcn_8R3qp7ml6Tc-q6yuQosIEXjqEBsMuNLb97fSalcHm7DalLUgOBaMhg",
+                  "translatedDescription": "In this lesson, we learn how to find the mass of a mystery object using a balanced scale. By keeping the scale balanced and taking equal portions from both sides, we can determine the mass of the mystery object. This helps us understand the concept of equality in real-life situations.",
+                  "translatedTitle": "Dividing both sides of an equation",
+                  "translatedYoutubeId": "Ye13MIPv6n0"
+                }
+              ],
+              "translatedDisplayName": "One-step multiplication & division equations",
+              "translatedProblemTypes": [
+                {
+                  "__typename": "ProblemType",
+                  "items": [
+                    {
+                      "__typename": "ProblemTypeAssessmentItem",
+                      "id": "xa226ae0d69f595ed",
+                      "live": true,
+                      "sha": "d01e9ae669dbd87ddca46a095f81290a2190e64a"
+                    },
+                    {
+                      "__typename": "ProblemTypeAssessmentItem",
+                      "id": "x2efcac12e81d22b0",
+                      "live": true,
+                      "sha": "25aee3b0a16ae13832459579f1a422a5a9daa800"
+                    },
+                    {
+                      "__typename": "ProblemTypeAssessmentItem",
+                      "id": "x1a9c91c929ac113d",
+                      "live": true,
+                      "sha": "5baf0f0118d57aa82ceb9884875baf9610f2adfd"
+                    },
+                    {
+                      "__typename": "ProblemTypeAssessmentItem",
+                      "id": "x7db8e20259ef9bd1",
+                      "live": true,
+                      "sha": "c480ad8c17654182a14b72f412a14dc8c4730c22"
+                    },
+                    {
+                      "__typename": "ProblemTypeAssessmentItem",
+                      "id": "x0d5e5e7d7705b2df",
+                      "live": true,
+                      "sha": "ddf0fcaa71bbc22e2658c2e1536c37191eca4174"
+                    },
+                    {
+                      "__typename": "ProblemTypeAssessmentItem",
+                      "id": "x2afc6f136a93995b",
+                      "live": true,
+                      "sha": "b0435c0e6b351800534893a7648142d28639911a"
+                    },
+                    {
+                      "__typename": "ProblemTypeAssessmentItem",
+                      "id": "xcb40b55d698a0f44",
+                      "live": true,
+                      "sha": "da38922dadc8c53993bb7adeb4210a19eef7f94c"
+                    },
+                    {
+                      "__typename": "ProblemTypeAssessmentItem",
+                      "id": "x308220a304630748",
+                      "live": true,
+                      "sha": "8653287da5cb066eeea86853305247ed27be5b2a"
+                    }
+                  ],
+                  "name": "1. ax=b",
+                  "relatedVideos": []
+                },
+                {
+                  "__typename": "ProblemType",
+                  "items": [
+                    {
+                      "__typename": "ProblemTypeAssessmentItem",
+                      "id": "x357bc6dcf09caaeb",
+                      "live": true,
+                      "sha": "ae9f9ee07f2c750d1b4b943b6b38ac43e2e8f735"
+                    },
+                    {
+                      "__typename": "ProblemTypeAssessmentItem",
+                      "id": "xc4854b8e909ba795",
+                      "live": true,
+                      "sha": "0f3f8d6d22edcef1aa3eea8d9343f21ecfface78"
+                    },
+                    {
+                      "__typename": "ProblemTypeAssessmentItem",
+                      "id": "x973933d72a63b821",
+                      "live": true,
+                      "sha": "423a31bd5f55d754c1e5cb50f3107f9d7b20a79a"
+                    },
+                    {
+                      "__typename": "ProblemTypeAssessmentItem",
+                      "id": "xe00c3e3d7dc31667",
+                      "live": true,
+                      "sha": "d4954be3acf2dac7c283bf90ee0707ad6b1a2c44"
+                    },
+                    {
+                      "__typename": "ProblemTypeAssessmentItem",
+                      "id": "x707dad3701de85a4",
+                      "live": true,
+                      "sha": "0e624487254f07d720011af9f41ba8bbe249c87b"
+                    },
+                    {
+                      "__typename": "ProblemTypeAssessmentItem",
+                      "id": "x15a8455db9630450",
+                      "live": true,
+                      "sha": "733c55ba8f796a2c63ac0e41645286e784c95f09"
+                    },
+                    {
+                      "__typename": "ProblemTypeAssessmentItem",
+                      "id": "x2a73db830987495e",
+                      "live": true,
+                      "sha": "53c7cc7a73e35dc8c3ffe9e819ce1687fe1f5961"
+                    },
+                    {
+                      "__typename": "ProblemTypeAssessmentItem",
+                      "id": "x58946435e292a8c8",
+                      "live": true,
+                      "sha": "7139902c178b9fde3c5d5de90cfbbff03d0f6785"
+                    },
+                    {
+                      "__typename": "ProblemTypeAssessmentItem",
+                      "id": "x7827f24294551b10",
+                      "live": true,
+                      "sha": "b60675c2dbf2c1b2ea4b160c80a9b5db0e7fa17d"
+                    },
+                    {
+                      "__typename": "ProblemTypeAssessmentItem",
+                      "id": "xc35d03fc19d45587",
+                      "live": true,
+                      "sha": "e57f1cba9fa841e866c321f3de5de3228e85b7b2"
+                    },
+                    {
+                      "__typename": "ProblemTypeAssessmentItem",
+                      "id": "xf37c4005436c5ce9",
+                      "live": true,
+                      "sha": "a31dbcc06ed84c977937c1f4c2c7ba99c687864b"
+                    },
+                    {
+                      "__typename": "ProblemTypeAssessmentItem",
+                      "id": "x849383c076a2eb79",
+                      "live": true,
+                      "sha": "bac8313963204ddd703a1b0d42c1cead5c33b3ec"
+                    },
+                    {
+                      "__typename": "ProblemTypeAssessmentItem",
+                      "id": "xaba50353356458fd",
+                      "live": true,
+                      "sha": "0e712dc83d45441ae402a5bcce496d7d702d91a5"
+                    },
+                    {
+                      "__typename": "ProblemTypeAssessmentItem",
+                      "id": "x5828f7381d516a26",
+                      "live": true,
+                      "sha": "61144ca3a4051736291359301aadc99da371dd57"
+                    },
+                    {
+                      "__typename": "ProblemTypeAssessmentItem",
+                      "id": "xf16eb1479e7e92a1",
+                      "live": true,
+                      "sha": "4acef539b78096da02ed8661d3c52114ebfd5e34"
+                    },
+                    {
+                      "__typename": "ProblemTypeAssessmentItem",
+                      "id": "x9e034645e47be8ed",
+                      "live": true,
+                      "sha": "a8381fb099f4424aa527c6fbf8b90874b269e073"
+                    }
+                  ],
+                  "name": "2. x/a=b",
+                  "relatedVideos": []
+                }
+              ]
+            },
+            "fpmMasteryLevel": "unfamiliar",
+            "lastAttemptNumber": 0,
+            "lastCountHints": 0,
+            "lastDone": null,
+            "lastMasteryUpdate": null,
+            "longestStreak": 0,
+            "maximumExerciseProgressDt": null,
+            "streak": 0,
+            "totalCorrect": 0,
+            "totalDone": 0
+          }
+        ]
+      }
+    }
+  }
+}

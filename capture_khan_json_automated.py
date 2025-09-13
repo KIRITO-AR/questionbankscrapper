@@ -10,12 +10,22 @@ import threading
 from urllib.parse import urlparse, parse_qs
 import re
 
+# Import our new modules
+try:
+    from active_scraper import ActiveKhanScraper
+    from graphql_analyzer import KhanGraphQLAnalyzer
+    ACTIVE_SCRAPING_AVAILABLE = True
+except ImportError:
+    ACTIVE_SCRAPING_AVAILABLE = False
+    print("[WARNING] Active scraping modules not available, falling back to passive mode")
+
 # --- Configuration ---
 SAVE_DIRECTORY = "khan_academy_json"
 REQUEST_DELAY = 1.0  # Delay between automated requests (seconds)
 MAX_RETRIES = 5  # Increased retries
 BATCH_SIZE = 3  # Reduced batch size for better reliability
 MAX_QUESTIONS = 1000  # Remove download limit (set to high number)
+ENABLE_ACTIVE_SCRAPING = True  # Enable active batch scraping
 
 # --- Global State ---
 questions_to_capture: Set[str] = set()
@@ -26,14 +36,29 @@ session_headers: Dict[str, str] = {}
 base_url = "https://www.khanacademy.org"
 all_discovered_questions: Set[str] = set()  # Track all discovered questions
 browser_automation_active = False
+active_scraper_instance: Optional[ActiveKhanScraper] = None
+graphql_analyzer: Optional[KhanGraphQLAnalyzer] = None
 
 class KhanAcademyAutomatedCapture:
     def __init__(self):
+        global graphql_analyzer, active_scraper_instance
+        
         if not os.path.exists(SAVE_DIRECTORY):
             os.makedirs(SAVE_DIRECTORY)
         self.active_requests = set()
         self.automation_task = None
+        self.active_scraping_task = None
+        
+        # Initialize GraphQL analyzer and active scraper if available
+        if ACTIVE_SCRAPING_AVAILABLE:
+            graphql_analyzer = KhanGraphQLAnalyzer()
+            print("[INFO] GraphQL analyzer initialized")
+        
         print("[INFO] Automated Capture addon loaded. Will auto-download all questions...")
+        if ENABLE_ACTIVE_SCRAPING and ACTIVE_SCRAPING_AVAILABLE:
+            print("[INFO] Active batch scraping enabled")
+        else:
+            print("[INFO] Using passive scraping mode only")
 
     def response(self, flow: http.HTTPFlow) -> None:
         # Capture session data for authenticated requests
@@ -55,7 +80,7 @@ class KhanAcademyAutomatedCapture:
 
     def capture_session_data(self, flow: http.HTTPFlow):
         """Capture session cookies and headers for authenticated requests"""
-        global session_cookies, session_headers
+        global session_cookies, session_headers, active_scraper_instance, graphql_analyzer
         
         if "khanacademy.org" in flow.request.pretty_host:
             # Capture cookies from request headers
@@ -70,6 +95,18 @@ class KhanAcademyAutomatedCapture:
                 'Referer': flow.request.headers.get('Referer', ''),
                 'Origin': 'https://www.khanacademy.org'
             })
+            
+            # Update active scraper with new session data
+            if ACTIVE_SCRAPING_AVAILABLE and active_scraper_instance:
+                active_scraper_instance.update_session_data(session_cookies, session_headers)
+            
+            # Analyze GraphQL requests
+            if ACTIVE_SCRAPING_AVAILABLE and graphql_analyzer and "graphql" in flow.request.pretty_url.lower():
+                try:
+                    request_data = flow.request.content.decode('utf-8', errors='ignore')
+                    graphql_analyzer.analyze_question_request(request_data, flow.request.pretty_url)
+                except Exception as e:
+                    print(f"[DEBUG] Could not analyze GraphQL request: {e}")
 
     def handle_practice_task(self, flow: http.HTTPFlow):
         """
@@ -122,6 +159,17 @@ class KhanAcademyAutomatedCapture:
             elif new_unsaved_questions and self.automation_task:
                 # If automation is already running, the new questions will be picked up
                 print(f"[INFO] Automation already running, new questions added to queue.")
+            
+            # Start active batch scraping if enabled and questions found
+            if (ENABLE_ACTIVE_SCRAPING and ACTIVE_SCRAPING_AVAILABLE and 
+                new_unsaved_questions and not self.active_scraping_task):
+                self.active_scraping_task = threading.Thread(
+                    target=self.start_active_batch_processing,
+                    args=(new_unsaved_questions,),
+                    daemon=True
+                )
+                self.active_scraping_task.start()
+                print(f"[INFO] Started active batch processing for {len(new_unsaved_questions)} questions")
 
         except (KeyError, TypeError, json.JSONDecodeError) as e:
             print(f"[ERROR] Could not parse practice task. Error: {e}")
@@ -495,5 +543,119 @@ class KhanAcademyAutomatedCapture:
             print(f"[DEBUG] Assessment item parse attempt failed: {e}")
             # Try alternative extraction
             self.try_extract_question_data(flow)
+    
+    def start_active_batch_processing(self, initial_questions: Set[str]):
+        """Start active batch processing using concurrent GraphQL requests."""
+        if not ACTIVE_SCRAPING_AVAILABLE:
+            print("[WARNING] Active scraping not available, skipping batch processing")
+            return
+        
+        try:
+            # Create event loop for this thread
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            
+            # Run the async batch processing
+            loop.run_until_complete(self.async_batch_processing(initial_questions))
+            
+        except Exception as e:
+            print(f"[ERROR] Active batch processing failed: {e}")
+        finally:
+            try:
+                loop.close()
+            except:
+                pass
+    
+    async def async_batch_processing(self, initial_questions: Set[str]):
+        """Async method for batch processing questions."""
+        global active_scraper_instance, saved_questions, questions_captured_count
+        
+        try:
+            # Initialize active scraper if not already done
+            if not active_scraper_instance:
+                active_scraper_instance = ActiveKhanScraper(session_cookies, session_headers)
+                await active_scraper_instance.create_session()
+                print("[INFO] Active scraper initialized")
+            
+            # Test connection first
+            if not await active_scraper_instance.test_connection():
+                print("[WARNING] Active scraper connection test failed, skipping batch processing")
+                return
+            
+            # Process questions in batches
+            questions_to_process = list(initial_questions - saved_questions)
+            
+            if not questions_to_process:
+                print("[INFO] No new questions to process actively")
+                return
+            
+            print(f"[INFO] Starting active batch processing for {len(questions_to_process)} questions")
+            
+            def progress_callback(completed, total, successful):
+                print(f"[PROGRESS] Active batch: {completed}/{total} processed, {successful} successful")
+            
+            # Fetch all questions concurrently
+            results = await active_scraper_instance.fetch_batch_with_progress(
+                questions_to_process, 
+                progress_callback
+            )
+            
+            # Save the results
+            saved_count = 0
+            for question_id, data in results.items():
+                if self.save_active_question_data(question_id, data):
+                    saved_count += 1
+                    saved_questions.add(question_id)
+                    questions_captured_count += 1
+            
+            print(f"[SUCCESS] Active batch processing completed: {saved_count}/{len(questions_to_process)} questions saved")
+            
+        except Exception as e:
+            print(f"[ERROR] Async batch processing error: {e}")
+        finally:
+            if active_scraper_instance:
+                await active_scraper_instance.close()
+    
+    def save_active_question_data(self, question_id: str, response_data: Dict) -> bool:
+        """Save question data obtained from active scraping."""
+        try:
+            # Extract the item data from the GraphQL response
+            if ("data" in response_data and 
+                "assessmentItem" in response_data["data"] and
+                "item" in response_data["data"]["assessmentItem"]):
+                
+                item = response_data["data"]["assessmentItem"]["item"]
+                
+                # Parse the itemData (which might be a JSON string)
+                item_data = item.get("itemData")
+                if isinstance(item_data, str):
+                    parsed_data = json.loads(item_data)
+                else:
+                    parsed_data = item_data
+                
+                # Create the complete question object
+                question_object = {
+                    "data": response_data["data"],
+                    "item_id": question_id,
+                    "captured_via": "active_scraping",
+                    "timestamp": datetime.now().isoformat()
+                }
+                
+                # Save to file
+                filename = os.path.join(SAVE_DIRECTORY, f"{question_id}.json")
+                with open(filename, 'w', encoding='utf-8') as f:
+                    json.dump(question_object, f, ensure_ascii=False, indent=2)
+                
+                timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                print(f"[ACTIVE] 💾 Saved {question_id} via active scraping ({timestamp})")
+                return True
+            
+            else:
+                print(f"[ACTIVE] ⚠ Invalid response structure for {question_id}")
+                return False
+                
+        except Exception as e:
+            print(f"[ACTIVE] ⚠ Error saving {question_id}: {e}")
+            return False
 
 addons = [KhanAcademyAutomatedCapture()]

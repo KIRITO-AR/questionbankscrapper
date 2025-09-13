@@ -1,13 +1,19 @@
-# Khan Academy Question Bank Scraper Dependencies
+# Khan Academy Question Bank Scraper - Autonomous Version Dependencies
 
 # Core mitmproxy for HTTP interception and proxying
 mitmproxy>=10.0.0
 
-# Async HTTP requests for automated question fetching
+# Async HTTP requests for automated question fetching and concurrent downloads
 aiohttp>=3.8.0
 
-# Browser automation (optional but recommended)
+# Browser automation for UI interactions
 selenium>=4.0.0
+
+# Additional dependencies for enhanced features
+requests>=2.28.0
+
+# Data processing and analysis
+typing-extensions>=4.0.0
 
 # Standard library dependencies (included for completeness)
 # json - built into Python
@@ -15,3 +21,5 @@ selenium>=4.0.0
 # datetime - built into Python
 # asyncio - built into Python
 # threading - built into Python
+# logging - built into Python
+# re - built into Python

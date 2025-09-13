@@ -238,40 +238,391 @@ class KhanAcademyBrowserAutomation:
             logger.error(f"Failed to simulate interaction: {e}")
             return False
 
-    def attempt_to_answer_question(self):
-        """
-        Attempt to answer the current question to trigger progression.
-        """
+    def detect_question_type(self):
+        """Detect the type of question being displayed."""
         try:
-            # Try to fill in simple numeric answers
-            numeric_inputs = self.driver.find_elements(By.CSS_SELECTOR, "input[type='number']")
+            selectors = {
+                "numeric_input": "input[type='text'], input[data-test-id='numeric-input'], input[type='number']",
+                "multiple_choice": "input[type='radio'], .multiple-choice",
+                "expression": "input[data-test-id='expression-input']",
+                "graph": ".graphie, .interactive-graph",
+                "dropdown": "select, .dropdown"
+            }
+            
+            for question_type, selector in selectors.items():
+                if self.driver.find_elements(By.CSS_SELECTOR, selector):
+                    logger.info(f"Detected question type: {question_type}")
+                    return question_type
+            return "generic"
+        except Exception as e:
+            logger.debug(f"Error detecting question type: {e}")
+            return "generic"
+    
+    def auto_answer_question(self):
+        """Automatically answer the current question based on its type."""
+        try:
+            # Wait for question to fully load
+            self.wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "[data-test-id='exercise-content'], .problem-content, .question-content")))
+            
+            # Detect question type and answer appropriately
+            question_type = self.detect_question_type()
+            
+            if question_type == "numeric_input":
+                return self.answer_numeric_question()
+            elif question_type == "multiple_choice":
+                return self.answer_multiple_choice()
+            elif question_type == "expression":
+                return self.answer_expression_question()
+            else:
+                return self.answer_generic_question()
+                
+        except Exception as e:
+            logger.error(f"Failed to auto-answer question: {e}")
+            return False
+    
+    def answer_numeric_question(self):
+        """Answer numeric input questions."""
+        try:
+            numeric_inputs = self.driver.find_elements(By.CSS_SELECTOR, "input[type='text'], input[type='number'], input[data-test-id='numeric-input']")
             for input_elem in numeric_inputs:
-                try:
-                    # Put a simple answer to trigger progression
+                if input_elem.is_displayed() and input_elem.is_enabled():
+                    input_elem.clear()
+                    # Use a simple answer that's likely to be wrong but will trigger progression
+                    input_elem.send_keys("1")
+                    logger.info("Filled numeric input with test value")
+                    time.sleep(0.5)
+                    return True
+            return False
+        except Exception as e:
+            logger.debug(f"Error answering numeric question: {e}")
+            return False
+    
+    def answer_multiple_choice(self):
+        """Answer multiple choice questions."""
+        try:
+            radio_buttons = self.driver.find_elements(By.CSS_SELECTOR, "input[type='radio']")
+            if radio_buttons:
+                # Select the first option
+                first_radio = radio_buttons[0]
+                if first_radio.is_displayed() and first_radio.is_enabled():
+                    self.driver.execute_script("arguments[0].click();", first_radio)
+                    logger.info("Selected first multiple choice option")
+                    time.sleep(0.5)
+                    return True
+            return False
+        except Exception as e:
+            logger.debug(f"Error answering multiple choice: {e}")
+            return False
+    
+    def answer_expression_question(self):
+        """Answer expression input questions."""
+        try:
+            expression_inputs = self.driver.find_elements(By.CSS_SELECTOR, "input[data-test-id='expression-input'], .math-input")
+            for input_elem in expression_inputs:
+                if input_elem.is_displayed() and input_elem.is_enabled():
+                    input_elem.clear()
+                    input_elem.send_keys("x")
+                    logger.info("Filled expression input with test value")
+                    time.sleep(0.5)
+                    return True
+            return False
+        except Exception as e:
+            logger.debug(f"Error answering expression question: {e}")
+            return False
+    
+    def answer_generic_question(self):
+        """Fallback method for unknown question types."""
+        try:
+            # Try to fill any visible text inputs
+            text_inputs = self.driver.find_elements(By.CSS_SELECTOR, "input[type='text']")
+            for input_elem in text_inputs:
+                if input_elem.is_displayed() and input_elem.is_enabled():
                     input_elem.clear()
                     input_elem.send_keys("1")
                     time.sleep(0.5)
+            
+            # Try to click first radio button if available
+            radio_buttons = self.driver.find_elements(By.CSS_SELECTOR, "input[type='radio']")
+            if radio_buttons:
+                self.driver.execute_script("arguments[0].click();", radio_buttons[0])
+                time.sleep(0.5)
+            
+            logger.info("Applied generic answer strategy")
+            return True
+        except Exception as e:
+            logger.debug(f"Error with generic answer strategy: {e}")
+            return False
+    
+    def attempt_to_answer_question(self):
+        """
+        Legacy method maintained for compatibility - now uses auto_answer_question.
+        """
+        return self.auto_answer_question()
+    def wait_for_question_load(self, timeout=30):
+        """Wait for a new question to fully load with multiple indicators."""
+        try:
+            # Wait for exercise content
+            self.wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "[data-test-id='exercise-content'], .problem-content, .question-content")))
+            
+            # Wait for question content to be visible
+            self.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".question-content, .problem-content, .exercise-content")))
+            
+            # Wait for input elements to be interactable
+            input_selectors = [
+                "input[type='text']",
+                "input[type='radio']", 
+                "input[type='number']",
+                "button[data-test-id='check-answer']"
+            ]
+            
+            for selector in input_selectors:
+                try:
+                    WebDriverWait(self.driver, 5).until(EC.element_to_be_clickable((By.CSS_SELECTOR, selector)))
+                    break
+                except TimeoutException:
+                    continue
+                    
+            # Additional wait for JavaScript to settle
+            time.sleep(2)
+            logger.info("Question loaded successfully")
+            return True
+            
+        except TimeoutException:
+            logger.warning("Question load timeout - continuing anyway")
+            return False
+        except Exception as e:
+            logger.error(f"Error waiting for question load: {e}")
+            return False
+    
+    def progress_to_next_question(self):
+        """Progress to next question using UI buttons instead of refresh."""
+        try:
+            # Step 1: Answer the current question
+            if not self.auto_answer_question():
+                logger.warning("Failed to answer question, trying to proceed anyway")
+            
+            # Step 2: Click "Check Answer" button
+            check_selectors = [
+                "button[data-test-id='check-answer']",
+                "button[data-test-id='check']",
+                "button.check-answer-button",
+                ".check-button"
+            ]
+            
+            check_clicked = False
+            for selector in check_selectors:
+                try:
+                    check_button = WebDriverWait(self.driver, 5).until(
+                        EC.element_to_be_clickable((By.CSS_SELECTOR, selector))
+                    )
+                    check_button.click()
+                    logger.info(f"Clicked check button: {selector}")
+                    check_clicked = True
+                    break
+                except TimeoutException:
+                    continue
+                except Exception as e:
+                    logger.debug(f"Check button {selector} failed: {e}")
+                    continue
+            
+            if not check_clicked:
+                logger.warning("Could not find check button")
+                return False
+            
+            # Step 3: Wait for result and click "Next Question"
+            time.sleep(3)  # Wait for answer validation
+            
+            next_selectors = [
+                "button[data-test-id='next-question']",
+                "button[data-test-id='next']",
+                "button.next-question-button",
+                ".next-button"
+            ]
+            
+            next_clicked = False
+            for selector in next_selectors:
+                try:
+                    next_button = WebDriverWait(self.driver, 10).until(
+                        EC.element_to_be_clickable((By.CSS_SELECTOR, selector))
+                    )
+                    next_button.click()
+                    logger.info(f"Clicked next button: {selector}")
+                    next_clicked = True
+                    break
+                except TimeoutException:
+                    continue
+                except Exception as e:
+                    logger.debug(f"Next button {selector} failed: {e}")
+                    continue
+            
+            if not next_clicked:
+                logger.warning("Could not find next button")
+                return False
+            
+            # Step 4: Wait for new question to load
+            return self.wait_for_question_load()
+            
+        except Exception as e:
+            logger.error(f"Error progressing to next question: {e}")
+            return False
+    
+    def handle_exercise_interruptions(self):
+        """Handle pop-ups, completion dialogs, and other interruptions."""
+        try:
+            interruption_handlers = [
+                ("Practice complete", self.handle_completion_dialog),
+                ("Congratulations", self.handle_completion_dialog),
+                ("Streak", self.handle_streak_popup),
+                ("Hint", self.handle_hint_dialog),
+                ("Error", self.handle_error_dialog),
+                ("Try again", self.handle_retry_dialog)
+            ]
+            
+            page_text = self.driver.page_source.lower()
+            
+            for text, handler in interruption_handlers:
+                if text.lower() in page_text:
+                    logger.info(f"Handling interruption: {text}")
+                    return handler()
+            return True
+        except Exception as e:
+            logger.error(f"Error handling interruptions: {e}")
+            return True  # Continue anyway
+    
+    def handle_completion_dialog(self):
+        """Handle exercise completion dialogs."""
+        try:
+            # Look for restart or continue buttons
+            restart_selectors = [
+                "button[data-test-id='restart']",
+                "button:contains('Start over')",
+                "button:contains('Restart')",
+                "a[href*='restart']"
+            ]
+            
+            for selector in restart_selectors:
+                try:
+                    if ":contains" in selector:
+                        element = self.driver.execute_script(f"""
+                            return Array.from(document.querySelectorAll('button, a')).find(el => 
+                                el.textContent.toLowerCase().includes('{selector.split("'")[1].lower()}'));
+                        """)
+                        if element:
+                            self.driver.execute_script("arguments[0].click();", element)
+                            logger.info("Restarted exercise from completion dialog")
+                            return True
+                    else:
+                        element = self.driver.find_element(By.CSS_SELECTOR, selector)
+                        element.click()
+                        logger.info("Restarted exercise from completion dialog")
+                        return True
                 except Exception:
                     continue
             
-            # Try to select first radio button option
-            radio_buttons = self.driver.find_elements(By.CSS_SELECTOR, "input[type='radio']")
-            if radio_buttons:
-                try:
-                    self.driver.execute_script("arguments[0].click();", radio_buttons[0])
-                    time.sleep(0.5)
-                except Exception:
-                    pass
-            
-            # Try to submit the answer
-            submit_selectors = [
-                "button[data-test-id='check-answer']",
-                "button:contains('Check')",
-                "button:contains('Submit')",
-                ".btn-primary"
+            # If no restart button, refresh the page
+            logger.info("No restart button found, refreshing page")
+            return self.refresh_page()
+        except Exception as e:
+            logger.error(f"Error handling completion dialog: {e}")
+            return False
+    
+    def handle_streak_popup(self):
+        """Handle streak celebration popups."""
+        try:
+            # Look for continue or dismiss buttons
+            dismiss_selectors = [
+                "button[data-test-id='continue']",
+                "button[data-test-id='dismiss']",
+                ".modal button",
+                "button:contains('Continue')"
             ]
             
-            for selector in submit_selectors:
+            for selector in dismiss_selectors:
+                try:
+                    if ":contains" in selector:
+                        element = self.driver.execute_script(f"""
+                            return Array.from(document.querySelectorAll('button')).find(el => 
+                                el.textContent.toLowerCase().includes('continue'));
+                        """)
+                        if element:
+                            self.driver.execute_script("arguments[0].click();", element)
+                            logger.info("Dismissed streak popup")
+                            return True
+                    else:
+                        element = self.driver.find_element(By.CSS_SELECTOR, selector)
+                        element.click()
+                        logger.info("Dismissed streak popup")
+                        return True
+                except Exception:
+                    continue
+            
+            return True  # Continue even if can't dismiss
+        except Exception as e:
+            logger.debug(f"Error handling streak popup: {e}")
+            return True
+    
+    def handle_hint_dialog(self):
+        """Handle hint dialogs."""
+        try:
+            # Look for close or skip hint buttons
+            close_selectors = [
+                "button[data-test-id='close-hint']",
+                "button[data-test-id='skip-hint']", 
+                ".hint-dialog button",
+                "button:contains('Skip')"
+            ]
+            
+            for selector in close_selectors:
+                try:
+                    element = self.driver.find_element(By.CSS_SELECTOR, selector)
+                    element.click()
+                    logger.info("Closed hint dialog")
+                    return True
+                except Exception:
+                    continue
+            
+            return True
+        except Exception as e:
+            logger.debug(f"Error handling hint dialog: {e}")
+            return True
+    
+    def handle_error_dialog(self):
+        """Handle error dialogs."""
+        try:
+            # Look for OK or dismiss buttons
+            ok_selectors = [
+                "button[data-test-id='ok']",
+                "button[data-test-id='dismiss']",
+                ".error-dialog button",
+                "button:contains('OK')"
+            ]
+            
+            for selector in ok_selectors:
+                try:
+                    element = self.driver.find_element(By.CSS_SELECTOR, selector)
+                    element.click()
+                    logger.info("Dismissed error dialog")
+                    return True
+                except Exception:
+                    continue
+            
+            return True
+        except Exception as e:
+            logger.debug(f"Error handling error dialog: {e}")
+            return True
+    
+    def handle_retry_dialog(self):
+        """Handle retry/try again dialogs."""
+        try:
+            # Look for try again or continue buttons
+            retry_selectors = [
+                "button[data-test-id='try-again']",
+                "button[data-test-id='retry']",
+                "button:contains('Try again')",
+                "button:contains('Continue')"
+            ]
+            
+            for selector in retry_selectors:
                 try:
                     if ":contains" in selector:
                         element = self.driver.execute_script(f"""
@@ -280,40 +631,20 @@ class KhanAcademyBrowserAutomation:
                         """)
                         if element:
                             self.driver.execute_script("arguments[0].click();", element)
-                            logger.info("Submitted answer to progress")
-                            time.sleep(2)
+                            logger.info("Clicked try again")
                             return True
                     else:
                         element = self.driver.find_element(By.CSS_SELECTOR, selector)
-                        if element.is_enabled():
-                            element.click()
-                            logger.info(f"Submitted answer: {selector}")
-                            time.sleep(2)
-                            return True
+                        element.click()
+                        logger.info("Clicked try again")
+                        return True
                 except Exception:
                     continue
-                    
+            
+            return True
         except Exception as e:
-            logger.debug(f"Could not answer question: {e}")
-        
-        return False
-    
-    def wait_for_questions_to_load(self, timeout=30):
-        """Wait for questions to be loaded and captured."""
-        start_time = time.time()
-        
-        while time.time() - start_time < timeout:
-            # Interact with the page to trigger question loading
-            self.simulate_question_interaction()
-            
-            # Small wait between interactions
-            time.sleep(3)
-            
-            # Try to progress to next question periodically
-            if (time.time() - start_time) % 10 < 3:  # Every 10 seconds
-                self.attempt_to_progress_to_next_question()
-        
-        return True
+            logger.debug(f"Error handling retry dialog: {e}")
+            return True
     
     def attempt_to_progress_to_next_question(self):
         """
@@ -361,71 +692,83 @@ class KhanAcademyBrowserAutomation:
             logger.debug(f"Could not progress to next question: {e}")
             return False
     
-    def automate_exercise_session(self, exercise_url, max_questions=1000, refresh_interval=120):
+    def automate_exercise_session(self, exercise_url, max_questions=1000, refresh_interval=300):
         """
-        Run a comprehensive automated session for an exercise.
+        Run a comprehensive automated session for an exercise with improved UI interactions.
         
         Args:
             exercise_url: URL of the Khan Academy exercise
             max_questions: Maximum number of questions to capture
-            refresh_interval: How often to refresh if no progress (seconds)
+            refresh_interval: How often to refresh if no progress (seconds) - increased default
         """
         if not self.setup_browser():
             return False
-        
+
         try:
             # Navigate to exercise
             if not self.navigate_to_exercise(exercise_url):
                 return False
-            
+
             # Start the exercise
             if not self.start_exercise():
                 logger.warning("Could not start exercise, continuing anyway...")
-            
-            # Main loop for question capture
-            total_cycles = 0
-            max_cycles = max_questions // 5  # Assume ~5 questions per cycle
+
+            # Main loop for question capture with improved progression
+            questions_progressed = 0
+            max_questions_per_session = max_questions
             last_refresh_time = time.time()
+            consecutive_failures = 0
             
-            while total_cycles < max_cycles:
+            logger.info(f"Starting automated session - target: {max_questions} questions")
+
+            while questions_progressed < max_questions_per_session and consecutive_failures < 5:
                 cycle_start = time.time()
-                logger.info(f"Question capture cycle {total_cycles + 1}/{max_cycles}")
-                
-                # Try to progress through questions
-                progress_made = False
-                for attempt in range(10):  # Try to progress through up to 10 questions per cycle
-                    # Wait and interact with current question
-                    self.wait_for_questions_to_load(timeout=15)
+                logger.info(f"Question {questions_progressed + 1}/{max_questions_per_session}")
+
+                # Handle any interruptions first
+                if not self.handle_exercise_interruptions():
+                    logger.warning("Failed to handle interruptions")
+
+                # Wait for current question to load
+                if not self.wait_for_question_load():
+                    logger.warning("Question load timeout, attempting to continue")
+
+                # Try to progress to next question using improved UI interactions
+                if self.progress_to_next_question():
+                    questions_progressed += 1
+                    consecutive_failures = 0
+                    logger.info(f"Successfully progressed to question {questions_progressed + 1}")
                     
-                    # Try to progress to next question
-                    if self.attempt_to_progress_to_next_question():
-                        progress_made = True
-                        time.sleep(2)  # Brief pause between questions
-                    else:
-                        # If we can't progress, try answering the current question
-                        if self.attempt_to_answer_question():
-                            time.sleep(2)
-                            if self.attempt_to_progress_to_next_question():
-                                progress_made = True
-                        break
-                
-                # If no progress made or it's been too long, refresh
-                current_time = time.time()
-                if not progress_made or (current_time - last_refresh_time) > refresh_interval:
-                    logger.info("Refreshing page to get fresh questions...")
-                    if not self.refresh_page():
-                        logger.error("Failed to refresh page")
-                        break
-                    last_refresh_time = current_time
-                
-                total_cycles += 1
-                
-                # Brief pause between cycles
-                time.sleep(3)
+                    # Brief pause between questions to allow for data capture
+                    time.sleep(3)
+                else:
+                    consecutive_failures += 1
+                    logger.warning(f"Failed to progress (failure #{consecutive_failures})")
+                    
+                    # If we've had several failures, try refresh as fallback
+                    current_time = time.time()
+                    if consecutive_failures >= 3 or (current_time - last_refresh_time) > refresh_interval:
+                        logger.info("Multiple failures detected, refreshing page as fallback...")
+                        if self.refresh_page():
+                            last_refresh_time = current_time
+                            consecutive_failures = 0
+                            time.sleep(5)  # Allow page to settle after refresh
+                        else:
+                            logger.error("Failed to refresh page")
+                            break
+
+                # Progress reporting every 5 questions
+                if questions_progressed % 5 == 0 and questions_progressed > 0:
+                    elapsed = time.time() - cycle_start
+                    logger.info(f"Progress update: {questions_progressed} questions completed")
+
+            if consecutive_failures >= 5:
+                logger.error("Too many consecutive failures, stopping session")
+            else:
+                logger.info(f"Automated session completed successfully - {questions_progressed} questions processed")
             
-            logger.info(f"Automated session completed after {total_cycles} cycles")
-            return True
-            
+            return questions_progressed > 0
+
         except Exception as e:
             logger.error(f"Automation session failed: {e}")
             return False
