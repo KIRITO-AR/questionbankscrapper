@@ -54,11 +54,10 @@ class KhanAcademyBrowserAutomation:
         chrome_options.add_argument('--disable-default-apps')
         
         # Additional network optimizations
-        chrome_options.add_argument('--no-proxy-server')
         chrome_options.add_argument('--disable-extensions')
         chrome_options.add_argument('--disable-plugins')
         chrome_options.add_argument('--disable-images')  # Speed up loading
-        chrome_options.add_argument('--disable-javascript')  # We don't need JS for our purpose
+        # Removed --disable-javascript as Khan Academy needs it
         
         # Additional options for automation
         chrome_options.add_argument('--disable-blink-features=AutomationControlled')
@@ -72,11 +71,11 @@ class KhanAcademyBrowserAutomation:
             self.driver = webdriver.Chrome(options=chrome_options)
             self.driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
             
-            # Set more aggressive timeouts for faster operation
-            self.driver.set_page_load_timeout(30)  # Reduced from 60
-            self.driver.implicitly_wait(10)  # Reduced from 15
+            # Set shorter timeouts for faster operation and better error handling
+            self.driver.set_page_load_timeout(20)  # Reduced from 30
+            self.driver.implicitly_wait(5)  # Reduced from 10
             
-            self.wait = WebDriverWait(self.driver, 20)  # Reduced from 30
+            self.wait = WebDriverWait(self.driver, 15)  # Reduced from 20
             logger.info("Browser setup complete with enhanced proxy and SSL configuration")
             return True
         except Exception as e:
@@ -103,13 +102,40 @@ class KhanAcademyBrowserAutomation:
             
             self.current_exercise_url = exercise_url
             
-            # Wait for page to load with better error handling
+            # Wait for page to load with better error handling and shorter timeouts
             try:
-                self.wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
-                time.sleep(5)  # Additional wait for full page load and JS execution
+                # Use shorter timeout for initial page load check
+                short_wait = WebDriverWait(self.driver, 10)
+                short_wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
+                logger.info("Basic page structure loaded")
+                
+                # Wait for Khan Academy specific elements with even shorter timeout
+                khan_wait = WebDriverWait(self.driver, 5)
+                try:
+                    # Look for any Khan Academy content indicators
+                    khan_wait.until(lambda driver: 
+                        driver.find_elements(By.CSS_SELECTOR, "[data-test-id], .exercise, .problem, [class*='khan'], [class*='exercise']") or
+                        "khanacademy" in driver.current_url.lower()
+                    )
+                    logger.info("Khan Academy content detected")
+                except:
+                    logger.info("Khan Academy content check timeout, but URL suggests we're on the right page")
+                
+                # Give time for JavaScript to initialize
+                time.sleep(3)
                 logger.info("Page loaded successfully")
+                
             except Exception as e:
                 logger.warning(f"Page load wait failed, but continuing: {e}")
+                # Even if the wait fails, we might still be on the page - check URL
+                try:
+                    current_url = self.driver.current_url
+                    if "khanacademy" in current_url.lower():
+                        logger.info(f"On Khan Academy page despite timeout: {current_url}")
+                    else:
+                        logger.warning(f"Not on expected page: {current_url}")
+                except:
+                    logger.warning("Could not verify current URL")
             
             return True
         except Exception as e:
@@ -261,8 +287,37 @@ class KhanAcademyBrowserAutomation:
     def auto_answer_question(self):
         """Automatically answer the current question based on its type."""
         try:
-            # Wait for question to fully load
-            self.wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "[data-test-id='exercise-content'], .problem-content, .question-content")))
+            # Wait a moment for page to settle
+            time.sleep(2)
+            
+            # Check if there's any content to work with
+            try:
+                # Look for any exercise/question content with more lenient selectors
+                content_selectors = [
+                    "[data-test-id='exercise-content']",
+                    ".problem-content", 
+                    ".question-content",
+                    ".exercise-content",
+                    ".problem",
+                    ".question",
+                    "[class*='question']",
+                    "[class*='problem']",
+                    "[class*='exercise']"
+                ]
+                
+                content_found = False
+                for selector in content_selectors:
+                    if self.driver.find_elements(By.CSS_SELECTOR, selector):
+                        content_found = True
+                        break
+                
+                if not content_found:
+                    logger.warning("No question content found - page may not be ready")
+                    return False
+                    
+            except Exception as e:
+                logger.warning(f"Error checking for content: {e}")
+                return False
             
             # Detect question type and answer appropriately
             question_type = self.detect_question_type()
@@ -397,74 +452,114 @@ class KhanAcademyBrowserAutomation:
     def progress_to_next_question(self):
         """Progress to next question using UI buttons instead of refresh."""
         try:
-            # Step 1: Answer the current question
-            if not self.auto_answer_question():
-                logger.warning("Failed to answer question, trying to proceed anyway")
+            logger.info("Starting question progression sequence")
             
-            # Step 2: Click "Check Answer" button
+            # Step 1: Try to answer the current question (non-blocking)
+            try:
+                self.auto_answer_question()
+                logger.info("Question answered (or attempted)")
+            except Exception as e:
+                logger.warning(f"Auto-answer failed, continuing: {e}")
+            
+            # Step 2: Look for and click "Check Answer" button
             check_selectors = [
                 "button[data-test-id='check-answer']",
-                "button[data-test-id='check']",
+                "button[data-test-id='check']", 
                 "button.check-answer-button",
-                ".check-button"
+                ".check-button",
+                "button:contains('Check')",
+                "[data-test-id*='check']"
             ]
             
             check_clicked = False
             for selector in check_selectors:
                 try:
-                    check_button = WebDriverWait(self.driver, 5).until(
-                        EC.element_to_be_clickable((By.CSS_SELECTOR, selector))
-                    )
-                    check_button.click()
-                    logger.info(f"Clicked check button: {selector}")
-                    check_clicked = True
-                    break
+                    if ":contains" in selector:
+                        # Handle text-based selectors
+                        element = self.driver.execute_script("""
+                            return Array.from(document.querySelectorAll('button')).find(el => 
+                                el.textContent.toLowerCase().includes('check'));
+                        """)
+                        if element:
+                            self.driver.execute_script("arguments[0].click();", element)
+                            logger.info("Clicked check button via JavaScript")
+                            check_clicked = True
+                            break
+                    else:
+                        check_button = WebDriverWait(self.driver, 3).until(
+                            EC.element_to_be_clickable((By.CSS_SELECTOR, selector))
+                        )
+                        check_button.click()
+                        logger.info(f"Clicked check button: {selector}")
+                        check_clicked = True
+                        break
                 except TimeoutException:
                     continue
                 except Exception as e:
                     logger.debug(f"Check button {selector} failed: {e}")
                     continue
             
-            if not check_clicked:
-                logger.warning("Could not find check button")
-                return False
+            if check_clicked:
+                time.sleep(2)  # Wait for answer validation
+                logger.info("Check button clicked, waiting for result")
+            else:
+                logger.warning("No check button found, trying to proceed")
             
-            # Step 3: Wait for result and click "Next Question"
-            time.sleep(3)  # Wait for answer validation
-            
+            # Step 3: Look for and click "Next Question" button
             next_selectors = [
                 "button[data-test-id='next-question']",
                 "button[data-test-id='next']",
-                "button.next-question-button",
-                ".next-button"
+                "button.next-question-button", 
+                ".next-button",
+                "button:contains('Next')",
+                "[data-test-id*='next']"
             ]
             
             next_clicked = False
             for selector in next_selectors:
                 try:
-                    next_button = WebDriverWait(self.driver, 10).until(
-                        EC.element_to_be_clickable((By.CSS_SELECTOR, selector))
-                    )
-                    next_button.click()
-                    logger.info(f"Clicked next button: {selector}")
-                    next_clicked = True
-                    break
+                    if ":contains" in selector:
+                        element = self.driver.execute_script("""
+                            return Array.from(document.querySelectorAll('button')).find(el => 
+                                el.textContent.toLowerCase().includes('next'));
+                        """)
+                        if element:
+                            self.driver.execute_script("arguments[0].click();", element)
+                            logger.info("Clicked next button via JavaScript")
+                            next_clicked = True
+                            break
+                    else:
+                        next_button = WebDriverWait(self.driver, 5).until(
+                            EC.element_to_be_clickable((By.CSS_SELECTOR, selector))
+                        )
+                        next_button.click()
+                        logger.info(f"Clicked next button: {selector}")
+                        next_clicked = True
+                        break
                 except TimeoutException:
                     continue
                 except Exception as e:
                     logger.debug(f"Next button {selector} failed: {e}")
                     continue
             
-            if not next_clicked:
-                logger.warning("Could not find next button")
-                return False
-            
-            # Step 4: Wait for new question to load
-            return self.wait_for_question_load()
+            if next_clicked:
+                # Step 4: Wait for new question to load
+                time.sleep(3)  # Give time for navigation
+                logger.info("Next button clicked, waiting for new question")
+                return self.wait_for_question_load()
+            else:
+                logger.warning("No next button found - trying page refresh fallback")
+                return self.refresh_page()
             
         except Exception as e:
             logger.error(f"Error progressing to next question: {e}")
-            return False
+            # Fallback to page refresh
+            try:
+                logger.info("Attempting fallback refresh")
+                return self.refresh_page()
+            except Exception as refresh_error:
+                logger.error(f"Fallback refresh also failed: {refresh_error}")
+                return False
     
     def handle_exercise_interruptions(self):
         """Handle pop-ups, completion dialogs, and other interruptions."""
