@@ -1,0 +1,67 @@
+{
+    "answerArea": {
+        "calculator": false,
+        "chi2Table": false,
+        "periodicTable": false,
+        "tTable": false,
+        "zTable": false
+    },
+    "hints": [
+        {
+            "content": "Multiply both sides by $8$:\n\n $ \\qquad\\dfrac{c}{8} \\red{\\cdot 8} = 9 \\red{\\cdot 8} $",
+            "images": {},
+            "replace": false,
+            "widgets": {}
+        },
+        {
+            "content": "Simplify:\n\n $\\qquad\\dfrac{c}{\\cancel{8}} \\cdot \\cancel{8} = 72$",
+            "images": {},
+            "replace": false,
+            "widgets": {}
+        },
+        {
+            "content": "$c = 72$",
+            "images": {},
+            "replace": false,
+            "widgets": {}
+        }
+    ],
+    "itemDataVersion": {
+        "major": 0,
+        "minor": 1
+    },
+    "question": {
+        "content": "**Solve the equation.**\n\n$\\dfrac{c}{8} = 9$\n\n$c =\\,$[[☃ numeric-input 1]]",
+        "images": {},
+        "widgets": {
+            "numeric-input 1": {
+                "alignment": "default",
+                "graded": true,
+                "options": {
+                    "answers": [
+                        {
+                            "answerForms": [],
+                            "maxError": null,
+                            "message": "",
+                            "simplify": "optional",
+                            "status": "correct",
+                            "strict": false,
+                            "value": 72
+                        }
+                    ],
+                    "coefficient": false,
+                    "labelText": "",
+                    "multipleNumberInput": false,
+                    "size": "small",
+                    "static": false
+                },
+                "static": false,
+                "type": "numeric-input",
+                "version": {
+                    "major": 0,
+                    "minor": 0
+                }
+            }
+        }
+    }
+}

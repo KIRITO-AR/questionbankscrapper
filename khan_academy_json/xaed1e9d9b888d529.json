@@ -1,0 +1,66 @@
+{
+    "answerArea": {
+        "calculator": false,
+        "chi2Table": false,
+        "periodicTable": false,
+        "tTable": false,
+        "zTable": false
+    },
+    "hints": [
+        {
+            "content": "Divide both sides by $9$:\n\n $\\qquad  \\red{\\dfrac{\\color{black}{9a}}{9}} = \\red{\\dfrac{\\color{black}{81}}{9}} $",
+            "images": {},
+            "replace": false,
+            "widgets": {}
+        },
+        {
+            "content": "Simplify:\n\n $\\qquad \\dfrac{\\cancel{9}a}{\\cancel{9}} = \\dfrac{81}{9}$",
+            "images": {},
+            "replace": false,
+            "widgets": {}
+        },
+        {
+            "content": "$a =9$",
+            "images": {},
+            "replace": false,
+            "widgets": {}
+        }
+    ],
+    "itemDataVersion": {
+        "major": 0,
+        "minor": 1
+    },
+    "question": {
+        "content": "**Solve the equation.**\n\n $9a = 81$\n\n$a =\\,$[[☃ numeric-input 1]]",
+        "images": {},
+        "widgets": {
+            "numeric-input 1": {
+                "alignment": "default",
+                "graded": true,
+                "options": {
+                    "answers": [
+                        {
+                            "maxError": null,
+                            "message": "",
+                            "simplify": "optional",
+                            "status": "correct",
+                            "strict": false,
+                            "value": 9
+                        }
+                    ],
+                    "coefficient": false,
+                    "labelText": "",
+                    "multipleNumberInput": false,
+                    "size": "small",
+                    "static": false
+                },
+                "static": false,
+                "type": "numeric-input",
+                "version": {
+                    "major": 0,
+                    "minor": 0
+                }
+            }
+        }
+    }
+}

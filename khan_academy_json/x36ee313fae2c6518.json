@@ -1,0 +1,67 @@
+{
+    "answerArea": {
+        "calculator": false,
+        "chi2Table": false,
+        "periodicTable": false,
+        "tTable": false,
+        "zTable": false
+    },
+    "hints": [
+        {
+            "content": "Multiply both sides by $8$:\n\n $\\qquad 2 \\red{\\cdot 8} = \\dfrac{f}{8} \\red{\\cdot 8} $",
+            "images": {},
+            "replace": false,
+            "widgets": {}
+        },
+        {
+            "content": "Simplify:\n\n $\\qquad16 = \\dfrac{f}{\\cancel{8}} \\cdot \\cancel{8}$",
+            "images": {},
+            "replace": false,
+            "widgets": {}
+        },
+        {
+            "content": "$f = 16$",
+            "images": {},
+            "replace": false,
+            "widgets": {}
+        }
+    ],
+    "itemDataVersion": {
+        "major": 0,
+        "minor": 1
+    },
+    "question": {
+        "content": "**Solve the equation.**\n\n$2 = \\dfrac{f}{8}$\n\n$f =\\,$[[☃ numeric-input 1]]",
+        "images": {},
+        "widgets": {
+            "numeric-input 1": {
+                "alignment": "default",
+                "graded": true,
+                "options": {
+                    "answers": [
+                        {
+                            "answerForms": [],
+                            "maxError": null,
+                            "message": "",
+                            "simplify": "optional",
+                            "status": "correct",
+                            "strict": false,
+                            "value": 16
+                        }
+                    ],
+                    "coefficient": false,
+                    "labelText": "",
+                    "multipleNumberInput": false,
+                    "size": "small",
+                    "static": false
+                },
+                "static": false,
+                "type": "numeric-input",
+                "version": {
+                    "major": 0,
+                    "minor": 0
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,72 @@
+{
+    "answerArea": {
+        "calculator": false,
+        "options": {
+            "content": "",
+            "images": {},
+            "widgets": {}
+        },
+        "periodicTable": false,
+        "type": "multiple"
+    },
+    "hints": [
+        {
+            "content": "$400 = 4\\text{ hundreds}$",
+            "images": {},
+            "widgets": {}
+        },
+        {
+            "content": "So, we need a number with $\\greenD4$ in the hundreds place.",
+            "images": {},
+            "widgets": {}
+        },
+        {
+            "content": "$\\greenD4$ is in the hundreds place in $2{,}\\greenD466$.",
+            "images": {},
+            "widgets": {}
+        }
+    ],
+    "itemDataVersion": {
+        "major": 0,
+        "minor": 1
+    },
+    "question": {
+        "content": "**The digit $\\greenD4$ in which number  represents a value of  $400$?**\n\n[[☃ radio 1]]\n",
+        "images": {},
+        "widgets": {
+            "radio 1": {
+                "alignment": "default",
+                "graded": true,
+                "options": {
+                    "choices": [
+                        {
+                            "content": "$\\greenD{4}00{,}895$",
+                            "correct": false
+                        },
+                        {
+                            "content": "$2{,}\\greenD466$",
+                            "correct": true
+                        },
+                        {
+                            "content": "$3\\greenD41$",
+                            "correct": false,
+                            "isNoneOfTheAbove": false
+                        }
+                    ],
+                    "deselectEnabled": false,
+                    "displayCount": null,
+                    "hasNoneOfTheAbove": false,
+                    "multipleSelect": false,
+                    "onePerLine": true,
+                    "randomize": false
+                },
+                "static": false,
+                "type": "radio",
+                "version": {
+                    "major": 1,
+                    "minor": 0
+                }
+            }
+        }
+    }
+}
