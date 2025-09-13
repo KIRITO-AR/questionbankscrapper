@@ -600,15 +600,14 @@ class KhanAcademyAutomatedCapture:
                 progress_callback
             )
             
-            # Save the results
+            # Save the results (results now contain Perseus data directly)
             saved_count = 0
-            for question_id, data in results.items():
-                if self.save_active_question_data(question_id, data):
+            for question_id, perseus_data in results.items():
+                if self.save_active_question_data(question_id, perseus_data):
                     saved_count += 1
-                    saved_questions.add(question_id)
-                    questions_captured_count += 1
             
             print(f"[SUCCESS] Active batch processing completed: {saved_count}/{len(questions_to_process)} questions saved")
+            print(f"[INFO] 📈 Total questions captured: {questions_captured_count}")
             
         except Exception as e:
             print(f"[ERROR] Async batch processing error: {e}")
@@ -616,46 +615,76 @@ class KhanAcademyAutomatedCapture:
             if active_scraper_instance:
                 await active_scraper_instance.close()
     
-    def save_active_question_data(self, question_id: str, response_data: Dict) -> bool:
-        """Save question data obtained from active scraping."""
+    def save_active_question_data(self, question_id: str, perseus_data: Dict) -> bool:
+        """Save question data obtained from active scraping in Perseus format."""
+        global saved_questions, questions_captured_count
+        
         try:
-            # Extract the item data from the GraphQL response
-            if ("data" in response_data and 
-                "assessmentItem" in response_data["data"] and
-                "item" in response_data["data"]["assessmentItem"]):
-                
-                item = response_data["data"]["assessmentItem"]["item"]
-                
-                # Parse the itemData (which might be a JSON string)
-                item_data = item.get("itemData")
-                if isinstance(item_data, str):
-                    parsed_data = json.loads(item_data)
-                else:
-                    parsed_data = item_data
-                
-                # Create the complete question object
-                question_object = {
-                    "data": response_data["data"],
-                    "item_id": question_id,
-                    "captured_via": "active_scraping",
-                    "timestamp": datetime.now().isoformat()
-                }
-                
-                # Save to file
-                filename = os.path.join(SAVE_DIRECTORY, f"{question_id}.json")
-                with open(filename, 'w', encoding='utf-8') as f:
-                    json.dump(question_object, f, ensure_ascii=False, indent=2)
-                
-                timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                print(f"[ACTIVE] 💾 Saved {question_id} via active scraping ({timestamp})")
-                return True
-            
-            else:
-                print(f"[ACTIVE] ⚠ Invalid response structure for {question_id}")
+            # The perseus_data should already be in the correct Perseus format from active_scraper
+            # Validate that it has the expected structure
+            if not self.validate_perseus_data(perseus_data, question_id):
+                print(f"[ERROR] Invalid Perseus data structure for {question_id}")
                 return False
-                
+            
+            # Save the Perseus data directly (not wrapped in GraphQL response)
+            filename = os.path.join(SAVE_DIRECTORY, f"{question_id}.json")
+            
+            with open(filename, 'w', encoding='utf-8') as f:
+                json.dump(perseus_data, f, ensure_ascii=False, indent=4)
+            
+            # Update tracking
+            saved_questions.add(question_id)
+            questions_captured_count += 1
+            
+            timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            print(f"[ACTIVE] 💾 Saved {question_id} via active scraping ({timestamp})")
+            print(f"         📊 Total captured: {questions_captured_count}")
+            
+            return True
+            
         except Exception as e:
-            print(f"[ACTIVE] ⚠ Error saving {question_id}: {e}")
+            print(f"[ERROR] Failed to save active question data for {question_id}: {e}")
+            return False
+    
+    def validate_perseus_data(self, data: Dict, question_id: str) -> bool:
+        """Validate Perseus question data structure."""
+        try:
+            # Check for required Perseus fields
+            required_fields = ["question"]
+            
+            for field in required_fields:
+                if field not in data:
+                    print(f"[WARNING] Missing Perseus field '{field}' for {question_id}")
+                    return False
+            
+            # Check question structure
+            question = data["question"]
+            if not isinstance(question, dict):
+                print(f"[WARNING] Invalid question structure for {question_id}")
+                return False
+            
+            if "content" not in question:
+                print(f"[WARNING] No content in question for {question_id}")
+                return False
+            
+            # Check content is meaningful
+            content = question["content"]
+            if not content or len(content.strip()) < 10:
+                print(f"[WARNING] Empty or too short content for {question_id}")
+                return False
+            
+            # Optional fields that should be present in good Perseus data
+            optional_fields = ["hints", "answerArea", "widgets"]
+            found_optional = sum(1 for field in optional_fields if field in data)
+            
+            if found_optional == 0:
+                print(f"[WARNING] No optional Perseus fields found for {question_id} - might be incomplete")
+            
+            print(f"[VALIDATION] ✓ Perseus data validated for {question_id}")
+            return True
+            
+        except Exception as e:
+            print(f"[ERROR] Perseus validation failed for {question_id}: {e}")
             return False
 
 addons = [KhanAcademyAutomatedCapture()]

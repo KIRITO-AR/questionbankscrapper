@@ -50,10 +50,10 @@ class AutonomousKhanScraper:
         self.questions_in_progress: Set[str] = set()
         
         # Configuration
-        self.batch_size = 5
-        self.ui_progression_interval = 30  # seconds
-        self.max_consecutive_failures = 5
-        self.session_timeout = 3600  # 1 hour max session
+        self.batch_size = 10  # Increased for better download throughput
+        self.ui_progression_interval = 20  # Faster UI progressions
+        self.max_consecutive_failures = 3  # Quicker failure detection
+        self.session_timeout = 7200  # 2 hours max session
         
         # Statistics
         self.stats = ScrapingStats()
@@ -94,6 +94,7 @@ class AutonomousKhanScraper:
             # Phase 2: Main scraping loop
             cycle_count = 0
             consecutive_failures = 0
+            last_download_cycle = 0
             
             while (len(self.downloaded_questions) < self.max_questions and 
                    consecutive_failures < self.max_consecutive_failures and
@@ -102,18 +103,28 @@ class AutonomousKhanScraper:
                 
                 cycle_count += 1
                 logger.info(f"=== Autonomous Cycle {cycle_count} ===")
+                logger.info(f"Progress: {len(self.downloaded_questions)}/{self.max_questions} downloaded, {len(self.discovered_questions)} discovered")
                 
                 cycle_success = False
                 
                 try:
-                    # Step 1: Active batch processing of discovered questions
+                    # Step 1: Always prioritize downloading discovered questions
                     batch_results = await self.perform_active_batch_scraping()
                     if batch_results > 0:
                         cycle_success = True
                         consecutive_failures = 0
+                        last_download_cycle = cycle_count
                     
-                    # Step 2: UI progression to discover new questions if needed
-                    if batch_results < 3:  # If few new questions found via active scraping
+                    # Step 2: UI progression to discover new questions 
+                    # - Always do UI progression if we haven't discovered enough questions
+                    # - Also do it if we haven't had successful downloads recently
+                    needs_ui_progression = (
+                        len(self.discovered_questions) < self.max_questions or
+                        batch_results == 0 or
+                        (cycle_count - last_download_cycle) > 3
+                    )
+                    
+                    if needs_ui_progression:
                         ui_results = await self.perform_ui_progression()
                         if ui_results > 0:
                             cycle_success = True
@@ -129,8 +140,11 @@ class AutonomousKhanScraper:
                         consecutive_failures += 1
                         logger.warning(f"Cycle {cycle_count} unsuccessful (failure #{consecutive_failures})")
                     
-                    # Step 5: Brief pause before next cycle
-                    await asyncio.sleep(5)
+                    # Step 5: Adaptive pause - shorter if we're downloading successfully
+                    if batch_results > 0:
+                        await asyncio.sleep(2)  # Short pause when downloading
+                    else:
+                        await asyncio.sleep(5)  # Normal pause otherwise
                     
                 except Exception as e:
                     logger.error(f"Error in autonomous cycle {cycle_count}: {e}")
@@ -190,11 +204,14 @@ class AutonomousKhanScraper:
                 logger.debug("No pending questions for active scraping")
                 return 0
             
-            # Process in batches
-            question_list = list(pending_questions)[:self.batch_size]
+            # Process in batches - take ALL pending questions if reasonable size
+            question_list = list(pending_questions)
+            if len(question_list) > self.batch_size * 2:
+                question_list = question_list[:self.batch_size]
+            
             self.questions_in_progress.update(question_list)
             
-            logger.info(f"Starting active batch scraping for {len(question_list)} questions")
+            logger.info(f"Starting active batch scraping for {len(question_list)} questions (total pending: {len(pending_questions)})")
             
             # Initialize active scraper session if needed
             if not self.active_scraper.session:
@@ -208,11 +225,20 @@ class AutonomousKhanScraper:
                 if data and self.save_question_safely(question_id, data):
                     self.downloaded_questions.add(question_id)
                     successful_downloads += 1
+                    logger.debug(f"Successfully downloaded question {question_id}")
+                else:
+                    logger.warning(f"Failed to download or save question {question_id}")
                 
                 self.questions_in_progress.discard(question_id)
             
             self.stats.active_batches_processed += 1
             logger.info(f"Active batch scraping completed: {successful_downloads}/{len(question_list)} successful")
+            
+            # If we have more pending questions, immediately schedule another batch
+            remaining_pending = len(pending_questions) - len(question_list)
+            if remaining_pending > 0:
+                logger.info(f"Still have {remaining_pending} questions pending for download")
+            
             return successful_downloads
             
         except Exception as e:
@@ -402,7 +428,7 @@ class AutonomousKhanScraper:
             logger.error(f"Recovery process error: {e}")
     
     def save_question_safely(self, question_id: str, data: Dict) -> bool:
-        """Safely save question data with error handling."""
+        """Safely save question data in Perseus format."""
         try:
             save_directory = "khan_academy_json"
             if not os.path.exists(save_directory):
@@ -410,23 +436,12 @@ class AutonomousKhanScraper:
             
             filename = os.path.join(save_directory, f"{question_id}.json")
             
-            # Add metadata
-            enhanced_data = {
-                "data": data,
-                "question_id": question_id,
-                "captured_via": "autonomous_scraper",
-                "timestamp": datetime.now().isoformat(),
-                "session_stats": {
-                    "ui_progressions": self.stats.ui_progressions,
-                    "active_batches": self.stats.active_batches_processed
-                }
-            }
-            
+            # Save in Perseus format directly (data should already be Perseus format from active_scraper)
             import json
             with open(filename, 'w', encoding='utf-8') as f:
-                json.dump(enhanced_data, f, ensure_ascii=False, indent=2)
+                json.dump(data, f, ensure_ascii=False, indent=2)
             
-            logger.debug(f"Saved question {question_id}")
+            logger.debug(f"Saved question {question_id} in Perseus format")
             return True
             
         except Exception as e:

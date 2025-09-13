@@ -91,7 +91,7 @@ class ActiveKhanScraper:
         logger.info(f"Starting batch fetch for {len(question_ids)} questions")
         
         # Create semaphore to limit concurrent requests
-        semaphore = asyncio.Semaphore(3)  # Max 3 concurrent requests
+        semaphore = asyncio.Semaphore(5)  # Increased from 3 to 5
         
         tasks = []
         for question_id in question_ids:
@@ -111,8 +111,14 @@ class ActiveKhanScraper:
                 logger.error(f"Failed to fetch {question_id}: {result}")
                 failed_downloads.append(question_id)
             elif result is not None:
-                successful_downloads[question_id] = result
-                logger.debug(f"Successfully fetched {question_id}")
+                # Extract Perseus data from the GraphQL response
+                perseus_data = self.extract_perseus_data(result, question_id)
+                if perseus_data:
+                    successful_downloads[question_id] = perseus_data
+                    logger.debug(f"Successfully fetched and processed {question_id}")
+                else:
+                    logger.warning(f"Could not extract Perseus data for {question_id}")
+                    failed_downloads.append(question_id)
             else:
                 failed_downloads.append(question_id)
         
@@ -195,6 +201,84 @@ class ActiveKhanScraper:
             logger.error(f"Exception fetching question {question_id}: {e}")
             return None
     
+    def extract_perseus_data(self, graphql_response: Dict, question_id: str) -> Optional[Dict]:
+        """Extract Perseus question data from GraphQL response."""
+        try:
+            # Navigate through the GraphQL response structure
+            if "data" not in graphql_response:
+                logger.warning(f"No data field in GraphQL response for {question_id}")
+                return None
+            
+            assessment_item = graphql_response["data"].get("assessmentItem")
+            if not assessment_item:
+                logger.warning(f"No assessmentItem in GraphQL response for {question_id}")
+                return None
+            
+            item = assessment_item.get("item")
+            if not item:
+                logger.warning(f"No item in assessmentItem for {question_id}")
+                return None
+            
+            item_data = item.get("itemData")
+            if not item_data:
+                logger.warning(f"No itemData for {question_id}")
+                return None
+            
+            # Parse itemData (it might be a string or already parsed)
+            if isinstance(item_data, str):
+                try:
+                    perseus_data = json.loads(item_data)
+                except json.JSONDecodeError as e:
+                    logger.error(f"Failed to parse itemData JSON for {question_id}: {e}")
+                    return None
+            else:
+                perseus_data = item_data
+            
+            # Validate Perseus structure
+            if not self.validate_perseus_structure(perseus_data, question_id):
+                return None
+            
+            logger.debug(f"Successfully extracted Perseus data for {question_id}")
+            return perseus_data
+            
+        except Exception as e:
+            logger.error(f"Error extracting Perseus data for {question_id}: {e}")
+            return None
+    
+    def validate_perseus_structure(self, data: Dict, question_id: str) -> bool:
+        """Validate that the data has proper Perseus structure."""
+        try:
+            # Check for required Perseus fields
+            required_fields = ["question"]
+            
+            for field in required_fields:
+                if field not in data:
+                    logger.warning(f"Missing required Perseus field '{field}' for {question_id}")
+                    return False
+            
+            # Check question structure
+            question = data["question"]
+            if not isinstance(question, dict):
+                logger.warning(f"Invalid question structure for {question_id}")
+                return False
+            
+            if "content" not in question:
+                logger.warning(f"No content in question for {question_id}")
+                return False
+            
+            # Check content is not empty
+            content = question["content"]
+            if not content or len(content.strip()) < 5:
+                logger.warning(f"Empty or too short content for {question_id}")
+                return False
+            
+            logger.debug(f"Perseus structure validated for {question_id}")
+            return True
+            
+        except Exception as e:
+            logger.error(f"Error validating Perseus structure for {question_id}: {e}")
+            return False
+
     def validate_response(self, data: Dict, question_id: str) -> bool:
         """Validate that the response contains valid question data."""
         try:
