@@ -1,0 +1,270 @@
+{
+    "answerArea": {
+        "calculator": false,
+        "chi2Table": false,
+        "financialCalculatorMonthlyPayment": false,
+        "financialCalculatorTimeToPayOff": false,
+        "financialCalculatorTotalAmount": false,
+        "periodicTable": false,
+        "periodicTableWithKey": false,
+        "tTable": false,
+        "zTable": false
+    },
+    "hints": [
+        {
+            "content": " [[☃ image 5]]\n\nThe kite is **above** the house.",
+            "images": {},
+            "replace": false,
+            "widgets": {
+                "image 1": {
+                    "alignment": "block",
+                    "graded": true,
+                    "options": {
+                        "alt": "",
+                        "backgroundImage": {
+                            "height": 191,
+                            "url": "https://cdn.kastatic.org/ka-content-images/82d30f328cf5c16b9075a174da0d6620f2550729.png",
+                            "width": 255
+                        },
+                        "box": [
+                            255,
+                            191
+                        ],
+                        "caption": "",
+                        "labels": [],
+                        "range": [
+                            [
+                                0,
+                                10
+                            ],
+                            [
+                                0,
+                                10
+                            ]
+                        ],
+                        "static": false,
+                        "title": ""
+                    },
+                    "static": false,
+                    "type": "image",
+                    "version": {
+                        "major": 0,
+                        "minor": 0
+                    }
+                },
+                "image 2": {
+                    "alignment": "block",
+                    "graded": true,
+                    "options": {
+                        "alt": "",
+                        "backgroundImage": {
+                            "height": 263,
+                            "url": "https://cdn.kastatic.org/ka-content-images/9967b3420ac87e2abaa3cfc3fe8b9ac248867e21.png",
+                            "width": 350
+                        },
+                        "box": [
+                            350,
+                            263
+                        ],
+                        "caption": "",
+                        "labels": [],
+                        "range": [
+                            [
+                                0,
+                                10
+                            ],
+                            [
+                                0,
+                                10
+                            ]
+                        ],
+                        "static": false,
+                        "title": ""
+                    },
+                    "static": false,
+                    "type": "image",
+                    "version": {
+                        "major": 0,
+                        "minor": 0
+                    }
+                },
+                "image 3": {
+                    "alignment": "block",
+                    "graded": true,
+                    "options": {
+                        "alt": "",
+                        "backgroundImage": {
+                            "height": 263,
+                            "url": "https://cdn.kastatic.org/ka-content-images/4a7572bf234d7527b731b569295ae29537eb6837.png",
+                            "width": 350
+                        },
+                        "box": [
+                            350,
+                            263
+                        ],
+                        "caption": "",
+                        "labels": [],
+                        "range": [
+                            [
+                                0,
+                                10
+                            ],
+                            [
+                                0,
+                                10
+                            ]
+                        ],
+                        "static": false,
+                        "title": ""
+                    },
+                    "static": false,
+                    "type": "image",
+                    "version": {
+                        "major": 0,
+                        "minor": 0
+                    }
+                },
+                "image 4": {
+                    "alignment": "block",
+                    "graded": true,
+                    "options": {
+                        "alt": "",
+                        "backgroundImage": {
+                            "height": 263,
+                            "url": "https://cdn.kastatic.org/ka-content-images/aaba589f3ff43e6fb474cd3e3a90712083347407.png",
+                            "width": 350
+                        },
+                        "box": [
+                            350,
+                            263
+                        ],
+                        "caption": "",
+                        "labels": [],
+                        "range": [
+                            [
+                                0,
+                                10
+                            ],
+                            [
+                                0,
+                                10
+                            ]
+                        ],
+                        "static": false,
+                        "title": ""
+                    },
+                    "static": false,
+                    "type": "image",
+                    "version": {
+                        "major": 0,
+                        "minor": 0
+                    }
+                },
+                "image 5": {
+                    "alignment": "block",
+                    "graded": true,
+                    "options": {
+                        "alt": "",
+                        "backgroundImage": {
+                            "height": 263,
+                            "url": "https://cdn.kastatic.org/ka-content-images/7ac990515c66b123405dd3f0ffeab77fd78de084.png",
+                            "width": 350
+                        },
+                        "box": [
+                            350,
+                            263
+                        ],
+                        "caption": "",
+                        "labels": [],
+                        "range": [
+                            [
+                                0,
+                                10
+                            ],
+                            [
+                                0,
+                                10
+                            ]
+                        ],
+                        "static": false,
+                        "title": ""
+                    },
+                    "static": false,
+                    "type": "image",
+                    "version": {
+                        "major": 0,
+                        "minor": 0
+                    }
+                }
+            }
+        }
+    ],
+    "question": {
+        "content": "Look at the given image.\n\n [[☃ image 1]]\n\n**The kite is [[☃ dropdown 1]] the house.**",
+        "images": {},
+        "widgets": {
+            "dropdown 1": {
+                "alignment": "default",
+                "graded": true,
+                "options": {
+                    "ariaLabel": "Above/Below",
+                    "choices": [
+                        {
+                            "content": "Above",
+                            "correct": true
+                        },
+                        {
+                            "content": "Below",
+                            "correct": false
+                        }
+                    ],
+                    "placeholder": "Above/Below",
+                    "static": false,
+                    "visibleLabel": ""
+                },
+                "static": false,
+                "type": "dropdown",
+                "version": {
+                    "major": 0,
+                    "minor": 0
+                }
+            },
+            "image 1": {
+                "alignment": "block",
+                "graded": true,
+                "options": {
+                    "alt": "",
+                    "backgroundImage": {
+                        "height": 350,
+                        "url": "https://cdn.kastatic.org/ka-content-images/cd7aee888da1f8bfbc427b6747b9591d73e62bd0.jpg",
+                        "width": 350
+                    },
+                    "box": [
+                        350,
+                        350
+                    ],
+                    "caption": "",
+                    "labels": [],
+                    "range": [
+                        [
+                            0,
+                            10
+                        ],
+                        [
+                            0,
+                            10
+                        ]
+                    ],
+                    "static": false,
+                    "title": ""
+                },
+                "static": false,
+                "type": "image",
+                "version": {
+                    "major": 0,
+                    "minor": 0
+                }
+            }
+        }
+    }
+}

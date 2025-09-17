@@ -246,15 +246,20 @@ class ActiveKhanScraper:
             return None
     
     def validate_perseus_structure(self, data: Dict, question_id: str) -> bool:
-        """Validate that the data has proper Perseus structure."""
+        """Validate that the data has proper Perseus structure - ENHANCED VERSION."""
         try:
             # Check for required Perseus fields
             required_fields = ["question"]
+            optional_fields = ["hints", "answerArea", "itemDataVersion"]
             
+            # Must have at least the question field
             for field in required_fields:
                 if field not in data:
                     logger.warning(f"Missing required Perseus field '{field}' for {question_id}")
                     return False
+            
+            # Count optional fields for confidence scoring
+            optional_found = sum(1 for field in optional_fields if field in data)
             
             # Check question structure
             question = data["question"]
@@ -272,7 +277,25 @@ class ActiveKhanScraper:
                 logger.warning(f"Empty or too short content for {question_id}")
                 return False
             
-            logger.debug(f"Perseus structure validated for {question_id}")
+            # Enhanced validation: check for widgets (interactive elements)
+            widgets_found = 0
+            if "widgets" in question and isinstance(question["widgets"], dict):
+                widgets_found = len(question["widgets"])
+                logger.debug(f"Found {widgets_found} widgets in question {question_id}")
+            
+            # Check hints structure if present
+            hints_valid = True
+            if "hints" in data:
+                hints = data["hints"]
+                if isinstance(hints, list) and len(hints) > 0:
+                    logger.debug(f"Found {len(hints)} hints for {question_id}")
+                else:
+                    hints_valid = False
+            
+            # Calculate confidence score
+            confidence_score = optional_found + (1 if widgets_found > 0 else 0) + (1 if hints_valid else 0)
+            
+            logger.debug(f"Perseus validation for {question_id}: confidence_score={confidence_score}, widgets={widgets_found}")
             return True
             
         except Exception as e:
@@ -390,3 +413,91 @@ class ActiveKhanScraper:
         self.session_cookies = cookies
         self.base_headers.update(headers)
         logger.info("Updated session data for active scraper")
+
+    def save_perseus_question(self, question_id: str, perseus_data: Dict, save_directory: str = "khan_academy_json") -> bool:
+        """Save Perseus JSON data to file with enhanced metadata."""
+        try:
+            import os
+            # Ensure directory exists
+            os.makedirs(save_directory, exist_ok=True)
+            
+            # Create filename with question ID
+            filename = f"{question_id}.json"
+            filepath = os.path.join(save_directory, filename)
+            
+            # Add metadata to the Perseus data
+            enhanced_data = {
+                **perseus_data,
+                "_metadata": {
+                    "question_id": question_id,
+                    "capture_timestamp": time.time(),
+                    "capture_method": "active_scraper",
+                    "format_version": "perseus_json"
+                }
+            }
+            
+            # Save to file with pretty formatting
+            with open(filepath, 'w', encoding='utf-8') as f:
+                json.dump(enhanced_data, f, indent=4, ensure_ascii=False)
+            
+            logger.debug(f"Saved Perseus data for {question_id} to {filepath}")
+            return True
+            
+        except Exception as e:
+            logger.error(f"Error saving Perseus data for {question_id}: {e}")
+            return False
+
+    def analyze_perseus_content(self, perseus_data: Dict) -> Dict:
+        """Analyze Perseus content to understand question structure."""
+        try:
+            analysis = {
+                "question_type": "unknown",
+                "widget_types": [],
+                "has_hints": False,
+                "hint_count": 0,
+                "content_length": 0,
+                "complexity_score": 0
+            }
+            
+            # Analyze question content
+            if "question" in perseus_data:
+                question = perseus_data["question"]
+                if "content" in question:
+                    analysis["content_length"] = len(question["content"])
+                
+                # Analyze widgets (like in your sample JSON)
+                if "widgets" in question and isinstance(question["widgets"], dict):
+                    widgets = question["widgets"]
+                    for widget_id, widget_data in widgets.items():
+                        if "type" in widget_data:
+                            widget_type = widget_data["type"]
+                            analysis["widget_types"].append(widget_type)
+                            
+                            # Determine question type based on widgets
+                            if widget_type == "numeric-input":
+                                analysis["question_type"] = "numeric_input"
+                            elif widget_type == "radio":
+                                analysis["question_type"] = "multiple_choice"
+                            elif widget_type == "expression":
+                                analysis["question_type"] = "expression"
+                            elif widget_type == "image":
+                                if analysis["question_type"] == "unknown":
+                                    analysis["question_type"] = "image_based"
+            
+            # Analyze hints
+            if "hints" in perseus_data and isinstance(perseus_data["hints"], list):
+                analysis["has_hints"] = True
+                analysis["hint_count"] = len(perseus_data["hints"])
+            
+            # Calculate complexity score
+            complexity = 0
+            complexity += min(analysis["content_length"] // 100, 5)  # Content length factor
+            complexity += len(analysis["widget_types"])  # Widget complexity
+            complexity += analysis["hint_count"] // 2  # Hint complexity
+            analysis["complexity_score"] = complexity
+            
+            return analysis
+            
+        except Exception as e:
+            logger.error(f"Error analyzing Perseus content: {e}")
+            return {"error": str(e)}

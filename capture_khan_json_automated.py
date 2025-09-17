@@ -110,17 +110,54 @@ class KhanAcademyAutomatedCapture:
 
     def handle_practice_task(self, flow: http.HTTPFlow):
         """
-        Parses the main task response and starts automated question downloading.
+        Parses the main task response and starts automated question downloading - ENHANCED.
         """
         global questions_to_capture, all_discovered_questions
-        print("[INFO] Practice Task detected. Starting automated question capture...")
+        print("[INFO] Practice Task detected. Starting enhanced question capture...")
         
         try:
             data = json.loads(flow.response.content)
             
-            # Multiple ways to extract question IDs
-            new_questions = set()
+            # Use enhanced GraphQL analyzer for better ID extraction
+            if ACTIVE_SCRAPING_AVAILABLE:
+                try:
+                    analyzer = KhanGraphQLAnalyzer()
+                    question_ids = analyzer.extract_question_batch_ids(data)
+                    
+                    if question_ids:
+                        print(f"[INFO] 🎯 Enhanced analyzer found {len(question_ids)} questions")
+                        new_questions = set(question_ids)
+                        all_discovered_questions.update(new_questions)
+                    else:
+                        print("[WARNING] Enhanced analyzer found no questions, falling back to legacy method")
+                        new_questions = self._legacy_question_extraction(data)
+                        
+                except Exception as e:
+                    print(f"[WARNING] Enhanced extraction failed: {e}, using legacy method")
+                    new_questions = self._legacy_question_extraction(data)
+            else:
+                new_questions = self._legacy_question_extraction(data)
             
+            # Filter for new unsaved questions
+            new_unsaved_questions = new_questions - saved_questions
+            questions_to_capture.update(new_unsaved_questions)
+            
+            print(f"[INFO] ✅ Found {len(new_unsaved_questions)} new questions to capture")
+            print(f"[INFO] 📊 Total discovered: {len(all_discovered_questions)} | Queue: {len(questions_to_capture)}")
+            
+            # Enhanced: Start active batch processing if available
+            if new_unsaved_questions and ENABLE_ACTIVE_SCRAPING and ACTIVE_SCRAPING_AVAILABLE:
+                print(f"[INFO] 🚀 Starting active batch processing for {len(new_unsaved_questions)} questions")
+                asyncio.create_task(self._process_question_batch_actively(list(new_unsaved_questions), flow))
+            
+        except Exception as e:
+            print(f"[ERROR] Failed to parse practice task: {e}")
+
+    def _legacy_question_extraction(self, data):
+        """Legacy question extraction method as fallback."""
+        new_questions = set()
+        
+        try:
             # Method 1: From practice task reserved items
             if 'data' in data and 'getOrCreatePracticeTask' in data['data']:
                 reserved_items = data['data']['getOrCreatePracticeTask']['result']['userTask']['task']['reservedItems']
@@ -128,7 +165,6 @@ class KhanAcademyAutomatedCapture:
                     # The ID is the part after the '|'
                     item_id = item.split('|')[1]
                     new_questions.add(item_id)
-                    all_discovered_questions.add(item_id)
             
             # Method 2: From any GraphQL response with assessment items
             if 'assessmentItem' in str(data):
@@ -138,43 +174,49 @@ class KhanAcademyAutomatedCapture:
                 for item_id in item_ids:
                     if len(item_id) > 10:  # Filter for Khan Academy question IDs
                         new_questions.add(item_id)
-                        all_discovered_questions.add(item_id)
-            
-            # Add only new questions that haven't been saved
-            new_unsaved_questions = new_questions - saved_questions
-            questions_to_capture.update(new_unsaved_questions)
-            
-            print(f"[INFO] Found {len(new_unsaved_questions)} new questions to capture automatically.")
-            print(f"[INFO] Total questions discovered: {len(all_discovered_questions)}")
-            print(f"[INFO] Total questions in queue: {len(questions_to_capture)}")
-            
-            # Start automated downloading in a separate thread
-            if new_unsaved_questions and not self.automation_task:
-                self.automation_task = threading.Thread(
-                    target=self.start_automated_capture,
-                    args=(new_unsaved_questions,),
-                    daemon=True
-                )
-                self.automation_task.start()
-            elif new_unsaved_questions and self.automation_task:
-                # If automation is already running, the new questions will be picked up
-                print(f"[INFO] Automation already running, new questions added to queue.")
-            
-            # Start active batch scraping if enabled and questions found
-            if (ENABLE_ACTIVE_SCRAPING and ACTIVE_SCRAPING_AVAILABLE and 
-                new_unsaved_questions and not self.active_scraping_task):
-                self.active_scraping_task = threading.Thread(
-                    target=self.start_active_batch_processing,
-                    args=(new_unsaved_questions,),
-                    daemon=True
-                )
-                self.active_scraping_task.start()
-                print(f"[INFO] Started active batch processing for {len(new_unsaved_questions)} questions")
+                        
+        except Exception as e:
+            print(f"[WARNING] Legacy extraction error: {e}")
+        
+        return new_questions
 
-        except (KeyError, TypeError, json.JSONDecodeError) as e:
-            print(f"[ERROR] Could not parse practice task. Error: {e}")
-            # Try to extract any question data anyway
-            self.try_extract_question_data(flow)
+    async def _process_question_batch_actively(self, question_ids, flow):
+        """Process a batch of questions using enhanced active scraping."""
+        try:
+            global captured_questions_count
+            
+            # Extract authentication data
+            cookies = flow.request.headers.get('cookie', '')
+            headers = {
+                'authorization': flow.request.headers.get('authorization', ''),
+                'x-csrf-token': flow.request.headers.get('x-csrf-token', ''),
+                'x-ka-fkey': flow.request.headers.get('x-ka-fkey', ''),
+                'user-agent': flow.request.headers.get('user-agent', ''),
+                'referer': 'https://www.khanacademy.org/',
+                'origin': 'https://www.khanacademy.org'
+            }
+            
+            # Initialize active scraper
+            active_scraper = ActiveKhanScraper(cookies, headers)
+            
+            print(f"[INFO] 🔄 Processing {len(question_ids)} questions concurrently...")
+            
+            # Download questions in batch
+            results = await active_scraper.batch_download_questions(question_ids, SAVE_DIRECTORY)
+            
+            # Update tracking
+            successful_count = len(results)
+            captured_questions_count += successful_count
+            saved_questions.update(results.keys())
+            
+            print(f"[INFO] ✅ Active batch completed: {successful_count}/{len(question_ids)} saved")
+            print(f"[INFO] 📈 Total captured: {captured_questions_count}")
+            
+            # Close the active scraper session
+            await active_scraper.close()
+            
+        except Exception as e:
+            print(f"[ERROR] Active batch processing failed: {e}")
 
     def try_extract_question_data(self, flow: http.HTTPFlow):
         """

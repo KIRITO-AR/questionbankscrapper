@@ -96,7 +96,7 @@ class EnhancedKhanScraper:
     def start_mitmproxy(self):
         """Start mitmproxy with the enhanced addon."""
         try:
-            addon_path = os.path.join(os.getcwd(), "capture_khan_json_automated.py")
+            addon_path = os.path.join(os.getcwd(), "capture_khan_json.py")
             
             if not os.path.exists(addon_path):
                 logger.error(f"Addon file not found: {addon_path}")
@@ -281,7 +281,7 @@ def main():
         print("  legacy          Traditional browser automation only")
         print()
         print("Example:")
-        print("  python enhanced_khan_scraper.py https://www.khanacademy.org/math/algebra/... 1000 autonomous")
+        print("  python enhanced_khan_scraper.py https://www.khanacademy.org/math/algebra/x2f8bb11595b61c86:quadratic-functions-equations/x2f8bb11595b61c86:quadratic-formula/e/quadratic_formula 1000 autonomous")
         print()
         print("Requirements:")
         print("  - mitmproxy must be installed and accessible")
@@ -299,9 +299,18 @@ def main():
     max_questions = int(sys.argv[2]) if len(sys.argv) > 2 else 1000
     mode = sys.argv[3].lower() if len(sys.argv) > 3 else 'autonomous'
     
-    # Validate URL
-    if not exercise_url.startswith("http"):
-        print("Error: Please provide a valid HTTP/HTTPS URL")
+    # Enhanced URL validation
+    if not validate_exercise_url(exercise_url):
+        print("❌ Error: Invalid Khan Academy exercise URL")
+        print()
+        print("Please provide a valid Khan Academy exercise URL that:")
+        print("  - Starts with https://www.khanacademy.org/")
+        print("  - Contains '/e/' for exercises")
+        print("  - Is not a placeholder (no '...' or incomplete paths)")
+        print()
+        print("Example valid URL:")
+        print("  https://www.khanacademy.org/math/algebra/x2f8bb11595b61c86:quadratic-functions-equations/x2f8bb11595b61c86:quadratic-formula/e/quadratic_formula")
+        print()
         sys.exit(1)
     
     # Validate mode
@@ -310,6 +319,46 @@ def main():
         sys.exit(1)
     
     # Create output directory
+    output_dir = "khan_academy_json"
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+        logger.info(f"Created output directory: {output_dir}")
+
+def validate_exercise_url(url):
+    """Validate that the URL is a proper Khan Academy exercise URL."""
+    try:
+        # Check basic URL format
+        if not url.startswith("https://www.khanacademy.org/"):
+            return False
+        
+        # Check for placeholder URLs
+        if "..." in url:
+            return False
+        
+        # Check for exercise path
+        if "/e/" not in url:
+            return False
+        
+        # Check minimum URL length (real URLs are quite long)
+        if len(url) < 80:
+            return False
+        
+        # Additional checks for common placeholder patterns
+        placeholder_patterns = [
+            "exercise_url",
+            "example",
+            "sample",
+            "placeholder"
+        ]
+        
+        for pattern in placeholder_patterns:
+            if pattern in url.lower():
+                return False
+        
+        return True
+        
+    except Exception:
+        return False
     os.makedirs("khan_academy_json", exist_ok=True)
     
     # Run the scraper

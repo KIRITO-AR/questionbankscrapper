@@ -269,3 +269,184 @@ class KhanGraphQLAnalyzer:
                             
         except Exception as e:
             logger.debug(f"Error analyzing data section: {e}")
+
+    def extract_question_batch_ids(self, graphql_response: str) -> List[str]:
+        """Extract question IDs from practice task response - ENHANCED VERSION."""
+        try:
+            if isinstance(graphql_response, str):
+                response_data = json.loads(graphql_response)
+            else:
+                response_data = graphql_response
+            
+            question_ids = set()
+            
+            # Multiple possible paths for question IDs in Khan Academy responses
+            id_extraction_paths = [
+                # Practice task responses
+                ['data', 'user', 'practiceTask', 'assessmentItems'],
+                ['data', 'practiceTask', 'assessmentItems'],
+                ['data', 'assessmentItems'],
+                
+                # Exercise responses
+                ['data', 'user', 'exercises', 'assessmentItems'],
+                ['data', 'exercises', 'assessmentItems'],
+                
+                # Direct assessment item arrays
+                ['assessmentItems'],
+                ['items'],
+                
+                # Nested in exercise data
+                ['data', 'exercise', 'assessmentItems'],
+                ['data', 'exercise', 'items']
+            ]
+            
+            # Try each extraction path
+            for path in id_extraction_paths:
+                try:
+                    items = self._extract_nested_value(response_data, path)
+                    if items and isinstance(items, list):
+                        for item in items:
+                            extracted_ids = self._extract_ids_from_item(item)
+                            question_ids.update(extracted_ids)
+                            
+                except Exception as e:
+                    logger.debug(f"Path {' -> '.join(path)} failed: {e}")
+                    continue
+            
+            # If no question IDs found via standard paths, try deep search
+            if not question_ids:
+                question_ids = self._deep_search_for_question_ids(response_data)
+            
+            # Remove any invalid IDs and convert to list
+            valid_ids = [qid for qid in question_ids if self._is_valid_question_id(qid)]
+            
+            logger.info(f"Extracted {len(valid_ids)} question IDs from GraphQL response")
+            return valid_ids
+            
+        except Exception as e:
+            logger.error(f"Failed to extract question batch IDs: {e}")
+            return []
+    
+    def _extract_nested_value(self, data, path):
+        """Extract nested value from dictionary using path list."""
+        try:
+            current = data
+            for key in path:
+                if isinstance(current, dict) and key in current:
+                    current = current[key]
+                elif isinstance(current, list) and key.isdigit() and int(key) < len(current):
+                    current = current[int(key)]
+                else:
+                    return None
+            return current
+        except Exception:
+            return None
+    
+    def _extract_ids_from_item(self, item):
+        """Extract question IDs from an assessment item."""
+        ids = set()
+        
+        if isinstance(item, dict):
+            # Try different ID field names
+            id_fields = ['id', 'assessmentItemId', 'itemId', 'questionId', 'contentId']
+            
+            for field in id_fields:
+                if field in item and item[field]:
+                    ids.add(str(item[field]))
+            
+            # Also check nested item structures
+            if 'item' in item and isinstance(item['item'], dict):
+                nested_ids = self._extract_ids_from_item(item['item'])
+                ids.update(nested_ids)
+                
+        elif isinstance(item, str):
+            # Sometimes the item itself is just an ID string
+            if self._is_valid_question_id(item):
+                ids.add(item)
+        
+        return ids
+    
+    def _deep_search_for_question_ids(self, data, max_depth=5, current_depth=0):
+        """Recursively search for question IDs in the response."""
+        ids = set()
+        
+        if current_depth >= max_depth:
+            return ids
+        
+        try:
+            if isinstance(data, dict):
+                for key, value in data.items():
+                    # Check if key suggests it contains IDs
+                    if any(keyword in key.lower() for keyword in ['id', 'item', 'assessment', 'question']):
+                        if isinstance(value, str) and self._is_valid_question_id(value):
+                            ids.add(value)
+                        elif isinstance(value, list):
+                            for item in value:
+                                if isinstance(item, str) and self._is_valid_question_id(item):
+                                    ids.add(item)
+                    
+                    # Recursive search
+                    if isinstance(value, (dict, list)):
+                        nested_ids = self._deep_search_for_question_ids(value, max_depth, current_depth + 1)
+                        ids.update(nested_ids)
+                        
+            elif isinstance(data, list):
+                for item in data:
+                    if isinstance(item, (dict, list)):
+                        nested_ids = self._deep_search_for_question_ids(item, max_depth, current_depth + 1)
+                        ids.update(nested_ids)
+                    elif isinstance(item, str) and self._is_valid_question_id(item):
+                        ids.add(item)
+        
+        except Exception as e:
+            logger.debug(f"Error in deep search at depth {current_depth}: {e}")
+        
+        return ids
+    
+    def _is_valid_question_id(self, qid):
+        """Check if a string looks like a valid Khan Academy question ID."""
+        if not isinstance(qid, str):
+            return False
+        
+        # Khan Academy question IDs typically:
+        # - Are hexadecimal strings
+        # - Are 16 characters long
+        # - Start with 'x' sometimes (like in your sample: x4199a21da4572c96)
+        
+        # Remove 'x' prefix if present
+        clean_id = qid.lower()
+        if clean_id.startswith('x'):
+            clean_id = clean_id[1:]
+        
+        # Check if it's a valid hex string of reasonable length
+        if len(clean_id) >= 8 and len(clean_id) <= 32:
+            try:
+                int(clean_id, 16)
+                return True
+            except ValueError:
+                pass
+        
+        return False
+
+    def generate_assessment_request_template(self, question_id: str) -> Dict:
+        """Generate GraphQL request template for fetching a specific question."""
+        return {
+            "query": """
+                query getAssessmentItem($assessmentItemId: String!) {
+                    assessmentItem(id: $assessmentItemId) {
+                        id
+                        item {
+                            id
+                            itemData
+                            sha
+                            __typename
+                        }
+                        __typename
+                    }
+                }
+            """,
+            "variables": {
+                "assessmentItemId": question_id
+            },
+            "operationName": "getAssessmentItem"
+        }
