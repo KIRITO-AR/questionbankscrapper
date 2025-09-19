@@ -18,9 +18,10 @@ PROXY_PORT = 8080
 DEFAULT_EXERCISE_URL = "https://www.khanacademy.org/math/cc-2nd-grade-math/x3184e0ec:add-and-subtract-within-20/x3184e0ec:add-within-20/e/add-within-20-visually"
 DEFAULT_MAX_QUESTIONS = 50  # Reduced for initial testing
 
-# Network resilience settings
-MITM_STARTUP_TIMEOUT = 15  # Time to wait for mitmproxy startup
+# Network resilience settings  
+MITM_STARTUP_TIMEOUT = 25  # Increased timeout for active scraping initialization
 MAX_RETRIES = 3  # Maximum retries for failed operations
+ACTIVE_SCRAPING_WAIT = 5  # Additional wait time for active batch fetching
 
 def _stream_output(prefix, pipe):
     """Continuously read a subprocess pipe and echo to stdout with a prefix."""
@@ -51,7 +52,9 @@ def start_mitmproxy():
         "--set", "block_global=false",  # Allows traffic to pass through
         "--set", "connection_strategy=lazy",  # Optimize connections
         "--set", "stream_large_bodies=50m",  # Stream large responses
-        "--set", "flow_detail=0"  # Reduce logging overhead
+        "--set", "flow_detail=0",  # Reduce logging overhead
+        "--set", "keep_host_header=true",  # Better for active requests
+        "--set", "http2=false"  # Disable HTTP/2 for better compatibility
     ]
     
     for attempt in range(MAX_RETRIES):
@@ -73,10 +76,16 @@ def start_mitmproxy():
             
             if mitm_process.poll() is None:  # Process is still running
                 print(f"Mitmproxy started successfully (PID: {mitm_process.pid})")
+                print("Active scraping mode enabled - will batch-fetch questions automatically")
                 # Start streaming threads so addon prints are visible in terminal
                 import threading
                 threading.Thread(target=_stream_output, args=("[mitmproxy]", mitm_process.stdout), daemon=True).start()
                 threading.Thread(target=_stream_output, args=("[mitmproxy-err]", mitm_process.stderr), daemon=True).start()
+                
+                # Give extra time for active scraping initialization
+                print(f"Allowing {ACTIVE_SCRAPING_WAIT}s for active scraping initialization...")
+                time.sleep(ACTIVE_SCRAPING_WAIT)
+                
                 return mitm_process
             else:
                 print(f"Mitmproxy failed to start (attempt {attempt + 1})")
@@ -169,12 +178,13 @@ def main(exercise_url=None, max_questions=None):
         max_questions = DEFAULT_MAX_QUESTIONS
     
     print("=" * 60)
-    print("Khan Academy Automated Question Scraper")
+    print("Khan Academy ACTIVE Question Scraper")
     print("=" * 60)
     print(f"Exercise URL: {exercise_url}")
     print(f"Max questions: {max_questions}")
     print(f"Proxy port: {PROXY_PORT}")
     print(f"MITM script: {MITM_SCRIPT}")
+    print(f"Mode: ACTIVE BATCH SCRAPING (auto-fetches all questions)")
     print()
     
     mitm_process = None
@@ -200,16 +210,18 @@ def main(exercise_url=None, max_questions=None):
         print("[SUCCESS] mitmproxy started successfully")
         
         # Step 2: Run browser automation
-        print("[2/4] Starting browser automation...")
+        print("[2/4] Starting browser automation with ACTIVE question fetching...")
         try:
             run_automation(exercise_url, max_questions)
             print("[SUCCESS] Browser automation completed")
+            print("[INFO] Check the khan_academy_json/ folder for actively fetched questions!")
         except Exception as e:
             print(f"[ERROR] Browser automation failed: {e}")
             print("This may be due to:")
             print("- Network timeout issues")
             print("- Slow proxy response")
             print("- Website changes")
+            print("- Khan Academy blocking active requests (will fallback to passive)")
             return False
         
         # Step 3: Cleanup
@@ -227,7 +239,27 @@ def main(exercise_url=None, max_questions=None):
             cleanup_process(mitm_process)
         print("Cleanup complete.")
         
-    print("\nScraping session finished!")
+    # Show summary of captured questions
+    print("\n" + "=" * 60)
+    print("SCRAPING SESSION SUMMARY")
+    print("=" * 60)
+    
+    # Count JSON files in the output directory
+    json_dir = "khan_academy_json"
+    if os.path.exists(json_dir):
+        json_files = [f for f in os.listdir(json_dir) if f.endswith('.json')]
+        print(f"Total questions captured: {len(json_files)}")
+        print(f"Output directory: {json_dir}")
+        if json_files:
+            print("Recent captures:")
+            # Show last 5 files
+            for file in sorted(json_files)[-5:]:
+                print(f"  - {file}")
+    else:
+        print("No questions captured (output directory not found)")
+        
+    print("=" * 60)
+    print("Scraping session finished!")
     return True
 
 if __name__ == "__main__":

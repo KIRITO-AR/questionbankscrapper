@@ -22,7 +22,7 @@ MAX_QUESTIONS = 1000  # High limit for unlimited scraping
 TIMEOUT = 15  # Reduced timeout for faster failure detection
 
 # Performance optimization settings
-ENABLE_ACTIVE_SCRAPING = False  # Disabled due to Khan Academy 403 "Operation not found in safelist" error
+ENABLE_ACTIVE_SCRAPING = True  # Enable active batch scraping
 MAX_CONCURRENT_REQUESTS = 3  # Limit concurrent requests to avoid overload
 
 # --- Global State ---
@@ -41,7 +41,7 @@ class KhanAcademyCapture:
         self.request_lock = threading.Lock()  # Thread safety
         self.log(f"[INFO] Khan Academy JSON Capture addon loaded")
         self.log(f"[INFO] Save directory: {SAVE_DIRECTORY}")
-        self.log(f"[INFO] Active batch scraping: {'ENABLED' if ENABLE_ACTIVE_SCRAPING else 'DISABLED (Khan Academy blocks active requests)'}")
+        self.log(f"[INFO] Active batch scraping: {'ENABLED' if ENABLE_ACTIVE_SCRAPING else 'DISABLED'}")
         self.log(f"[INFO] Performance mode: Optimized for reduced timeouts")
 
     def log(self, message: str) -> None:
@@ -169,17 +169,21 @@ class KhanAcademyCapture:
 
         self.base_headers = {
             'Cookie': cookie_header,
-            'User-Agent': flow.request.headers.get('User-Agent', ''),
+            'User-Agent': flow.request.headers.get('User-Agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'),
             'X-KA-FKey': xka,
             'x-ka-fkey': xka,
             'Content-Type': 'application/json',
             'Accept': 'application/json, text/plain, */*',
             'Accept-Language': flow.request.headers.get('Accept-Language', 'en-US,en;q=0.9'),
+            'Accept-Encoding': 'gzip, deflate, br',
             'Origin': 'https://www.khanacademy.org',
             'Referer': referer,
             'Sec-Fetch-Dest': 'empty',
             'Sec-Fetch-Mode': 'cors',
-            'Sec-Fetch-Site': 'same-origin'
+            'Sec-Fetch-Site': 'same-origin',
+            'sec-ch-ua': '"Not_A Brand";v="8", "Chromium";v="120", "Google Chrome";v="120"',
+            'sec-ch-ua-mobile': '?0',
+            'sec-ch-ua-platform': '"Windows"'
         }
 
         try:
@@ -219,11 +223,15 @@ class KhanAcademyCapture:
                         questions_to_capture.add(item_id)
 
             self.log(f"[MITM] Found {len(new_ids)} new question IDs.")
-            self.log(f"[INFO] Active fetching disabled due to Khan Academy GraphQL restrictions.")
-            self.log(f"[INFO] Will rely on passive capture only. Questions found: {list(new_ids)}")
             
-            # Active fetching disabled due to Khan Academy 403 "Operation not found in safelist" error
-            # Relying on passive capture only
+            if ENABLE_ACTIVE_SCRAPING and new_ids:
+                self.log(f"[INFO] Active scraping enabled - fetching {len(new_ids)} questions")
+                for item_id in new_ids:
+                    threading.Thread(target=self.fetch_assessment_item, args=(item_id,), daemon=True).start()
+                    time.sleep(REQUEST_DELAY)  # Rate limit between requests
+            else:
+                self.log(f"[INFO] Active scraping disabled - will rely on passive capture only.")
+                self.log(f"[INFO] Questions found: {list(new_ids)}")
 
         except (KeyError, TypeError, IndexError) as e:
             self.log(f"[ERROR] Could not find question IDs in manifest. Error: {e}")
@@ -283,27 +291,21 @@ class KhanAcademyCapture:
                 self.log("[WARNING] No headers available for active requests")
                 return
 
-            # Use the specific getAssessmentItem endpoint that matches intercepted requests
-            # Based on logs: /api/internal/_mt/graphql/getAssessmentItem
-            graphql_url = "https://www.khanacademy.org/api/internal/_mt/graphql/getAssessmentItem"
+            # Use the standard GraphQL endpoint that matches intercepted requests
+            graphql_url = "https://www.khanacademy.org/api/internal/graphql"
             
-            # Updated GraphQL query payload to match actual requests
+            # Updated GraphQL query payload with simplified structure
             payload = {
                 "operationName": "getAssessmentItem",
                 "variables": {"id": item_id},
                 "query": """query getAssessmentItem($id: String!) {
                     assessmentItem(id: $id) {
-                        ... on AssessmentItem {
+                        id
+                        itemData
+                        item {
                             id
                             itemData
-                            item {
-                                id
-                                itemData
-                                sha
-                            }
-                        }
-                        ... on Scratchpad {
-                            id
+                            sha
                         }
                     }
                 }"""
@@ -350,15 +352,24 @@ class KhanAcademyCapture:
         except requests.exceptions.Timeout:
             self.log(f"[ERROR] Timeout fetching {item_id} (network may be slow)")
         except requests.exceptions.HTTPError as e:
-            # Detailed logging for HTTP errors, especially 400s
+            # Detailed logging for HTTP errors, especially 400s and 403s
             status_code = getattr(e.response, 'status_code', 'unknown')
             response_text = getattr(e.response, 'text', '')
             if callable(response_text):
                 response_text = response_text()
             self.log(f"[ERROR] HTTP {status_code} for {item_id}")
             self.log(f"[ERROR] Response: {response_text[:500]}")
+            
             if status_code == 400:
                 self.log(f"[ERROR] 400 Bad Request - likely payload or authentication issue")
+            elif status_code == 403:
+                self.log(f"[WARNING] 403 Forbidden - Khan Academy may be blocking active requests")
+                self.log(f"[INFO] Falling back to passive capture for {item_id}")
+                # Add to passive capture queue
+                questions_to_capture.add(item_id)
+            elif status_code == 429:
+                self.log(f"[WARNING] 429 Rate Limited - slowing down requests")
+                time.sleep(REQUEST_DELAY * 2)  # Double the delay
         except requests.exceptions.RequestException as e:
             self.log(f"[ERROR] Active fetch failed for {item_id}. Error: {e}")
         except json.JSONDecodeError:
