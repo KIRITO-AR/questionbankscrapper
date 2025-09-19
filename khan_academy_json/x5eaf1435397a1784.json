@@ -1,0 +1,144 @@
+{
+    "answerArea": {
+        "calculator": false,
+        "chi2Table": false,
+        "financialCalculatorMonthlyPayment": false,
+        "financialCalculatorTimeToPayOff": false,
+        "financialCalculatorTotalAmount": false,
+        "periodicTable": false,
+        "periodicTableWithKey": false,
+        "tTable": false,
+        "zTable": false
+    },
+    "hints": [
+        {
+            "content": " [[☃ image 2]]\n\n**The ants** are BELOW the branch.",
+            "images": {},
+            "replace": false,
+            "widgets": {
+                "image 1": {
+                    "alignment": "block",
+                    "graded": true,
+                    "options": {
+                        "alt": "",
+                        "backgroundImage": {
+                            "height": 307,
+                            "url": "https://cdn.kastatic.org/ka-content-images/af889edb3c88218cb6182137bc375c5afe17d765.png",
+                            "width": 305
+                        },
+                        "box": [
+                            305,
+                            307
+                        ],
+                        "caption": "",
+                        "labels": [],
+                        "range": [
+                            [
+                                0,
+                                10
+                            ],
+                            [
+                                0,
+                                10
+                            ]
+                        ],
+                        "static": false,
+                        "title": ""
+                    },
+                    "static": false,
+                    "type": "image",
+                    "version": {
+                        "major": 0,
+                        "minor": 0
+                    }
+                },
+                "image 2": {
+                    "alignment": "block",
+                    "graded": true,
+                    "options": {
+                        "alt": "",
+                        "backgroundImage": {
+                            "height": 307,
+                            "url": "https://cdn.kastatic.org/ka-content-images/fbc1fc437a7a6ec0e4addb3ea0173286d54490b7.png",
+                            "width": 305
+                        },
+                        "box": [
+                            305,
+                            307
+                        ],
+                        "caption": "",
+                        "labels": [],
+                        "range": [
+                            [
+                                0,
+                                10
+                            ],
+                            [
+                                0,
+                                10
+                            ]
+                        ],
+                        "static": false,
+                        "title": ""
+                    },
+                    "static": false,
+                    "type": "image",
+                    "version": {
+                        "major": 0,
+                        "minor": 0
+                    }
+                }
+            }
+        }
+    ],
+    "question": {
+        "content": "Look at the given image.\n\n [[☃ image 1]]\n\n**Which of these is BELOW the branch?**\n\n[[☃ radio 1]]\n\n",
+        "images": {},
+        "widgets": {
+            "image 1": {
+                "options": {
+                    "backgroundImage": {
+                        "height": 352,
+                        "url": "https://cdn.kastatic.org/ka-content-images/76c4e12d982f5d033351e5d46c6df54aaca6db4c.png",
+                        "width": 350
+                    },
+                    "box": [
+                        350,
+                        352
+                    ],
+                    "title": ""
+                },
+                "type": "image"
+            },
+            "radio 1": {
+                "alignment": "default",
+                "graded": true,
+                "options": {
+                    "choices": [
+                        {
+                            "content": "Cat",
+                            "correct": false
+                        },
+                        {
+                            "content": "Ants",
+                            "correct": true
+                        }
+                    ],
+                    "countChoices": false,
+                    "deselectEnabled": false,
+                    "displayCount": null,
+                    "hasNoneOfTheAbove": false,
+                    "multipleSelect": false,
+                    "numCorrect": 1,
+                    "randomize": false
+                },
+                "static": false,
+                "type": "radio",
+                "version": {
+                    "major": 2,
+                    "minor": 0
+                }
+            }
+        }
+    }
+}
