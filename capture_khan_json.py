@@ -22,7 +22,7 @@ MAX_QUESTIONS = 1000  # High limit for unlimited scraping
 TIMEOUT = 15  # Reduced timeout for faster failure detection
 
 # Performance optimization settings
-ENABLE_ACTIVE_SCRAPING = True
+ENABLE_ACTIVE_SCRAPING = False  # Disabled due to Khan Academy 403 "Operation not found in safelist" error
 MAX_CONCURRENT_REQUESTS = 3  # Limit concurrent requests to avoid overload
 
 # --- Global State ---
@@ -41,7 +41,7 @@ class KhanAcademyCapture:
         self.request_lock = threading.Lock()  # Thread safety
         self.log(f"[INFO] Khan Academy JSON Capture addon loaded")
         self.log(f"[INFO] Save directory: {SAVE_DIRECTORY}")
-        self.log(f"[INFO] Active batch scraping: {'ENABLED' if ENABLE_ACTIVE_SCRAPING else 'DISABLED'}")
+        self.log(f"[INFO] Active batch scraping: {'ENABLED' if ENABLE_ACTIVE_SCRAPING else 'DISABLED (Khan Academy blocks active requests)'}")
         self.log(f"[INFO] Performance mode: Optimized for reduced timeouts")
 
     def log(self, message: str) -> None:
@@ -218,11 +218,12 @@ class KhanAcademyCapture:
                         new_ids.add(item_id)
                         questions_to_capture.add(item_id)
 
-            self.log(f"[MITM] Found {len(new_ids)} new question IDs. Actively fetching now...")
+            self.log(f"[MITM] Found {len(new_ids)} new question IDs.")
+            self.log(f"[INFO] Active fetching disabled due to Khan Academy GraphQL restrictions.")
+            self.log(f"[INFO] Will rely on passive capture only. Questions found: {list(new_ids)}")
             
-            # Actively fetch each question
-            for item_id in new_ids:
-                self.fetch_assessment_item(item_id)
+            # Active fetching disabled due to Khan Academy 403 "Operation not found in safelist" error
+            # Relying on passive capture only
 
         except (KeyError, TypeError, IndexError) as e:
             self.log(f"[ERROR] Could not find question IDs in manifest. Error: {e}")
@@ -252,13 +253,15 @@ class KhanAcademyCapture:
             
             if found_ids:
                 self.log(f"[INFO] Found {len(found_ids)} questions using alternative parsing")
+                self.log(f"[INFO] Active fetching disabled - will wait for passive capture")
+                self.log(f"[INFO] Questions discovered: {list(found_ids)}")
+                # Store IDs but don't actively fetch due to GraphQL restrictions
                 for item_id in found_ids:
                     # Normalize to include 'x' prefix if missing
                     if not item_id.startswith('x'):
                         item_id = 'x' + item_id
                     if item_id not in questions_to_capture:
                         questions_to_capture.add(item_id)
-                        self.fetch_assessment_item(item_id)
                         
         except Exception as e:
             self.log(f"[ERROR] Alternative parsing failed: {e}")
