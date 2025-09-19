@@ -1,0 +1,101 @@
+{
+    "answerArea": {
+        "calculator": false,
+        "chi2Table": false,
+        "financialCalculatorMonthlyPayment": false,
+        "financialCalculatorTimeToPayOff": false,
+        "financialCalculatorTotalAmount": false,
+        "periodicTable": false,
+        "periodicTableWithKey": false,
+        "tTable": false,
+        "zTable": false
+    },
+    "hints": [
+        {
+            "content": "Count $1, 2, 3, 4, 5, 6, 7, 8, 9$.  \nDrag a piece of cheese into the box for each number. \n\n![9 pieces of cheese in a box.](https://cdn.kastatic.org/ka-perseus-images/1effad4eb9ad902fcc653cb9005296c4cc05d95e.jpg)  \n$\\quad\\quad 1 \\quad\\quad\\:\\: 2 \\quad\\quad\\:\\:3  \\quad\\quad\\:\\: 4  \\quad\\quad\\:\\: 5  \\quad\\quad\\:\\: 6\\quad\\quad\\:\\: 7  \\quad\\quad\\:\\: 8\\quad\\quad\\:\\: 9$",
+            "images": {
+                "https://cdn.kastatic.org/ka-perseus-images/1effad4eb9ad902fcc653cb9005296c4cc05d95e.jpg": {
+                    "height": 104,
+                    "width": 479
+                }
+            },
+            "replace": false,
+            "widgets": {}
+        }
+    ],
+    "question": {
+        "content": "**Put $9$ pieces of cheese in the box.**\n\n\n\n[[☃ orderer 1]]",
+        "images": {},
+        "widgets": {
+            "orderer 1": {
+                "alignment": "default",
+                "graded": true,
+                "options": {
+                    "correctOptions": [
+                        {
+                            "content": "![A piece of cheese.](https://cdn.kastatic.org/ka-perseus-graphie/b668589746b8c800c85843a2a994efff8d429786.png)",
+                            "images": {},
+                            "widgets": {}
+                        },
+                        {
+                            "content": "![A piece of cheese.](https://cdn.kastatic.org/ka-perseus-graphie/b668589746b8c800c85843a2a994efff8d429786.png)",
+                            "images": {},
+                            "widgets": {}
+                        },
+                        {
+                            "content": "![A piece of cheese.](https://cdn.kastatic.org/ka-perseus-graphie/b668589746b8c800c85843a2a994efff8d429786.png)",
+                            "images": {},
+                            "widgets": {}
+                        },
+                        {
+                            "content": "![A piece of cheese.](https://cdn.kastatic.org/ka-perseus-graphie/b668589746b8c800c85843a2a994efff8d429786.png)",
+                            "images": {},
+                            "widgets": {}
+                        },
+                        {
+                            "content": "![A piece of cheese.](https://cdn.kastatic.org/ka-perseus-graphie/b668589746b8c800c85843a2a994efff8d429786.png)",
+                            "images": {},
+                            "widgets": {}
+                        },
+                        {
+                            "content": "![A piece of cheese.](https://cdn.kastatic.org/ka-perseus-graphie/b668589746b8c800c85843a2a994efff8d429786.png)",
+                            "images": {},
+                            "widgets": {}
+                        },
+                        {
+                            "content": "![A piece of cheese.](https://cdn.kastatic.org/ka-perseus-graphie/b668589746b8c800c85843a2a994efff8d429786.png)",
+                            "images": {},
+                            "widgets": {}
+                        },
+                        {
+                            "content": "![A piece of cheese.](https://cdn.kastatic.org/ka-perseus-graphie/b668589746b8c800c85843a2a994efff8d429786.png)",
+                            "images": {},
+                            "widgets": {}
+                        },
+                        {
+                            "content": "![A piece of cheese.](https://cdn.kastatic.org/ka-perseus-graphie/b668589746b8c800c85843a2a994efff8d429786.png)",
+                            "images": {},
+                            "widgets": {}
+                        }
+                    ],
+                    "height": "auto",
+                    "layout": "horizontal",
+                    "options": [
+                        {
+                            "content": "![A piece of cheese.](https://cdn.kastatic.org/ka-perseus-graphie/b668589746b8c800c85843a2a994efff8d429786.png)",
+                            "images": {},
+                            "widgets": {}
+                        }
+                    ],
+                    "otherOptions": []
+                },
+                "static": false,
+                "type": "orderer",
+                "version": {
+                    "major": 0,
+                    "minor": 0
+                }
+            }
+        }
+    }
+}

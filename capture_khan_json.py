@@ -280,14 +280,30 @@ class KhanAcademyCapture:
                 self.log("[WARNING] No headers available for active requests")
                 return
 
-            # Use the main GraphQL endpoint
-            graphql_url = "https://www.khanacademy.org/api/internal/graphql/"
+            # Use the specific getAssessmentItem endpoint that matches intercepted requests
+            # Based on logs: /api/internal/_mt/graphql/getAssessmentItem
+            graphql_url = "https://www.khanacademy.org/api/internal/_mt/graphql/getAssessmentItem"
             
-            # Standard GraphQL query payload
+            # Updated GraphQL query payload to match actual requests
             payload = {
                 "operationName": "getAssessmentItem",
                 "variables": {"id": item_id},
-                "query": "query getAssessmentItem($id: String!) { assessmentItem(id: $id) { ... on AssessmentItem { id itemData } ... on Scratchpad { id } } }"
+                "query": """query getAssessmentItem($id: String!) {
+                    assessmentItem(id: $id) {
+                        ... on AssessmentItem {
+                            id
+                            itemData
+                            item {
+                                id
+                                itemData
+                                sha
+                            }
+                        }
+                        ... on Scratchpad {
+                            id
+                        }
+                    }
+                }"""
             }
 
             # Enhanced headers with better authentication
@@ -304,12 +320,23 @@ class KhanAcademyCapture:
 
             # Make request with reduced timeout
             self.log(f"[MITM] Active fetch: {item_id}")
+            self.log(f"[DEBUG] Request URL: {graphql_url}")
+            self.log(f"[DEBUG] Payload: {json.dumps(payload)}")
+            self.log(f"[DEBUG] Headers keys: {list(headers.keys())}")
+            
             response = requests.post(
                 graphql_url, 
                 headers=headers, 
                 json=payload,
                 timeout=TIMEOUT
             )
+            
+            self.log(f"[DEBUG] Response status: {response.status_code}")
+            
+            if response.status_code != 200:
+                response_text = response.text[:1000]  # First 1000 chars
+                self.log(f"[DEBUG] Response body: {response_text}")
+            
             response.raise_for_status()
             
             # Parse and save the JSON
@@ -319,6 +346,16 @@ class KhanAcademyCapture:
             
         except requests.exceptions.Timeout:
             self.log(f"[ERROR] Timeout fetching {item_id} (network may be slow)")
+        except requests.exceptions.HTTPError as e:
+            # Detailed logging for HTTP errors, especially 400s
+            status_code = getattr(e.response, 'status_code', 'unknown')
+            response_text = getattr(e.response, 'text', '')
+            if callable(response_text):
+                response_text = response_text()
+            self.log(f"[ERROR] HTTP {status_code} for {item_id}")
+            self.log(f"[ERROR] Response: {response_text[:500]}")
+            if status_code == 400:
+                self.log(f"[ERROR] 400 Bad Request - likely payload or authentication issue")
         except requests.exceptions.RequestException as e:
             self.log(f"[ERROR] Active fetch failed for {item_id}. Error: {e}")
         except json.JSONDecodeError:

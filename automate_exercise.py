@@ -211,65 +211,133 @@ def run_automation(exercise_url=None, max_questions=20):
             except TimeoutException:
                 pass  # No pop-up found, continue as normal
             
-            # 1. Wait for interactable elements instead of relying on a specific question container
+            # 1. Wait for question content to be fully loaded with enhanced conditions
+            question_loaded = False
             try:
+                # Wait for various indicators that question is loaded
                 WebDriverWait(driver, ELEMENT_WAIT).until(
                     EC.any_of(
+                        # Interactive elements
                         EC.presence_of_element_located((By.CSS_SELECTOR, 'input[type="radio"]')),
                         EC.presence_of_element_located((By.CSS_SELECTOR, 'input[type="text"]')),
                         EC.presence_of_element_located((By.CSS_SELECTOR, 'input[type="number"]')),
+                        EC.presence_of_element_located((By.CSS_SELECTOR, '[data-test-id*="choice"]')),
+                        # Question content containers
+                        EC.presence_of_element_located((By.CSS_SELECTOR, '.perseus-widget-container')),
+                        EC.presence_of_element_located((By.CSS_SELECTOR, '.question-content')),
+                        EC.presence_of_element_located((By.CSS_SELECTOR, '[data-test-id="exercise-question"]')),
+                        # Check button as last resort
                         EC.element_to_be_clickable((By.CSS_SELECTOR, 'button[data-test-id="check-answer-button"]'))
                     )
                 )
+                question_loaded = True
+                print("Question elements detected and loaded.")
             except TimeoutException:
+                print("Question elements not loaded in time, attempting to advance...")
                 # Try pressing Next/Continue to advance if current screen not ready
                 advanced = False
                 for sel in [
                     'button[data-test-id="next-question-button"]',
                     'button[data-test-id*="next"]',
-                    'button[data-test-id*="continue"]'
+                    'button[data-test-id*="continue"]',
+                    'button[data-test-id="hint-button"]'  # Sometimes need to get hints first
                 ]:
                     try:
                         btn = WebDriverWait(driver, 4).until(EC.element_to_be_clickable((By.CSS_SELECTOR, sel)))
-                        btn.click(); time.sleep(2)
+                        btn.click(); time.sleep(3)
                         advanced = True
+                        print(f"Clicked {sel} to advance")
                         break
                     except TimeoutException:
                         continue
+                        
                 if not advanced:
                     print("No interactable elements found; skipping this iteration")
                     continue
             
-            # 2. Answer the question (simple logic)
+            # 2. Answer the question (enhanced logic with better selectors)
+            answered = False
+            
             # Try to find a radio button first
             try:
-                first_radio_button = driver.find_element(By.CSS_SELECTOR, 'input[type="radio"]')
-                first_radio_button.click()
-                print("Selected a radio button.")
-            except:
-                # If no radio button, try to find a numeric input
+                radio_buttons = driver.find_elements(By.CSS_SELECTOR, 'input[type="radio"], [role="radio"]')
+                if radio_buttons:
+                    radio_buttons[0].click()
+                    print("Selected a radio button.")
+                    answered = True
+            except Exception as e:
+                print(f"Radio button error: {e}")
+            
+            # If no radio button, try text/number inputs
+            if not answered:
                 try:
-                    numeric_input = driver.find_element(By.CSS_SELECTOR, 'input[type="text"]')
-                    numeric_input.clear()
-                    numeric_input.send_keys("1")
-                    print("Entered '1' into a numeric input.")
-                except:
-                    # Try other input types
-                    try:
-                        # Try number input
-                        number_input = driver.find_element(By.CSS_SELECTOR, 'input[type="number"]')
-                        number_input.clear()
-                        number_input.send_keys("1")
-                        print("Entered '1' into a number input.")
-                    except:
-                        # Try any clickable option
+                    # Look for various input types with more selectors
+                    input_selectors = [
+                        'input[type="text"]',
+                        'input[type="number"]', 
+                        'input[aria-label*="answer"]',
+                        'input[placeholder*="answer"]',
+                        '.perseus-input input',
+                        '.simple-text-input input',
+                        'input[data-test-id*="input"]'
+                    ]
+                    
+                    input_found = None
+                    for selector in input_selectors:
                         try:
-                            clickable_option = driver.find_element(By.CSS_SELECTOR, '[data-test-id*="choice"], .choice, button[data-test-id*="option"]')
-                            clickable_option.click()
-                            print("Clicked a choice option.")
+                            input_found = driver.find_element(By.CSS_SELECTOR, selector)
+                            if input_found.is_displayed() and input_found.is_enabled():
+                                break
                         except:
-                            print("Could not find a standard answer input.")
-                            pass
+                            continue
+                    
+                    if input_found:
+                        input_found.clear()
+                        input_found.send_keys("1")
+                        print(f"Entered '1' into an input field.")
+                        answered = True
+                except Exception as e:
+                    print(f"Input field error: {e}")
+            
+            # Try clickable choices/options
+            if not answered:
+                try:
+                    choice_selectors = [
+                        '[data-test-id*="choice"]',
+                        '.choice',
+                        'button[data-test-id*="option"]',
+                        '[role="button"][aria-label*="choice"]',
+                        '.multiple-choice li button',
+                        '.perseus-widget-radio .perseus-widget-radio-option',
+                        '[data-test-id="radio-choice"]'
+                    ]
+                    
+                    choice_found = None
+                    for selector in choice_selectors:
+                        try:
+                            choices = driver.find_elements(By.CSS_SELECTOR, selector)
+                            if choices:
+                                choice_found = choices[0]
+                                if choice_found.is_displayed() and choice_found.is_enabled():
+                                    break
+                        except:
+                            continue
+                    
+                    if choice_found:
+                        choice_found.click()
+                        print("Clicked a choice option.")
+                        answered = True
+                except Exception as e:
+                    print(f"Choice option error: {e}")
+            
+            if not answered:
+                print("Could not find a standard answer input.")
+                # Take a screenshot for debugging
+                try:
+                    driver.save_screenshot(f"debug_question_{i+1}.png")
+                    print(f"Saved debug screenshot: debug_question_{i+1}.png")
+                except:
+                    pass
             
             # 3. Click the "Check" button with enhanced timeout
             try:

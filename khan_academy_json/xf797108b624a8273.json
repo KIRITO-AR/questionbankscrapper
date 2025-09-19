@@ -1,0 +1,114 @@
+{
+    "answerArea": {
+        "calculator": false,
+        "chi2Table": false,
+        "financialCalculatorMonthlyPayment": false,
+        "financialCalculatorTimeToPayOff": false,
+        "financialCalculatorTotalAmount": false,
+        "periodicTable": false,
+        "periodicTableWithKey": false,
+        "tTable": false,
+        "zTable": false
+    },
+    "hints": [
+        {
+            "content": "Here, the  YELLOW is at the TOP.  \n\nAnd the RED block is at the BOTTOM.\n\n [[☃ image 1]]",
+            "images": {},
+            "replace": false,
+            "widgets": {
+                "image 1": {
+                    "alignment": "block",
+                    "graded": true,
+                    "options": {
+                        "alt": "",
+                        "backgroundImage": {
+                            "height": 2048,
+                            "url": "https://cdn.kastatic.org/ka-content-images/c2f9abfc1e4be83a530bf2d002eb18772a17ec91.jpg",
+                            "width": 2048
+                        },
+                        "box": [
+                            2048,
+                            2048
+                        ],
+                        "caption": "",
+                        "labels": [],
+                        "range": [
+                            [
+                                0,
+                                10
+                            ],
+                            [
+                                0,
+                                10
+                            ]
+                        ],
+                        "static": false,
+                        "title": ""
+                    },
+                    "static": false,
+                    "type": "image",
+                    "version": {
+                        "major": 0,
+                        "minor": 0
+                    }
+                }
+            }
+        },
+        {
+            "content": "**Correct Answer: BOTTOM.**",
+            "images": {},
+            "replace": false,
+            "widgets": {}
+        }
+    ],
+    "question": {
+        "content": "Look at the image.\n\n [[☃ image 1]]\n\n**The red block is at the $______$?**\n\n[[☃ radio 1]]",
+        "images": {},
+        "widgets": {
+            "image 1": {
+                "options": {
+                    "backgroundImage": {
+                        "height": 2048,
+                        "url": "https://cdn.kastatic.org/ka-content-images/c2f9abfc1e4be83a530bf2d002eb18772a17ec91.jpg",
+                        "width": 2048
+                    },
+                    "box": [
+                        2048,
+                        2048
+                    ],
+                    "title": ""
+                },
+                "type": "image"
+            },
+            "radio 1": {
+                "alignment": "default",
+                "graded": true,
+                "options": {
+                    "choices": [
+                        {
+                            "content": "TOP",
+                            "correct": false
+                        },
+                        {
+                            "content": "BOTTOM",
+                            "correct": true
+                        }
+                    ],
+                    "countChoices": false,
+                    "deselectEnabled": false,
+                    "displayCount": null,
+                    "hasNoneOfTheAbove": false,
+                    "multipleSelect": false,
+                    "numCorrect": 1,
+                    "randomize": false
+                },
+                "static": false,
+                "type": "radio",
+                "version": {
+                    "major": 2,
+                    "minor": 0
+                }
+            }
+        }
+    }
+}
