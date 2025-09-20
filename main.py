@@ -16,7 +16,7 @@ from automate_exercise import run_automation
 MITM_SCRIPT = "capture_khan_json.py"
 PROXY_PORT = 8080
 DEFAULT_EXERCISE_URL = "https://www.khanacademy.org/math/cc-2nd-grade-math/x3184e0ec:add-and-subtract-within-20/x3184e0ec:add-within-20/e/add-within-20-visually"
-DEFAULT_MAX_QUESTIONS = 50  # Reduced for initial testing
+DEFAULT_MAX_QUESTIONS = 500  # Increased for comprehensive autonomous scraping
 
 # Network resilience settings  
 MITM_STARTUP_TIMEOUT = 25  # Increased timeout for active scraping initialization

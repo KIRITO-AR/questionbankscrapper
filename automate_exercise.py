@@ -25,13 +25,222 @@ EXPLICIT_WAIT = 45      # Increased for slow network connections
 ELEMENT_WAIT = 30       # For individual elements
 POPUP_WAIT = 3          # Short wait for popups
 
-def run_automation(exercise_url=None, max_questions=20):
+def log_progress(message):
+    """Log progress with timestamp."""
+    timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
+    print(f"[{timestamp}] {message}")
+
+def find_all_exercise_links(driver):
+    """Find all exercise links on the current page automatically."""
+    try:
+        # JavaScript to find all exercise links
+        exercise_links = driver.execute_script("""
+            var links = [];
+            // Find direct exercise links (containing /e/)
+            document.querySelectorAll('a[href*="/e/"]').forEach(function(link) {
+                if (link.href && link.href.includes('/e/') && link.href.includes('khanacademy.org')) {
+                    links.push(link.href);
+                }
+            });
+            
+            // Find practice links
+            document.querySelectorAll('a[href*="practice"]').forEach(function(link) {
+                if (link.href && link.href.includes('practice') && link.href.includes('khanacademy.org')) {
+                    links.push(link.href);
+                }
+            });
+            
+            // Remove duplicates
+            return [...new Set(links)];
+        """)
+        
+        log_progress(f"Found {len(exercise_links)} exercise links on current page")
+        return exercise_links
+        
+    except Exception as e:
+        log_progress(f"Error finding exercise links: {e}")
+        return []
+
+def find_section_links(driver):
+    """Find section/topic links for deeper navigation."""
+    try:
+        section_links = driver.execute_script("""
+            var links = [];
+            // Find topic/section links
+            document.querySelectorAll('a[href*="/math/"], a[href*="/science/"]').forEach(function(link) {
+                if (link.href && !link.href.includes('/e/') && !link.href.includes('#') && link.href.includes('khanacademy.org')) {
+                    links.push(link.href);
+                }
+            });
+            return [...new Set(links)];
+        """)
+        
+        log_progress(f"Found {len(section_links)} section links on current page")
+        return section_links[:20]  # Limit to prevent infinite crawling
+        
+    except Exception as e:
+        log_progress(f"Error finding section links: {e}")
+        return []
+
+def autonomous_answer_question(driver):
+    """Autonomously answer the current question without user interaction."""
+    answered = False
+    
+    # Try radio buttons first
+    try:
+        radio_buttons = driver.find_elements(By.CSS_SELECTOR, 'input[type="radio"], [role="radio"]')
+        if radio_buttons and radio_buttons[0].is_displayed():
+            driver.execute_script("arguments[0].click();", radio_buttons[0])
+            log_progress("✓ Selected radio button answer")
+            answered = True
+    except Exception as e:
+        log_progress(f"Radio button error: {e}")
+    
+    # Try text/number inputs
+    if not answered:
+        try:
+            input_selectors = [
+                'input[type="text"]',
+                'input[type="number"]', 
+                'input[aria-label*="answer"]',
+                'input[placeholder*="answer"]',
+                '.perseus-input input',
+                '.simple-text-input input',
+                'input[data-test-id*="input"]'
+            ]
+            
+            for selector in input_selectors:
+                try:
+                    inputs = driver.find_elements(By.CSS_SELECTOR, selector)
+                    for input_found in inputs:
+                        if input_found.is_displayed() and input_found.is_enabled():
+                            input_found.clear()
+                            # Use simple answers that are often correct
+                            import random
+                            answers = ["1", "2", "5", "10", "0", "x", "y"]
+                            input_found.send_keys(random.choice(answers))
+                            log_progress(f"✓ Entered answer in input field: {selector}")
+                            answered = True
+                            break
+                    if answered:
+                        break
+                except:
+                    continue
+        except Exception as e:
+            log_progress(f"Input field error: {e}")
+    
+    # Try clickable choices
+    if not answered:
+        try:
+            choice_selectors = [
+                '[data-test-id*="choice"]',
+                '.choice',
+                'button[data-test-id*="option"]',
+                '[role="button"][aria-label*="choice"]',
+                '.multiple-choice li button',
+                '.perseus-widget-radio .perseus-widget-radio-option',
+                '[data-test-id="radio-choice"]'
+            ]
+            
+            for selector in choice_selectors:
+                try:
+                    choices = driver.find_elements(By.CSS_SELECTOR, selector)
+                    if choices and choices[0].is_displayed() and choices[0].is_enabled():
+                        driver.execute_script("arguments[0].click();", choices[0])
+                        log_progress(f"✓ Clicked choice option: {selector}")
+                        answered = True
+                        break
+                except:
+                    continue
+        except Exception as e:
+            log_progress(f"Choice option error: {e}")
+    
+    return answered
+
+def autonomous_submit_answer(driver):
+    """Submit answer autonomously."""
+    try:
+        # Try multiple check button selectors
+        check_selectors = [
+            'button[data-test-id="check-answer-button"]',
+            'button[data-test-id="submit-answer-button"]'
+        ]
+        
+        for selector in check_selectors:
+            try:
+                check_button = WebDriverWait(driver, 10).until(
+                    EC.element_to_be_clickable((By.CSS_SELECTOR, selector))
+                )
+                check_button.click()
+                log_progress("✓ Submitted answer")
+                time.sleep(3)
+                return True
+            except TimeoutException:
+                continue
+        
+        # JavaScript fallback
+        button = driver.execute_script("""
+            return Array.from(document.querySelectorAll('button')).find(el => 
+                /check|submit/i.test(el.textContent)
+            );
+        """)
+        if button:
+            driver.execute_script("arguments[0].click();", button)
+            log_progress("✓ Submitted answer via JavaScript")
+            time.sleep(3)
+            return True
+            
+    except Exception as e:
+        log_progress(f"Error submitting answer: {e}")
+    
+    return False
+
+def autonomous_next_question(driver):
+    """Move to next question autonomously."""
+    try:
+        # Try multiple next button selectors
+        next_selectors = [
+            'button[data-test-id="next-question-button"]',
+            'button[data-test-id*="next"]',
+            'button[data-test-id*="continue"]'
+        ]
+        
+        for selector in next_selectors:
+            try:
+                next_button = WebDriverWait(driver, 10).until(
+                    EC.element_to_be_clickable((By.CSS_SELECTOR, selector))
+                )
+                next_button.click()
+                log_progress("✓ Moved to next question")
+                time.sleep(5)
+                return True
+            except TimeoutException:
+                continue
+        
+        # JavaScript fallback
+        button = driver.execute_script("""
+            return Array.from(document.querySelectorAll('button')).find(el => 
+                /next|continue/i.test(el.textContent)
+            );
+        """)
+        if button:
+            driver.execute_script("arguments[0].click();", button)
+            log_progress("✓ Moved to next question via JavaScript")
+            time.sleep(5)
+            return True
+            
+    except Exception as e:
+        log_progress(f"Error moving to next question: {e}")
+    
+    return False
+
+def run_automation(exercise_url=None, max_questions=1000):
     """
-    Main automation function that controls the browser and answers questions.
+    Main automation function that autonomously scrapes ALL questions.
     
     Args:
         exercise_url (str): The Khan Academy exercise URL to scrape
-        max_questions (int): Maximum number of questions to answer
+        max_questions (int): Maximum number of questions to answer (increased default)
     """
     if exercise_url is None:
         exercise_url = EXERCISE_URL
@@ -70,323 +279,309 @@ def run_automation(exercise_url=None, max_questions=20):
     driver.implicitly_wait(IMPLICIT_WAIT)
     
     try:
-        # Navigate to exercise page with retry logic
-        print(f"Navigating to exercise page: {exercise_url}")
+        log_progress("🚀 Starting AUTONOMOUS Khan Academy scraping...")
         
+        # Navigate to exercise page with retry logic
         max_retries = 3
         for attempt in range(max_retries):
             try:
-                print(f"Navigation attempt {attempt + 1}/{max_retries}")
+                log_progress(f"Navigation attempt {attempt + 1}/{max_retries} to: {exercise_url}")
                 driver.get(exercise_url)
-                print("Page load initiated, waiting for content...")
                 
-                # Wait for basic page structure to ensure successful load
+                # Wait for basic page structure
                 WebDriverWait(driver, EXPLICIT_WAIT).until(
                     EC.any_of(
                         EC.presence_of_element_located((By.TAG_NAME, "body")),
                         EC.presence_of_element_located((By.CSS_SELECTOR, "[data-test-id]"))
                     )
                 )
-                print("Page loaded successfully!")
+                log_progress("✓ Page loaded successfully!")
                 break
                 
             except TimeoutException:
-                print(f"Page load timeout on attempt {attempt + 1}")
+                log_progress(f"⚠ Page load timeout on attempt {attempt + 1}")
                 if attempt == max_retries - 1:
-                    print("Failed to load page after all retries")
+                    log_progress("❌ Failed to load page after all retries")
                     return
-                time.sleep(5)  # Wait before retry
+                time.sleep(5)
         
-        print("Starting automation...")
-
-        # Try to click Start/Practice once after load so GraphQL batch prefetch triggers
-        try:
-            start_buttons = [
+        # Start comprehensive autonomous scraping
+        total_questions_processed = 0
+        visited_exercises = set()
+        
+        # Check if this is a section page with multiple exercises
+        time.sleep(3)
+        exercise_links = find_all_exercise_links(driver)
+        section_links = find_section_links(driver)
+        
+        # If we found exercise links, scrape them all
+        if exercise_links:
+            log_progress(f"📚 Found {len(exercise_links)} exercises to scrape autonomously")
+            
+            all_exercises_to_scrape = exercise_links.copy()
+            
+            # Add exercises from section links too
+            for section_url in section_links[:10]:  # Limit section depth
+                try:
+                    log_progress(f"🔍 Exploring section: {section_url}")
+                    driver.get(section_url)
+                    time.sleep(3)
+                    more_exercises = find_all_exercise_links(driver)
+                    for ex in more_exercises:
+                        if ex not in all_exercises_to_scrape:
+                            all_exercises_to_scrape.append(ex)
+                except:
+                    continue
+            
+            log_progress(f"📝 Total exercises to scrape: {len(all_exercises_to_scrape)}")
+            
+            # Scrape each exercise autonomously
+            for i, exercise_url in enumerate(all_exercises_to_scrape):
+                if exercise_url in visited_exercises:
+                    continue
+                    
+                if total_questions_processed >= max_questions:
+                    log_progress(f"🎯 Reached maximum questions limit: {max_questions}")
+                    break
+                
+                visited_exercises.add(exercise_url)
+                
+                try:
+                    log_progress(f"📖 [{i+1}/{len(all_exercises_to_scrape)}] Scraping exercise: {exercise_url}")
+                    driver.get(exercise_url)
+                    time.sleep(3)
+                    
+                    # Try to start the exercise
+                    started = False
+                    start_selectors = [
+                        'button[data-test-id="start-button"]',
+                        'button[data-test-id="practice-button"]',
+                        'a[data-test-id="start-practice"]',
+                    ]
+                    
+                    for sel in start_selectors:
+                        try:
+                            btn = WebDriverWait(driver, 8).until(
+                                EC.element_to_be_clickable((By.CSS_SELECTOR, sel))
+                            )
+                            btn.click()
+                            log_progress(f"✓ Started exercise using: {sel}")
+                            time.sleep(3)
+                            started = True
+                            break
+                        except TimeoutException:
+                            continue
+                    
+                    if not started:
+                        # JavaScript fallback
+                        btn = driver.execute_script("""
+                            return Array.from(document.querySelectorAll('button,a')).find(el => 
+                                /start|practice/i.test(el.textContent)
+                            );
+                        """)
+                        if btn:
+                            driver.execute_script("arguments[0].click();", btn)
+                            log_progress("✓ Started exercise via JavaScript")
+                            time.sleep(3)
+                    
+                    # Wait for GraphQL calls to complete
+                    log_progress("⏳ Waiting for question data to load...")
+                    time.sleep(8)
+                    
+                    # Enhanced: Navigate through the exercise more thoroughly to trigger more requests
+                    log_progress("🔄 Enhanced passive capture - navigating through exercise thoroughly")
+                    
+                    # Try to load a few questions to trigger more GraphQL calls
+                    for warmup in range(3):
+                        try:
+                            # Wait for question to load
+                            time.sleep(2)
+                            
+                            # Try to answer quickly to move to next question
+                            if autonomous_answer_question(driver):
+                                if autonomous_submit_answer(driver):
+                                    if autonomous_next_question(driver):
+                                        log_progress(f"🔥 Warmup question {warmup+1} - triggered more GraphQL calls")
+                                    else:
+                                        break
+                                else:
+                                    break
+                            else:
+                                # Even if we can't answer, try to advance
+                                autonomous_next_question(driver)
+                        except:
+                            break
+                    
+                    # Reset back to start if possible or just continue with main loop
+                    log_progress("✅ Enhanced capture warmup complete, starting main question loop")
+                    
+                    # Autonomous question answering loop for this exercise
+                    exercise_questions = 0
+                    consecutive_failures = 0
+                    max_questions_per_exercise = 50  # Limit per exercise
+                    
+                    for q in range(max_questions_per_exercise):
+                        if total_questions_processed >= max_questions:
+                            break
+                            
+                        log_progress(f"🔢 Question {q+1} in current exercise...")
+                        
+                        # Handle pop-ups
+                        try:
+                            continue_button = WebDriverWait(driver, 2).until(
+                                EC.element_to_be_clickable((By.CSS_SELECTOR, 'button[data-test-id="skill-mastery-modal-continue-button"]'))
+                            )
+                            continue_button.click()
+                            log_progress("✓ Dismissed skill mastery pop-up")
+                            time.sleep(2)
+                        except TimeoutException:
+                            pass
+                        
+                        # Wait for question to load
+                        try:
+                            WebDriverWait(driver, ELEMENT_WAIT).until(
+                                EC.any_of(
+                                    EC.presence_of_element_located((By.CSS_SELECTOR, 'input[type="radio"]')),
+                                    EC.presence_of_element_located((By.CSS_SELECTOR, 'input[type="text"]')),
+                                    EC.presence_of_element_located((By.CSS_SELECTOR, 'input[type="number"]')),
+                                    EC.presence_of_element_located((By.CSS_SELECTOR, '[data-test-id*="choice"]')),
+                                    EC.presence_of_element_located((By.CSS_SELECTOR, '.perseus-widget-container')),
+                                    EC.element_to_be_clickable((By.CSS_SELECTOR, 'button[data-test-id="check-answer-button"]'))
+                                )
+                            )
+                        except TimeoutException:
+                            # Try to advance if stuck
+                            if not autonomous_next_question(driver):
+                                consecutive_failures += 1
+                                if consecutive_failures >= 3:
+                                    log_progress("⚠ Too many failures, moving to next exercise")
+                                    break
+                            continue
+                        
+                        # Answer the question autonomously
+                        if autonomous_answer_question(driver):
+                            # Submit the answer
+                            if autonomous_submit_answer(driver):
+                                # Move to next question
+                                if autonomous_next_question(driver):
+                                    exercise_questions += 1
+                                    total_questions_processed += 1
+                                    consecutive_failures = 0
+                                    log_progress(f"✅ Processed question {exercise_questions} (Total: {total_questions_processed})")
+                                else:
+                                    log_progress("✅ Exercise complete - no more questions")
+                                    break
+                            else:
+                                consecutive_failures += 1
+                        else:
+                            log_progress("❌ Could not answer question")
+                            consecutive_failures += 1
+                        
+                        # Break if too many consecutive failures
+                        if consecutive_failures >= 5:
+                            log_progress("⚠ Too many consecutive failures, moving to next exercise")
+                            break
+                        
+                        time.sleep(2)  # Brief pause between questions
+                    
+                    log_progress(f"✅ Completed exercise: {exercise_questions} questions processed")
+                    time.sleep(3)  # Brief pause between exercises
+                    
+                except Exception as e:
+                    log_progress(f"❌ Error in exercise {exercise_url}: {e}")
+                    continue
+            
+            log_progress(f"🎉 AUTONOMOUS SCRAPING COMPLETE!")
+            log_progress(f"📊 Total exercises visited: {len(visited_exercises)}")
+            log_progress(f"📊 Total questions processed: {total_questions_processed}")
+            
+        else:
+            # Single exercise mode - scrape this one exercise thoroughly
+            log_progress("📖 Single exercise mode - scraping current exercise thoroughly")
+            
+            # Try to start the exercise
+            started = False
+            start_selectors = [
                 'button[data-test-id="start-button"]',
                 'button[data-test-id="practice-button"]',
                 'a[data-test-id="start-practice"]',
             ]
-            clicked = False
-            for sel in start_buttons:
+            
+            for sel in start_selectors:
                 try:
                     btn = WebDriverWait(driver, 8).until(
                         EC.element_to_be_clickable((By.CSS_SELECTOR, sel))
                     )
                     btn.click()
-                    print(f"Clicked start button: {sel}")
-                    time.sleep(2)
-                    clicked = True
+                    log_progress(f"✓ Started exercise using: {sel}")
+                    time.sleep(3)
+                    started = True
                     break
                 except TimeoutException:
                     continue
-            if not clicked:
-                # Fallback to text-based find via JS
-                btn = driver.execute_script(
-                    "return Array.from(document.querySelectorAll('button,a')).find(el => /start|practice/i.test(el.textContent));"
-                )
+            
+            if not started:
+                btn = driver.execute_script("""
+                    return Array.from(document.querySelectorAll('button,a')).find(el => 
+                        /start|practice/i.test(el.textContent)
+                    );
+                """)
                 if btn:
                     driver.execute_script("arguments[0].click();", btn)
-                    print("Clicked start via text match")
+                    log_progress("✓ Started exercise via JavaScript")
+                    time.sleep(3)
+            
+            # Wait for GraphQL calls
+            log_progress("⏳ Waiting for question data to load...")
+            time.sleep(8)
+            
+            # Answer questions autonomously
+            for i in range(max_questions):
+                log_progress(f"🔢 Autonomous Question {i+1}/{max_questions}")
+                
+                # Handle pop-ups
+                try:
+                    continue_button = WebDriverWait(driver, 2).until(
+                        EC.element_to_be_clickable((By.CSS_SELECTOR, 'button[data-test-id="skill-mastery-modal-continue-button"]'))
+                    )
+                    continue_button.click()
                     time.sleep(2)
-        except Exception:
-            pass
-
-        # Wait longer for GraphQL calls to complete after starting practice
-        print("Waiting for GraphQL calls to complete...")
-        time.sleep(8)
-
-        # If current page is a curriculum/section page, iterate all exercise links
-        try:
-            links = driver.execute_script(
-                "return Array.from(document.querySelectorAll('a[href*="/e/"]')).map(a => a.href);"
-            )
-            # Deduplicate while preserving order
-            seen = set()
-            exercise_links = []
-            for href in links:
-                if href and href not in seen:
-                    seen.add(href)
-                    exercise_links.append(href)
-            if exercise_links:
-                print(f"Found {len(exercise_links)} exercise links on this page. Beginning batch scrape...")
-                scraped = 0
-                for href in exercise_links:
-                    try:
-                        print(f"Opening exercise: {href}")
-                        driver.get(href)
-                        # Wait for page body
-                        WebDriverWait(driver, EXPLICIT_WAIT).until(
-                            EC.presence_of_element_located((By.TAG_NAME, 'body'))
-                        )
-                        time.sleep(2)
-                        # Click Start/Practice if present to trigger practice task
-                        started = False
-                        for sel in [
-                            'button[data-test-id="start-button"]',
-                            'button[data-test-id="practice-button"]',
-                            'a[data-test-id="start-practice"]',
-                        ]:
-                            try:
-                                btn = WebDriverWait(driver, 6).until(
-                                    EC.element_to_be_clickable((By.CSS_SELECTOR, sel))
-                                )
-                                btn.click(); started = True; print("Started exercise")
-                                break
-                            except TimeoutException:
-                                continue
-                        if not started:
-                            # Text-based fallback
-                            btn = driver.execute_script(
-                                "return Array.from(document.querySelectorAll('button,a')).find(el => /start|practice/i.test(el.textContent));"
-                            )
-                            if btn:
-                                driver.execute_script("arguments[0].click();", btn)
-                                started = True
-                        # Allow mitm addon to capture manifest and download items
-                        print("Waiting for GraphQL calls to complete...")
-                        time.sleep(8)
-                        scraped += 1
-                        if scraped >= max_questions:
-                            break
-                    except Exception as e:
-                        print(f"Error opening {href}: {e}")
-                print("Batch scrape over exercises complete. Returning.")
-                return
-        except Exception:
-            pass
-        
-        # Loop to answer a set number of questions
-        for i in range(max_questions):
-            print(f"--- Answering Question {i+1} ---")
-            
-            # Handle potential pop-ups before each question
-            try:
-                # Look for a common modal pop-up and a continue button
-                continue_button = WebDriverWait(driver, POPUP_WAIT).until(
-                    EC.element_to_be_clickable((By.CSS_SELECTOR, 'button[data-test-id="skill-mastery-modal-continue-button"]'))
-                )
-                print("Found and clicked a skill mastery pop-up.")
-                continue_button.click()
-                time.sleep(2)
-            except TimeoutException:
-                pass  # No pop-up found, continue as normal
-            
-            # 1. Wait for question content to be fully loaded with enhanced conditions
-            question_loaded = False
-            try:
-                # Wait for various indicators that question is loaded
-                WebDriverWait(driver, ELEMENT_WAIT).until(
-                    EC.any_of(
-                        # Interactive elements
-                        EC.presence_of_element_located((By.CSS_SELECTOR, 'input[type="radio"]')),
-                        EC.presence_of_element_located((By.CSS_SELECTOR, 'input[type="text"]')),
-                        EC.presence_of_element_located((By.CSS_SELECTOR, 'input[type="number"]')),
-                        EC.presence_of_element_located((By.CSS_SELECTOR, '[data-test-id*="choice"]')),
-                        # Question content containers
-                        EC.presence_of_element_located((By.CSS_SELECTOR, '.perseus-widget-container')),
-                        EC.presence_of_element_located((By.CSS_SELECTOR, '.question-content')),
-                        EC.presence_of_element_located((By.CSS_SELECTOR, '[data-test-id="exercise-question"]')),
-                        # Check button as last resort
-                        EC.element_to_be_clickable((By.CSS_SELECTOR, 'button[data-test-id="check-answer-button"]'))
-                    )
-                )
-                question_loaded = True
-                print("Question elements detected and loaded.")
-            except TimeoutException:
-                print("Question elements not loaded in time, attempting to advance...")
-                # Try pressing Next/Continue to advance if current screen not ready
-                advanced = False
-                for sel in [
-                    'button[data-test-id="next-question-button"]',
-                    'button[data-test-id*="next"]',
-                    'button[data-test-id*="continue"]',
-                    'button[data-test-id="hint-button"]'  # Sometimes need to get hints first
-                ]:
-                    try:
-                        btn = WebDriverWait(driver, 4).until(EC.element_to_be_clickable((By.CSS_SELECTOR, sel)))
-                        btn.click(); time.sleep(3)
-                        advanced = True
-                        print(f"Clicked {sel} to advance")
-                        break
-                    except TimeoutException:
-                        continue
-                        
-                if not advanced:
-                    print("No interactable elements found; skipping this iteration")
-                    continue
-            
-            # 2. Answer the question (enhanced logic with better selectors)
-            answered = False
-            
-            # Try to find a radio button first
-            try:
-                radio_buttons = driver.find_elements(By.CSS_SELECTOR, 'input[type="radio"], [role="radio"]')
-                if radio_buttons:
-                    radio_buttons[0].click()
-                    print("Selected a radio button.")
-                    answered = True
-            except Exception as e:
-                print(f"Radio button error: {e}")
-            
-            # If no radio button, try text/number inputs
-            if not answered:
-                try:
-                    # Look for various input types with more selectors
-                    input_selectors = [
-                        'input[type="text"]',
-                        'input[type="number"]', 
-                        'input[aria-label*="answer"]',
-                        'input[placeholder*="answer"]',
-                        '.perseus-input input',
-                        '.simple-text-input input',
-                        'input[data-test-id*="input"]'
-                    ]
-                    
-                    input_found = None
-                    for selector in input_selectors:
-                        try:
-                            input_found = driver.find_element(By.CSS_SELECTOR, selector)
-                            if input_found.is_displayed() and input_found.is_enabled():
-                                break
-                        except:
-                            continue
-                    
-                    if input_found:
-                        input_found.clear()
-                        input_found.send_keys("1")
-                        print(f"Entered '1' into an input field.")
-                        answered = True
-                except Exception as e:
-                    print(f"Input field error: {e}")
-            
-            # Try clickable choices/options
-            if not answered:
-                try:
-                    choice_selectors = [
-                        '[data-test-id*="choice"]',
-                        '.choice',
-                        'button[data-test-id*="option"]',
-                        '[role="button"][aria-label*="choice"]',
-                        '.multiple-choice li button',
-                        '.perseus-widget-radio .perseus-widget-radio-option',
-                        '[data-test-id="radio-choice"]'
-                    ]
-                    
-                    choice_found = None
-                    for selector in choice_selectors:
-                        try:
-                            choices = driver.find_elements(By.CSS_SELECTOR, selector)
-                            if choices:
-                                choice_found = choices[0]
-                                if choice_found.is_displayed() and choice_found.is_enabled():
-                                    break
-                        except:
-                            continue
-                    
-                    if choice_found:
-                        choice_found.click()
-                        print("Clicked a choice option.")
-                        answered = True
-                except Exception as e:
-                    print(f"Choice option error: {e}")
-            
-            if not answered:
-                print("Could not find a standard answer input.")
-                # Take a screenshot for debugging
-                try:
-                    driver.save_screenshot(f"debug_question_{i+1}.png")
-                    print(f"Saved debug screenshot: debug_question_{i+1}.png")
-                except:
+                except TimeoutException:
                     pass
-            
-            # 3. Click the "Check" button with enhanced timeout
-            try:
-                check_button = WebDriverWait(driver, ELEMENT_WAIT).until(
-                    EC.element_to_be_clickable((By.CSS_SELECTOR, 'button[data-test-id="check-answer-button"]'))
-                )
-                check_button.click()
-                print("Clicked 'Check'.")
-                time.sleep(3)
-            except TimeoutException:
-                # Try alternative check button selectors (avoid unsupported CSS pseudo)
+                
+                # Wait for question to load
                 try:
-                    # Search by text with JS
-                    js_btn = driver.execute_script(
-                        "return Array.from(document.querySelectorAll('button')).find(el => /check|submit/i.test(el.textContent));"
+                    WebDriverWait(driver, ELEMENT_WAIT).until(
+                        EC.any_of(
+                            EC.presence_of_element_located((By.CSS_SELECTOR, 'input[type="radio"]')),
+                            EC.presence_of_element_located((By.CSS_SELECTOR, 'input[type="text"]')),
+                            EC.presence_of_element_located((By.CSS_SELECTOR, 'input[type="number"]')),
+                            EC.presence_of_element_located((By.CSS_SELECTOR, '[data-test-id*="choice"]')),
+                            EC.presence_of_element_located((By.CSS_SELECTOR, '.perseus-widget-container')),
+                            EC.element_to_be_clickable((By.CSS_SELECTOR, 'button[data-test-id="check-answer-button"]'))
+                        )
                     )
-                    if js_btn:
-                        driver.execute_script("arguments[0].click();", js_btn)
-                        print("Clicked alternative 'Check' via text.")
-                        time.sleep(3)
-                    else:
-                        print("Could not find check button after extended wait.")
-                except Exception:
-                    print("Could not find check button after extended wait.")
-            
-            # 4. Click the "Next question" button with enhanced timeout
-            try:
-                next_button = WebDriverWait(driver, ELEMENT_WAIT).until(
-                    EC.element_to_be_clickable((By.CSS_SELECTOR, 'button[data-test-id="next-question-button"]'))
-                )
-                next_button.click()
-                print("Clicked 'Next question'.")
-            except TimeoutException:
-                # Try alternative next button via text search
-                try:
-                    js_next = driver.execute_script(
-                        "return Array.from(document.querySelectorAll('button')).find(el => /next|continue/i.test(el.textContent));"
-                    )
-                    if js_next:
-                        driver.execute_script("arguments[0].click();", js_next)
-                        print("Clicked alternative 'Next' via text.")
-                    else:
-                        print("Could not find next button after extended wait, may have completed exercise.")
+                except TimeoutException:
+                    if not autonomous_next_question(driver):
+                        log_progress("❌ Could not advance - may be end of exercise")
                         break
-                except Exception:
-                    print("Could not find next button after extended wait, may have completed exercise.")
-                    break
+                    continue
+                
+                # Process question autonomously
+                if autonomous_answer_question(driver):
+                    if autonomous_submit_answer(driver):
+                        if not autonomous_next_question(driver):
+                            log_progress("✅ Exercise complete - no more questions")
+                            break
+                        total_questions_processed += 1
+                    else:
+                        log_progress("❌ Could not submit answer")
+                else:
+                    log_progress("❌ Could not answer question")
+                
+                time.sleep(2)
             
-            time.sleep(5)  # Increased wait for next question to start loading
+            log_progress(f"✅ Single exercise complete: {total_questions_processed} questions processed")
     
     except TimeoutException as e:
         print(f"Timeout error occurred during automation: {e}")
