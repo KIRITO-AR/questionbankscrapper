@@ -3,6 +3,7 @@ Enhanced debug version of capture script to see exact response structure
 """
 import json
 import os
+import re
 from datetime import datetime
 from mitmproxy import http
 from mitmproxy.tools.main import mitmdump
@@ -141,7 +142,13 @@ class DetailedDebugKhanCaptureAddon:
     def save_assessment_item(self, assessment_item, item_id, timestamp):
         """Save the assessment item to a file."""
         try:
-            filename = os.path.join(SAVE_DIRECTORY, f"detailed_debug_{item_id}.json")
+            # Restrict item_id to safe characters to prevent path traversal
+            safe_item_id = re.sub(r'[^A-Za-z0-9_-]', '_', str(item_id))
+            filename = os.path.join(SAVE_DIRECTORY, f"detailed_debug_{safe_item_id}.json")
+            # Defense in depth: ensure the resolved path stays inside SAVE_DIRECTORY
+            base_dir = os.path.realpath(SAVE_DIRECTORY)
+            if os.path.commonpath([base_dir, os.path.realpath(filename)]) != base_dir:
+                raise ValueError("Unsafe output path")
             
             if 'itemData' in assessment_item:
                 # Try to parse itemData as JSON

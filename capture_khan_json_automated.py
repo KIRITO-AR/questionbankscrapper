@@ -256,6 +256,10 @@ class KhanAcademyAutomatedCapture:
             if question_id in saved_questions:
                 return False
                 
+            if not isinstance(question_id, str) or not re.fullmatch(r'[A-Za-z0-9_-]+', question_id):
+                print(f'  ⚠ Unsafe question ID rejected: {question_id!r}')
+                return False
+
             saved_questions.add(question_id)
             
             filename = os.path.join(SAVE_DIRECTORY, f"{question_id}.json")
@@ -474,6 +478,9 @@ class KhanAcademyAutomatedCapture:
             if item_id != question_id:
                 print(f"  ⚠ ID mismatch: expected {question_id}, got {item_id}")
                 # Continue anyway, might be a variation
+            if not isinstance(item_id, str) or not re.fullmatch(r'[A-Za-z0-9_-]+', item_id):
+                print(f'  ⚠ Unsafe question ID rejected: {item_id!r}')
+                return False
             
             if item_id not in saved_questions:
                 saved_questions.add(item_id)
@@ -662,6 +669,9 @@ class KhanAcademyAutomatedCapture:
         global saved_questions, questions_captured_count
         
         try:
+            if not isinstance(question_id, str) or not re.fullmatch(r'[A-Za-z0-9_-]+', question_id):
+                print(f'  ⚠ Unsafe question ID rejected: {question_id!r}')
+                return False
             # The perseus_data should already be in the correct Perseus format from active_scraper
             # Validate that it has the expected structure
             if not self.validate_perseus_data(perseus_data, question_id):

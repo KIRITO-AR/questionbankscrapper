@@ -946,6 +946,11 @@ class KhanAcademyCapture:
             os.makedirs(SAVE_DIRECTORY, exist_ok=True)
 
             # Save to file unconditionally so browsing saves all questions
+            import re
+            # Validate item_id to prevent path traversal (only safe filename characters)
+            if not isinstance(item_id, str) or not re.fullmatch(r'[A-Za-z0-9_-]+', item_id):
+                self.log(f"[ERROR] Refusing to save item with unsafe id: {item_id!r}")
+                return False
             filename = os.path.join(SAVE_DIRECTORY, f"{item_id}.json")
             with open(filename, 'w', encoding='utf-8') as f:
                 json.dump(perseus_data, f, ensure_ascii=False, indent=4)
