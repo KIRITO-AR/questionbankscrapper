@@ -5,6 +5,7 @@ Debug version of the capture script to see what requests are being intercepted.
 
 import json
 import os
+import re
 from mitmproxy import http
 from datetime import datetime
 
@@ -107,10 +108,19 @@ class DebugKhanCapture:
                 item_id = assessment_item.get('id', 'unknown')
                 
                 print(f"[SAVE] Found assessment item: {item_id}")
-                
+
                 # Save to file
-                filename = os.path.join(SAVE_DIRECTORY, f"debug_{item_id}.json")
-                
+                safe_id = str(item_id)
+                if not re.fullmatch(r'[A-Za-z0-9_-]{1,128}', safe_id):
+                    print(f"[SAVE] Skipping unsafe item id: {item_id!r}")
+                    return
+                filename = os.path.join(SAVE_DIRECTORY, f"debug_{safe_id}.json")
+                real_dir = os.path.realpath(SAVE_DIRECTORY)
+                real_file = os.path.realpath(filename)
+                if os.path.commonpath([real_dir, real_file]) != real_dir:
+                    print(f"[SAVE] Skipping path outside save directory: {filename}")
+                    return
+
                 if 'itemData' in assessment_item:
                     perseus_data = json.loads(assessment_item['itemData'])
                     with open(filename, 'w', encoding='utf-8') as f:
@@ -120,7 +130,7 @@ class DebugKhanCapture:
                     print(f"[SAVE] No itemData found in assessment item")
                     
         except Exception as e:
-            pass  # Ignore errors for now
+            print(f"[ERROR] Failed to process assessment item: {e}")
 
 # Create the addon instance
 addons = [DebugKhanCapture()]

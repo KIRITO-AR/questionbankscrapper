@@ -424,7 +424,11 @@ class ActiveKhanScraper:
             # Create filename with question ID
             filename = f"{question_id}.json"
             filepath = os.path.join(save_directory, filename)
-            
+            # Prevent path traversal outside save_directory
+            if os.path.commonpath([os.path.realpath(save_directory), os.path.realpath(filepath)]) != os.path.realpath(save_directory):
+                logger.error(f"Refusing to save outside directory for question_id {question_id!r}")
+                return False
+        
             # Add metadata to the Perseus data
             enhanced_data = {
                 **perseus_data,
